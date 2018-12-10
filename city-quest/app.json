@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "city-hunt",
-    "slug": "city-hunt",
+    "name": "city-quest",
+    "slug": "city-quest",
     "privacy": "public",
     "sdkVersion": "31.0.0",
     "platforms": [
