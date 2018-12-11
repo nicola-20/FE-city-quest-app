@@ -1,50 +1,58 @@
+import React from "react";
+import {
+  createStackNavigator,
+  createAppContainer,
+  createBottomTabNavigator,
+  createDrawerNavigator,
+  TabBarBottom
+} from "react-navigation";
+import Stack from "./navigation/Navigators";
+import CameraScreen from "./screens/CameraScreen";
+import MapScreen from "./screens/MapScreen";
+import QuestionScreen from "./screens/QuestionScreen";
+import LobbyScreen from "./screens/LobbyScreen";
 
-import React from 'react';
-import { Image, Text, View } from 'react-native';
-import { Asset, AppLoading, SplashScreen } from 'expo';
-
-export default class App extends React.Component {
-  state = {
-    isSplashReady: false,
-    inGame: false
-  };
-
-  render() {
-    if (!this.state.isSplashReady) {
-      return (
-        <AppLoading
-          startAsync={this._cacheSplashResourcesAsync}
-          onFinish={() => this.setState({ isSplashReady: true })}
-          onError={console.warn}
-          autoHideSplash={false}
-        />
-      );
+const HomeBar = createAppContainer(
+  createBottomTabNavigator(
+    {
+      Camera: CameraScreen,
+      Map: MapScreen,
+      Question: QuestionScreen
+    },
+    {
+      defaultNavigationOptions: ({ navigation }) => ({
+      }),
+      tabBarComponent: TabBarBottom,
+      tabBarPosition: "bottom",
+      tabBarOptions: {
+        activeTintColor: "tomato",
+        inactiveTintColor: "gray",
+        style: {
+          backgroundColor: "#1B2737"
+        }
+      },
+      animationEnabled: true,
+      swipeEnabled: false
     }
-    if (this.state.inGame) {
-      return (
-        <Text>Playing the game</Text>
-      )
-    } else return (
-      <LobbyScreen />
-    );    
+  )
+);
+
+const AppStack = createStackNavigator(
+  {
+    Lobby: {
+      screen: LobbyScreen
+    },
+    Home: {
+      screen: HomeBar
+    }
+  },
+  {
+    initialRoute: "Lobby"
   }
+);
 
-  _cacheSplashResourcesAsync = async () => {
-    const png = require('./assets/images/splash.png');
-    return Asset.fromModule(png).downloadAsync()
-  }
+// const App = createAppContainer(Stack)
 
-  _cacheResourcesAsync = async () => {
-    SplashScreen.hide();
-    const images = [
-      require('./assets/images/icon2.png'),
-    ];
+const App = createAppContainer(AppStack);
 
-    const cacheImages = images.map((image) => {
-      return Asset.fromModule(image).downloadAsync();
-    });
-
-    await Promise.all(cacheImages);
-    this.setState({ isAppReady: true });
-  }
-}
+export default App;
