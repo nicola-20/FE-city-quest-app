@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "dependencies": {
-    "expo-cli": "^2.6.8"
+    "expo-cli": "^2.6.8",
+    "react-navigation": "^3.0.7"
   },
   "devDependencies": {},
   "scripts": {
