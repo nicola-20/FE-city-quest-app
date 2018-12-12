@@ -1,24 +1,74 @@
 import React from "react";
-import { View, Text, Button } from "react-native";
+import { ScrollView, Text, Button, TouchableOpacity, StyleSheet } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import * as api from '../api.js'
 
 class SelectTrailScreen extends React.Component {
+  state = {
+    trails: []
+  }
+  static navigationOptions = ({navigation}) => {
+    return {
+      headerTitle: (<Text style={styles.headerTitle}>Select Trail</Text>),
+      headerLeft: (
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => navigation.navigate("Lobby")}
+        >
+          <Ionicons name="ios-arrow-back" size={32} color="white" />
+        </TouchableOpacity>
+      ),
+      headerRight: null
+    }
+  }
   render() {
     const { navigation } = this.props
+    const { trails } = this.state
     return (
-      <View>
-        <Text>Select Trail</Text>
-        <Button
-          onPress={() => {navigation.navigate('CreateGame')}}
-          title="Select Trail 1"
-          color="#841584"
-        />
-        <Button
-          onPress={() => {navigation.navigate('CreateGame')}}
-          title="Select Trail 2"
-          color="#841584"
-        />
-      </View>
+      <ScrollView contentContainerStyle={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+      {trails.map((trail) => {
+        return  (<TouchableOpacity key={trail.id} onPress={() => {navigation.navigate('CreateGame', {trailId: trail.id, trail_name: trail.name})}} style={styles.button}><Text style={styles.buttonText}>{trail.name}</Text></TouchableOpacity>)
+      })}
+      </ScrollView>
     );
   }
+  componentDidMount() {
+    const trails = api.getTrails()
+    // .then((trails) => {
+      this.setState({
+        trails
+      })
+    // })
+  }
 }
+
+const styles = StyleSheet.create({
+  backButton: {
+    marginLeft: 10,
+    paddingRight: 10
+  },
+  headerTitle: {
+    color: "white",
+    fontSize: 20
+  },
+  button: {
+    alignItems: "center",
+    backgroundColor: "#7B68BF",
+    borderWidth: 0,
+    borderRadius: 9,
+    // borderColor: "#515151",
+    padding: 10,
+    margin: 30,
+    width: 300
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 20
+  }
+})
+
 export default SelectTrailScreen;

@@ -38,11 +38,9 @@ const GameTab = createAppContainer(
       }
     },
     {
-      defaultNavigationOptions: ({ navigation }) => ({}),
+      // defaultNavigationOptions: ({ navigation }) => ({}),
       initialRouteName: "Map",
       order: ["Camera", "Map", "Question"],
-      tabBarComponent: TabBarBottom,
-      tabBarPosition: "bottom",
       tabBarOptions: {
         activeTintColor: "#e91e63"
       }
@@ -56,7 +54,8 @@ const Drawer = createAppContainer(
   createDrawerNavigator(
     {
       Quit: {
-        screen: LobbyScreen
+        screen: LobbyScreen,
+        header: null
       },
       Info: {
         screen: InfoScreen
@@ -73,7 +72,8 @@ const Drawer = createAppContainer(
       // contentComponent: DrawerScreen,
       drawerWidth: 150,
       drawerPosition: 'right',
-      drawerType: 'front'
+      drawerType: 'front',
+      headerBackTitleVisible: false
     }
   )
 );
@@ -85,7 +85,8 @@ export default (Stack = createStackNavigator(
     Lobby: {
       screen: LobbyScreen,
       navigationOptions: {
-        title: "Lobby"
+        title: "Lobby",
+        header: null
       }
     },
     SelectTrail: {
@@ -115,11 +116,19 @@ export default (Stack = createStackNavigator(
     Drawer: {
       screen: Drawer,
       navigationOptions: {
-        header: null
+        // header: null,
+        headerTitle: null,
+        headerBackTitle: null
       }
     }
   },
   {
-    initialRoute: "Lobby"
+    initialRoute: "Lobby",
+    defaultNavigationOptions: {
+      headerStyle: {
+        backgroundColor: '#3EAC9A'
+      },
+      headerTintColor: '#fff'
+    }
   }
 ));
