@@ -6,11 +6,12 @@ import { AntDesign } from "@expo/vector-icons";
 // const AnimatedIcon = Animated.createAnimatedComponent()
 
 class WaitingScreen extends React.Component {
+  //
   state = {
-    noOfPlayers: 0,
-    players: [],
-    gamePin: '',
-    gameName: ''
+    noOfPlayers: 4,
+    playersArray: [],
+    gamePin: '1234',
+    gameName: 'Bobs Game'
   }
   static navigationOptions = ({navigation}) => {
     return {
@@ -21,25 +22,28 @@ class WaitingScreen extends React.Component {
   }
   render() {
     const { navigation } = this.props
-    // console.log(this.state)
-    const currentPlayers = []
-    for (let i = 0; i <= this.state.noOfPlayers; i++) {
-      if (this.state.players[i] && this.state.players[i].length > 1) {
-        currentPlayers.push(this.state.players[i].playerName) //<Text>{this.state.players[i].playerName}</Text>
-      } else {
-        currentPlayers.push('waiting') //<ActivityIndicator size="large" color="#7B68BF" />
-      }
+    const { playersArray } = this.state;
+    const currentPlayers = [];
+    for (let i = 0; i < this.state.noOfPlayers; i++) {
+     if(playersArray[i]) currentPlayers.push(playersArray[i].playerName)
+     else currentPlayers.push(null)
     }
-    console.log(currentPlayers, 'currentplayers')
+
+    
+
+    console.log(this.state)
     return (
+
       <View>
         <Text>Welcome to:</Text>
         <Text>{this.state.gameName}</Text>
-        {/* <AntDesign name="loading2" size={32} color="white" /> */}
-        {currentPlayers.map((player) => {
-          return player === 'waiting' ? <ActivityIndicator size="large" color="#7B68BF" /> : <Text>{this.state.players[i].playerName}</Text>
-        })}
-        {/* <ActivityIndicator size="large" color="#7B68BF" /> */}
+        <View>
+          {
+         currentPlayers.map((player, index) => {
+          return player? <Text key={index}>{player}</Text> :  <ActivityIndicator key={index} size="large" color="#7B68BF" /> 
+         })
+       }
+       </View>
         <Button
           onPress={() => {navigation.navigate('Game')}}
           title="Start Game"
@@ -49,16 +53,20 @@ class WaitingScreen extends React.Component {
       </View>
     );
   }
+
+  createGrid = () => {
+    
+  }
   componentDidMount() {
     const game = api.getGame()
-    // .then((game) => {
+    //.then((game) => {
       this.setState({
         noOfPlayers: game.noOfPlayers,
-        players: game.playersArray,
+        playersArray: game.playersArray,
         gamePin: game.gamePin,
         gameName: game.gameName
-      })
-    // })
+     // })
+    })
   }
 }
 const styles = StyleSheet.create({
@@ -66,7 +74,7 @@ const styles = StyleSheet.create({
     fontSize: 17
   },
   backButton: {
-    marginLeft: 10,
+    paddingLeft: 15,
     paddingRight: 10
   },
   headerTitle: {

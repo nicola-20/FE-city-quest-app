@@ -113,7 +113,7 @@ export const getGame = async => {
           playerName: "Rob"
         }
       ],
-      noOfPlayers: 3,
+      noOfPlayers: 4,
       gamePin: 1355
     }
   };
