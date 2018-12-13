@@ -31,7 +31,7 @@ class JoinGameScreen extends React.Component {
     };
   };
   render() {
-    console.log(this.state);
+    // console.log(this.state);
     const { navigation } = this.props;
     return (
       <KeyboardAwareScrollView

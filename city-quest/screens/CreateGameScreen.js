@@ -31,8 +31,8 @@ class CreateGameScreen extends React.Component {
     };
   };
   render() {
-    console.log(this.props);
-    console.log(this.state);
+    // console.log(this.props);
+    // console.log(this.state);
     const { navigation } = this.props;
     return (
       <KeyboardAwareScrollView

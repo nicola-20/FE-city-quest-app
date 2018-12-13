@@ -127,6 +127,7 @@ export default (Stack = createStackNavigator(
     defaultNavigationOptions: {
       headerStyle: {
         backgroundColor: '#3EAC9A'
+        // align header title center in android
       },
       headerTintColor: '#fff'
     }
