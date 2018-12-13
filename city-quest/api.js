@@ -1,121 +1,70 @@
-export const getTrails = async => {
-  // const data = api request
-  const data = {
-    trails: [
-      {
-        route: [
-          {
-            locationId: "manc-town-hall",
-            lat: 53.4781,
-            long: -2.2441,
-            name: "Manchester Town Hall"
-          },
-          {
-            long: -2.2447,
-            name: "Manchester Central Library",
-            locationId: "library",
-            lat: 53.4781
-          },
-          {
-            long: -2.2399,
-            name: "Chinatown Arch",
-            locationId: "chinaTown",
-            lat: 53.4784
-          },
-          {
-            name: "John Bright Statue",
-            locationId: "johnBright",
-            lat: 53.6146,
-            long: -2.1623
-          },
-          {
-            locationId: "stAnn",
-            lat: 53.4817,
-            long: -2.2458,
-            name: "St Ann's Church"
-          }
-        ],
-        region: {
-          long: -2.2426,
-          city: "Manchester",
-          lat: 53.4808
-        },
-        duration: 2700000,
-        name: "Manchester City Trail",
-        id: "manchester-city-trail"
-      },
-      {
-        route: [
-          {
-            locationId: "manc-town-hall",
-            lat: 53.4781,
-            long: -2.2441,
-            name: "Manchester Town Hall"
-          },
-          {
-            long: -2.2447,
-            name: "Manchester Central Library",
-            locationId: "library",
-            lat: 53.4781
-          },
-          {
-            long: -2.2399,
-            name: "Chinatown Arch",
-            locationId: "chinaTown",
-            lat: 53.4784
-          },
-          {
-            name: "John Bright Statue",
-            locationId: "johnBright",
-            lat: 53.6146,
-            long: -2.1623
-          },
-          {
-            locationId: "stAnn",
-            lat: 53.4817,
-            long: -2.2458,
-            name: "St Ann's Church"
-          }
-        ],
-        region: {
-          long: -2.2426,
-          city: "Manchester",
-          lat: 53.4808
-        },
-        duration: 2700000,
-        name: "Manchester Christmas Trail",
-        id: "manchester-christmas-trail"
-      }
-    ]
-  };
-  return data.trails;
+import axios from 'axios'
+const Frisbee = require('frisbee')
+const api = new Frisbee({
+  baseURI: 'https://city-quest-game.herokuapp.com/api',
+  headers: {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  }
+})
+
+
+export const getTrails = async () => {
+
+  try {
+  let res = await api.get('/trails')
+
+  if(res.err) throw res.err
+  return res.body;
+} catch (err) {
+    throw err;
+  }
 };
 
-export const getGame = async => {
-  // const data = API CALL GOES HERE
-  const data = {
-    game: {
-      startTime: 1544618750735,
-      gameName: "newGame",
-      trailId: "manchester-city-game",
-      playersArray: [
+export const createGame = async (gameData) => {
+
+  // try {
+  //   let res = await api.post('/games')
+  //   console.log('response', res.body)
+  //   if(res.err) throw res.err
+
+  // } catch (err) {
+  //   throw err;
+  // }
+  const {data} = await axios.post('https://city-quest-game.herokuapp.com/api/games', gameData)
+  return data;
+
+}
+export const createPlayer = async (playerName, gamePin) => {
+  const {data} = await axios.post(`https://city-quest-game.herokuapp.com/api/games/${gamePin}/players`, playerName)
+  console.log(data)
+}
+export const getGame = async (gamePin) => {
+  // try {
+  //   let res = await api.get('/')
+  // }
+
+  return {
+    "playersArray": [
         {
-          progress: 0,
-          playerName: "Rajinder"
+            "progress": 1,
+            "playerName": "Rajinder",
+            "totalTime": 1309
         },
         {
-          progress: 0,
-          playerName: "Kate"
+            "progress": "true",
+            "playerName": "Kate"
         },
         {
-          totalTime: 2,
-          progress: 0,
-          playerName: "Rob"
+            "playerName": "Rob",
+            "totalTime": 2,
+            "progress": 0
         }
-      ],
-      noOfPlayers: 4,
-      gamePin: 1355
-    }
-  };
-  return data.game;
-};
+    ],
+    "noOfPlayers": 3,
+    "gamePin": 1355,
+    "startTime": 1544618750735,
+    "gameName": "newGame",
+    "trailId": "manchester-city-game"
+ }
+}

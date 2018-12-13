@@ -35,7 +35,7 @@ class WaitingScreen extends React.Component {
       else currentPlayers.push(null);
     }
 
-    console.log(this.state);
+
     return (
       <View style={styles.view}>
         <View style={styles.waitingHeader}>

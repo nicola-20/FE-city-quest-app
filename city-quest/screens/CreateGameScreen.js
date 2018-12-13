@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Ionicons } from "@expo/vector-icons";
+import * as api from '../api.js'
 
 class CreateGameScreen extends React.Component {
   state = {
@@ -165,10 +166,18 @@ class CreateGameScreen extends React.Component {
     });
   }
   handleCreate = () => {
-    // make post request GAME
-    // then
-    // MAKE PATCH REQUEST PLAYER
-    this.props.navigation.navigate("Waiting")
+    const gameData = {
+      gameName: this.state.gameName,
+      noOfPlayers: this.state.noOfPlayers,
+      trailId: this.state.trailId
+    }
+    api.createGame(gameData)
+    .then(({gamePin}) => {
+      return api.createPlayer(this.state.PlayerName, gamePin)
+    })
+    .then((res) => {
+      this.props.navigation.navigate("Waiting")
+    })
   }
 }
 

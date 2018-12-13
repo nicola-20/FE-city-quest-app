@@ -1,11 +1,12 @@
 import React from "react";
-import { ScrollView, Text, Button, TouchableOpacity, StyleSheet } from "react-native";
+import { ScrollView, Text, Button, TouchableOpacity, StyleSheet, ActivityIndicator } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import * as api from '../api.js'
 
 class SelectTrailScreen extends React.Component {
   state = {
-    trails: []
+    trails: [],
+    isLoading: true
   }
   static navigationOptions = ({navigation}) => {
     return {
@@ -24,6 +25,7 @@ class SelectTrailScreen extends React.Component {
   render() {
     const { navigation } = this.props
     const { trails } = this.state
+    if(this.state.isLoading) return (<ActivityIndicator></ActivityIndicator>)
     return (
       <ScrollView contentContainerStyle={{
         flex: 1,
@@ -37,12 +39,8 @@ class SelectTrailScreen extends React.Component {
     );
   }
   componentDidMount() {
-    const trails = api.getTrails()
-    // .then((trails) => {
-      this.setState({
-        trails
-      })
-    // })
+    api.getTrails()
+    .then(({trails}) => this.setState({trails, isLoading: false}))
   }
 }
 
