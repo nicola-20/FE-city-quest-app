@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     alignItems: "center"
   },
   backButton: {
-    marginLeft: 10,
+    paddingLeft: 15,
     paddingRight: 10
   },
   headerTitle: {

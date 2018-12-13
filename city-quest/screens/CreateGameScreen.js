@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     fontSize: 17
   },
   backButton: {
-    marginLeft: 10,
+    paddingLeft: 15,
     paddingRight: 10
   },
   headerTitle: {

@@ -48,7 +48,7 @@ class SelectTrailScreen extends React.Component {
 
 const styles = StyleSheet.create({
   backButton: {
-    marginLeft: 10,
+    paddingLeft: 15,
     paddingRight: 10
   },
   headerTitle: {
