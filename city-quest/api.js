@@ -1,28 +1,29 @@
-import axios from 'axios'
-const Frisbee = require('frisbee')
+import axios from "axios";
+const Frisbee = require("frisbee");
 const api = new Frisbee({
-  baseURI: 'https://city-quest-game.herokuapp.com/api',
+  baseURI: "https://city-quest-game.herokuapp.com/api",
   headers: {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
+    Accept: "application/json",
+    "Content-Type": "application/json"
   }
-})
-
+});
+const BASE_URL = "https://city-quest-game.herokuapp.com/api";
 
 export const getTrails = async () => {
+  // try {
+  //   let res = await api.get("/trails");
 
-  try {
-  let res = await api.get('/trails')
-
-  if(res.err) throw res.err
-  return res.body;
-} catch (err) {
-    throw err;
-  }
+  //   if (res.err) throw res.err;
+  //   return res.body;
+  // } catch (err) {
+  //   throw err;
+  // }
+  const { data } = await axios.get(`${BASE_URL}/trails`);
+  console.log(data, "<<<<<");
+  return data;
 };
 
-export const createGame = async (gameData) => {
-
+export const createGame = async gameData => {
   // try {
   //   let res = await api.post('/games')
   //   console.log('response', res.body)
@@ -31,40 +32,22 @@ export const createGame = async (gameData) => {
   // } catch (err) {
   //   throw err;
   // }
-  const {data} = await axios.post('https://city-quest-game.herokuapp.com/api/games', gameData)
-  return data;
+  const { data } = await axios.post(`${BASE_URL}/games`, gameData);
 
-}
-export const createPlayer = async (playerName, gamePin) => {
-  const {data} = await axios.post(`https://city-quest-game.herokuapp.com/api/games/${gamePin}/players`, playerName)
-  console.log(data)
-}
-export const getGame = async (gamePin) => {
+  return data;
+};
+export const createPlayer = async (PlayerName, gamePin) => {
+  console.log("got to create player");
+  const { data } = await axios.post(`${BASE_URL}/games/${gamePin}/players`, {
+    playerName: PlayerName
+  });
+  return data.playerName;
+};
+export const getGame = async gamePin => {
   // try {
   //   let res = await api.get('/')
   // }
-
-  return {
-    "playersArray": [
-        {
-            "progress": 1,
-            "playerName": "Rajinder",
-            "totalTime": 1309
-        },
-        {
-            "progress": "true",
-            "playerName": "Kate"
-        },
-        {
-            "playerName": "Rob",
-            "totalTime": 2,
-            "progress": 0
-        }
-    ],
-    "noOfPlayers": 3,
-    "gamePin": 1355,
-    "startTime": 1544618750735,
-    "gameName": "newGame",
-    "trailId": "manchester-city-game"
- }
-}
+  const { data } = await axios.get(`${BASE_URL}/games/${gamePin}`);
+  console.log(data);
+  return data;
+};
