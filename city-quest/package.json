@@ -14,7 +14,8 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-31.0.0.tar.gz",
     "react-native-keyboard-aware-scroll-view": "^0.8.0",
     "react-navigation": "^3.0.7",
-    "socket.io-client": "^2.2.0"
+    "socket.io-client": "^2.2.0",
+    "react-native-maps": "^0.22.1"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.0.0"

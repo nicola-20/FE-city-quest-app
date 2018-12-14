@@ -1,9 +1,8 @@
 import axios from "axios";
 const BASE_URL = "https://city-quest-game.herokuapp.com/api";
 const Frisbee = require("frisbee");
-import openSocket from 'socket.io-client'
-const socket = openSocket(BASE_URL)
-
+import openSocket from "socket.io-client";
+const socket = openSocket(BASE_URL);
 
 const api = new Frisbee({
   baseURI: "https://city-quest-game.herokuapp.com/api",
@@ -12,7 +11,6 @@ const api = new Frisbee({
     "Content-Type": "application/json"
   }
 });
-const BASE_URL = "https://city-quest-game.herokuapp.com/api";
 
 export const getTrails = async () => {
   // try {
@@ -23,7 +21,7 @@ export const getTrails = async () => {
   // } catch (err) {
   //   throw err;
   // }
-  const { data } = await axios.get(`${BASE_URL}/trails`);
+  const { data } = await axios.get(`${BASE_URL}/trails`)
   console.log(data, "<<<<<");
   return data;
 };
@@ -58,6 +56,6 @@ export const getGame = async gamePin => {
 };
 
 export const suscribeToTimer = (interval, cb) => {
-  socket.once('timer', timestamp => cb(null, timestamp))
-  socket.emit('subscribeToTimer', 1000)
-}
+  socket.once("timer", timestamp => cb(null, timestamp));
+  socket.emit("subscribeToTimer", 1000);
+};

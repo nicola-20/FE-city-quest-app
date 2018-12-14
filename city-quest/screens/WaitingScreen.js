@@ -1,5 +1,5 @@
 import React from "react";
-import { subscribeToTimer } from '../api'
+import { subscribeToTimer } from "../api";
 import {
   View,
   Text,
@@ -13,17 +13,17 @@ import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 class WaitingScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    subscribeToTimer((err, timestamp) => this.setState({timestamp}))
-  }
+  // constructor(props) {
+  //   super(props);
+  //   subscribeToTimer((err, timestamp) => this.setState({timestamp}))
+  // }
 
   state = {
     noOfPlayers: 0,
     playersArray: [],
     gamePin: "",
     gameName: "",
-    timestamp: 'no time stamp yet'
+    timestamp: "no time stamp yet"
   };
   static navigationOptions = ({ navigation }) => {
     return {
@@ -32,7 +32,7 @@ class WaitingScreen extends React.Component {
       headerRight: null
     };
   };
-  
+
   render() {
     const { navigation } = this.props;
     const { playersArray } = this.state;
@@ -87,7 +87,6 @@ class WaitingScreen extends React.Component {
 
   // createGrid = () => {};
   componentDidMount() {
-    
     const { navigation } = this.props;
     const GamePin = navigation.getParam("GamePin", "this is your game pin");
     api.getGame(GamePin).then(game => {

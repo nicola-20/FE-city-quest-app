@@ -8,7 +8,7 @@ class SelectTrailScreen extends React.Component {
     trails: [],
     isLoading: true
   }
-  static navigationOptions = ({navigation}) => {
+  static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: (<Text style={styles.headerTitle}>Select Trail</Text>),
       headerLeft: (
@@ -25,23 +25,24 @@ class SelectTrailScreen extends React.Component {
   render() {
     const { navigation } = this.props
     const { trails } = this.state
-    if(this.state.isLoading) return (<ActivityIndicator></ActivityIndicator>)
+    if (this.state.isLoading) return (<ActivityIndicator></ActivityIndicator>)
     return (
       <ScrollView contentContainerStyle={{
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
-      
+
       }}>
-      {trails.map((trail) => {
-        return  (<TouchableOpacity key={trail.id} onPress={() => {navigation.navigate('CreateGame', {trailId: trail.id, trail_name: trail.name})}} style={styles.button}><Text style={styles.buttonText}>{trail.name}</Text></TouchableOpacity>)
-      })}
+        {trails.map((trail) => {
+          return (<TouchableOpacity key={trail.id} onPress={() => { navigation.navigate('CreateGame', { trailId: trail.id, trail_name: trail.name }) }} style={styles.button}><Text style={styles.buttonText}>{trail.name}</Text></TouchableOpacity>)
+        })}
       </ScrollView>
     );
   }
   componentDidMount() {
     api.getTrails()
-    .then(({trails}) => this.setState({trails, isLoading: false}))
+      .then(({ trails }) => this.setState({ trails, isLoading: false }))
+    // .catch((err) => this.setState({ trails: [{ id: 'Something went wrong' }] }))
   }
 }
 
