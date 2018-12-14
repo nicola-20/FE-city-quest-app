@@ -1,5 +1,10 @@
 import axios from "axios";
+const BASE_URL = "https://city-quest-game.herokuapp.com/api";
 const Frisbee = require("frisbee");
+import openSocket from 'socket.io-client'
+const socket = openSocket(BASE_URL)
+
+
 const api = new Frisbee({
   baseURI: "https://city-quest-game.herokuapp.com/api",
   headers: {
@@ -51,3 +56,8 @@ export const getGame = async gamePin => {
   console.log(data);
   return data;
 };
+
+export const suscribeToTimer = (interval, cb) => {
+  socket.once('timer', timestamp => cb(null, timestamp))
+  socket.emit('subscribeToTimer', 1000)
+}

@@ -30,7 +30,8 @@ class SelectTrailScreen extends React.Component {
       <ScrollView contentContainerStyle={{
         flex: 1,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
+      
       }}>
       {trails.map((trail) => {
         return  (<TouchableOpacity key={trail.id} onPress={() => {navigation.navigate('CreateGame', {trailId: trail.id, trail_name: trail.name})}} style={styles.button}><Text style={styles.buttonText}>{trail.name}</Text></TouchableOpacity>)
