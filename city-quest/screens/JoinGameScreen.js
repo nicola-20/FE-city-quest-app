@@ -9,12 +9,12 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Ionicons } from "@expo/vector-icons";
-import * as api from '../api.js'
+import * as api from "../api.js";
 
 class JoinGameScreen extends React.Component {
   state = {
     PlayerName: "",
-    GamePIN: ""
+    GamePin: ""
   };
   static navigationOptions = ({ navigation }) => {
     return {
@@ -46,7 +46,7 @@ class JoinGameScreen extends React.Component {
           style={styles.input}
           placeholder="Game PIN"
           onChangeText={text => {
-            this.setState({ GamePIN: text });
+            this.setState({ GamePin: text });
           }}
         />
         <TextInput
@@ -61,10 +61,7 @@ class JoinGameScreen extends React.Component {
             this.setState({ PlayerName: text });
           }}
         />
-        <TouchableOpacity
-          onPress={this.handleJoin}
-          style={styles.button}
-        >
+        <TouchableOpacity onPress={this.handleJoin} style={styles.button}>
           <Text style={styles.buttonText}>Join</Text>
         </TouchableOpacity>
       </KeyboardAwareScrollView>
@@ -72,9 +69,10 @@ class JoinGameScreen extends React.Component {
   }
 
   handleJoin = () => {
-    //api request here .then navigate // frisby
-    this.props.navigation.navigate("Waiting")
-  }
+    const { GamePin, PlayerName } = this.state;
+    api.createPlayer(PlayerName, GamePin);
+    this.props.navigation.navigate("Waiting", { GamePin: GamePin });
+  };
 }
 
 const styles = StyleSheet.create({

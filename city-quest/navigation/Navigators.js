@@ -1,3 +1,5 @@
+import React from "react";
+import { View, Text, Button, TouchableOpacity, StyleSheet } from "react-native";
 import {
   createDrawerNavigator,
   createStackNavigator,
@@ -64,15 +66,16 @@ const Drawer = createAppContainer(
         screen: CompletedTasksScreen
       },
       Game: {
-        screen: GameTab
+        screen: GameTab,
+        header: null
       }
     },
     {
       initialRouteName: "Game",
       // contentComponent: DrawerScreen,
       drawerWidth: 150,
-      drawerPosition: 'right',
-      drawerType: 'front',
+      drawerPosition: "right",
+      drawerType: "front",
       headerBackTitleVisible: false
     }
   )
@@ -116,9 +119,9 @@ export default (Stack = createStackNavigator(
     Drawer: {
       screen: Drawer,
       navigationOptions: {
-        // header: null,
-        headerTitle: null,
-        headerBackTitle: null
+        headerTitle: <Text >Game Icon</Text>,
+        headerLeft: null,
+        headerRight: null
       }
     }
   },
@@ -126,10 +129,10 @@ export default (Stack = createStackNavigator(
     initialRoute: "Lobby",
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: '#3EAC9A'
+        backgroundColor: "#3EAC9A"
         // align header title center in android
       },
-      headerTintColor: '#fff'
+      headerTintColor: "#fff"
     }
   }
 ));

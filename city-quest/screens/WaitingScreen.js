@@ -1,4 +1,5 @@
 import React from "react";
+import { subscribeToTimer } from "../api";
 import {
   View,
   Text,
@@ -12,12 +13,17 @@ import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 class WaitingScreen extends React.Component {
-  //
+  // constructor(props) {
+  //   super(props);
+  //   subscribeToTimer((err, timestamp) => this.setState({timestamp}))
+  // }
+
   state = {
-    noOfPlayers: 4,
+    noOfPlayers: 0,
     playersArray: [],
-    gamePin: "1234",
-    gameName: "Bobs Game"
+    gamePin: "",
+    gameName: "",
+    timestamp: "no time stamp yet"
   };
   static navigationOptions = ({ navigation }) => {
     return {
@@ -26,6 +32,7 @@ class WaitingScreen extends React.Component {
       headerRight: null
     };
   };
+
   render() {
     const { navigation } = this.props;
     const { playersArray } = this.state;
@@ -35,7 +42,6 @@ class WaitingScreen extends React.Component {
       else currentPlayers.push(null);
     }
 
-    console.log(this.state);
     return (
       <View style={styles.view}>
         <View style={styles.waitingHeader}>
@@ -51,9 +57,7 @@ class WaitingScreen extends React.Component {
                   size={90}
                   color="rgba(125, 100, 189, 1.0)"
                 />
-                <Text style={styles.text}>
-                  {player}
-                </Text>
+                <Text style={styles.text}>{player}</Text>
               </View>
             ) : (
               <View style={styles.player} key={index}>
@@ -81,16 +85,17 @@ class WaitingScreen extends React.Component {
     );
   }
 
-  createGrid = () => {};
+  // createGrid = () => {};
   componentDidMount() {
-    const game = api.getGame();
-    //.then((game) => {
-    this.setState({
-      noOfPlayers: game.noOfPlayers,
-      playersArray: game.playersArray,
-      gamePin: game.gamePin,
-      gameName: game.gameName
-      // })
+    const { navigation } = this.props;
+    const GamePin = navigation.getParam("GamePin", "this is your game pin");
+    api.getGame(GamePin).then(game => {
+      this.setState({
+        noOfPlayers: game.noOfPlayers,
+        playersArray: game.playersArray,
+        gamePin: game.gamePin,
+        gameName: game.gameName
+      });
     });
   }
 }
@@ -125,7 +130,7 @@ const styles = StyleSheet.create({
   PIN: {
     // flex: 1,
     borderColor: "black",
-    borderWidth: 0.5,
+    borderWidth: 0.5
   },
   player: {
     display: "flex",
@@ -147,9 +152,9 @@ const styles = StyleSheet.create({
   },
   PINtext: {
     fontSize: 30,
-    color: 'rgba(95, 187, 148, 1.0)',
+    color: "rgba(95, 187, 148, 1.0)",
     letterSpacing: 5,
-    backgroundColor: 'grey'
+    backgroundColor: "grey"
   },
   backButton: {
     paddingLeft: 15,

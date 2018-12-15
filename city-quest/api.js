@@ -1,121 +1,61 @@
-export const getTrails = async => {
-  // const data = api request
-  const data = {
-    trails: [
-      {
-        route: [
-          {
-            locationId: "manc-town-hall",
-            lat: 53.4781,
-            long: -2.2441,
-            name: "Manchester Town Hall"
-          },
-          {
-            long: -2.2447,
-            name: "Manchester Central Library",
-            locationId: "library",
-            lat: 53.4781
-          },
-          {
-            long: -2.2399,
-            name: "Chinatown Arch",
-            locationId: "chinaTown",
-            lat: 53.4784
-          },
-          {
-            name: "John Bright Statue",
-            locationId: "johnBright",
-            lat: 53.6146,
-            long: -2.1623
-          },
-          {
-            locationId: "stAnn",
-            lat: 53.4817,
-            long: -2.2458,
-            name: "St Ann's Church"
-          }
-        ],
-        region: {
-          long: -2.2426,
-          city: "Manchester",
-          lat: 53.4808
-        },
-        duration: 2700000,
-        name: "Manchester City Trail",
-        id: "manchester-city-trail"
-      },
-      {
-        route: [
-          {
-            locationId: "manc-town-hall",
-            lat: 53.4781,
-            long: -2.2441,
-            name: "Manchester Town Hall"
-          },
-          {
-            long: -2.2447,
-            name: "Manchester Central Library",
-            locationId: "library",
-            lat: 53.4781
-          },
-          {
-            long: -2.2399,
-            name: "Chinatown Arch",
-            locationId: "chinaTown",
-            lat: 53.4784
-          },
-          {
-            name: "John Bright Statue",
-            locationId: "johnBright",
-            lat: 53.6146,
-            long: -2.1623
-          },
-          {
-            locationId: "stAnn",
-            lat: 53.4817,
-            long: -2.2458,
-            name: "St Ann's Church"
-          }
-        ],
-        region: {
-          long: -2.2426,
-          city: "Manchester",
-          lat: 53.4808
-        },
-        duration: 2700000,
-        name: "Manchester Christmas Trail",
-        id: "manchester-christmas-trail"
-      }
-    ]
-  };
-  return data.trails;
+import axios from "axios";
+const BASE_URL = "https://city-quest-game.herokuapp.com/api";
+const Frisbee = require("frisbee");
+import openSocket from "socket.io-client";
+const socket = openSocket(BASE_URL);
+
+const api = new Frisbee({
+  baseURI: "https://city-quest-game.herokuapp.com/api",
+  headers: {
+    Accept: "application/json",
+    "Content-Type": "application/json"
+  }
+});
+
+export const getTrails = async () => {
+  // try {
+  //   let res = await api.get("/trails");
+
+  //   if (res.err) throw res.err;
+  //   return res.body;
+  // } catch (err) {
+  //   throw err;
+  // }
+  const { data } = await axios.get(`${BASE_URL}/trails`)
+  console.log(data, "<<<<<");
+  return data;
 };
 
-export const getGame = async => {
-  // const data = API CALL GOES HERE
-  const data = {
-    game: {
-      startTime: 1544618750735,
-      gameName: "newGame",
-      trailId: "manchester-city-game",
-      playersArray: [
-        {
-          progress: 0,
-          playerName: "Rajinder"
-        },
-        {
-          progress: 0,
-          playerName: "Kate"
-        },
-        {
-          totalTime: 2,
-          progress: 0,
-          playerName: "Rob"
-        }
-      ],
-      noOfPlayers: 4,
-      gamePin: 1355
-    }
-  };
-  return data.game;
+export const createGame = async gameData => {
+  // try {
+  //   let res = await api.post('/games')
+  //   console.log('response', res.body)
+  //   if(res.err) throw res.err
+
+  // } catch (err) {
+  //   throw err;
+  // }
+  const { data } = await axios.post(`${BASE_URL}/games`, gameData);
+
+  return data;
+};
+export const createPlayer = async (PlayerName, gamePin) => {
+  console.log("got to create player");
+  const { data } = await axios.post(`${BASE_URL}/games/${gamePin}/players`, {
+    playerName: PlayerName
+  });
+  return data.playerName;
+};
+export const getGame = async gamePin => {
+  // try {
+  //   let res = await api.get('/')
+  // }
+  const { data } = await axios.get(`${BASE_URL}/games/${gamePin}`);
+  console.log(data);
+  return data;
+};
+
+export const suscribeToTimer = (interval, cb) => {
+  socket.once("timer", timestamp => cb(null, timestamp));
+  socket.emit("subscribeToTimer", 1000);
 };

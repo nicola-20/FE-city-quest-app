@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Ionicons } from "@expo/vector-icons";
+import * as api from "../api.js";
 
 class CreateGameScreen extends React.Component {
   state = {
@@ -44,7 +45,9 @@ class CreateGameScreen extends React.Component {
         enableOnAndroid={true}
       >
         <Text style={styles.text}>Selected trail:</Text>
-        <Text style={styles.text}>{navigation.getParam("trail_name", "Trail")}</Text>
+        <Text style={styles.text}>
+          {navigation.getParam("trail_name", "Trail")}
+        </Text>
         <TextInput
           style={styles.input}
           placeholder="Game Name"
@@ -154,7 +157,10 @@ class CreateGameScreen extends React.Component {
     );
   }
   componentDidMount() {
-    const trailId = this.props.navigation.getParam("trailId", 'your chosen trail');
+    const trailId = this.props.navigation.getParam(
+      "trailId",
+      "your chosen trail"
+    );
     this.setState({
       trailId
     });
@@ -163,13 +169,27 @@ class CreateGameScreen extends React.Component {
     this.setState({
       noOfPlayers: num
     });
-  }
+  };
   handleCreate = () => {
-    // make post request GAME
-    // then
-    // MAKE PATCH REQUEST PLAYER
-    this.props.navigation.navigate("Waiting")
-  }
+    const gameData = {
+      gameName: this.state.gameName,
+      noOfPlayers: this.state.noOfPlayers,
+      trailId: this.state.trailId
+    };
+    api
+      .createGame(gameData)
+      .then(({ gamePin }) => {
+        console.log(gamePin);
+        return Promise.all([
+          api.createPlayer(this.state.PlayerName, gamePin),
+          gamePin
+        ]);
+      })
+      .then(([player, gamePin]) => {
+        console.log(gamePin);
+        this.props.navigation.navigate("Waiting", { GamePin: gamePin });
+      });
+  };
 }
 
 const styles = StyleSheet.create({
