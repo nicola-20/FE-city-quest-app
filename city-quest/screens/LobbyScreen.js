@@ -13,7 +13,6 @@ class LobbyScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     return (
-      // <View style={styles.view}>
       <LinearGradient style={styles.view} colors={["#2ebf91", "#8360c3"]}>
         <TouchableOpacity
           onPress={() => {
@@ -32,7 +31,6 @@ class LobbyScreen extends React.Component {
           <Text style={styles.buttonText}>Create Game</Text>
         </TouchableOpacity>
       </LinearGradient>
-      // </View>
     );
   }
 }
@@ -46,15 +44,18 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     // backgroundColor: "#841584",
-    borderWidth: 0.5,
+    borderWidth: 0.7,
     borderRadius: 9,
     borderColor: "white",
     padding: 10,
-    margin: 30
+    margin: 30,
+    width: '80%'
   },
   buttonText: {
     color: "white",
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: 'sf-thin',
+    letterSpacing: 1
   }
 });
 export default LobbyScreen;

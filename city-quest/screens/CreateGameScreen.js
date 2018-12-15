@@ -6,6 +6,7 @@ import {
   StyleSheet,
   TextInput
 } from "react-native";
+import { LinearGradient } from "expo";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Ionicons } from "@expo/vector-icons";
 import * as api from "../api.js";
@@ -28,7 +29,7 @@ class CreateGameScreen extends React.Component {
           <Ionicons name="ios-arrow-back" size={32} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: null
+      headerRight: <Text />
     };
   };
   render() {
@@ -44,115 +45,137 @@ class CreateGameScreen extends React.Component {
         }}
         enableOnAndroid={true}
       >
-        <Text style={styles.text}>Selected trail:</Text>
-        <Text style={styles.text}>
-          {navigation.getParam("trail_name", "Trail")}
-        </Text>
-        <TextInput
-          style={styles.input}
-          placeholder="Game Name"
-          onChangeText={text => {
-            this.setState({ gameName: text });
-          }}
-        />
-        <TextInput
-          style={styles.input}
-          placeholder="Your name here"
-          onClick={() => {
-            this.scroll.props.scrollToPosition(5, 5);
-          }}
-          returnKeyType="send"
-          onSubmitEditing={this.handleCreate}
-          onChangeText={text => {
-            this.setState({ PlayerName: text });
-          }}
-        />
-        <Text style={styles.text}>Select number of players</Text>
-        <View style={styles.numbers}>
-          <TouchableOpacity
-            style={
-              this.state.noOfPlayers === 1
-                ? styles.numberButtonSelected
-                : styles.numberButton
-            }
-            onPress={() => {
-              this.handlePress(1);
+        <View style={styles.heading}>
+          <Text style={styles.text}>Selected trail:</Text>
+          <Text style={styles.trailName}>
+            {navigation.getParam("trail_name", "Trail")}
+          </Text>
+        </View>
+        {/* <LinearGradient
+          style={styles.gradient}
+          start={{ x: 0.0, y: 1.0 }}
+          end={{ x: 1.0, y: 1.0 }}
+          colors={["#2ebf91", "#8360c3"]}
+        > */}
+        <View style={styles.inputs}>
+          <TextInput
+            style={styles.input}
+            placeholder="Game Name"
+            onChangeText={text => {
+              this.setState({ gameName: text });
             }}
-          >
-            <Text
+          />
+          {/* </LinearGradient> */}
+          {/* <LinearGradient
+          style={styles.gradient}
+          start={{ x: 0.0, y: 1.0 }}
+          end={{ x: 1.0, y: 1.0 }}
+          colors={["#2ebf91", "#8360c3"]}
+        > */}
+          <TextInput
+            style={styles.input}
+            placeholder="Your name here"
+            onClick={() => {
+              this.scroll.props.scrollToPosition(5, 5);
+            }}
+            returnKeyType="send"
+            onSubmitEditing={this.handleCreate}
+            onChangeText={text => {
+              this.setState({ PlayerName: text });
+            }}
+          />
+        </View>
+        {/* </LinearGradient> */}
+        <View style={styles.players}>
+          <Text style={styles.text}>Select number of players:</Text>
+          <View style={styles.numbers}>
+            <TouchableOpacity
               style={
                 this.state.noOfPlayers === 1
-                  ? styles.numberTextSelected
-                  : styles.numberText
+                  ? styles.numberButtonSelected
+                  : styles.numberButton
               }
+              onPress={() => {
+                this.handlePress(1);
+              }}
             >
-              1
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={
-              this.state.noOfPlayers === 2
-                ? styles.numberButtonSelected
-                : styles.numberButton
-            }
-            onPress={() => {
-              this.handlePress(2);
-            }}
-          >
-            <Text
+              <Text
+                style={
+                  this.state.noOfPlayers === 1
+                    ? styles.numberTextSelected
+                    : styles.numberText
+                }
+              >
+                1
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={
                 this.state.noOfPlayers === 2
-                  ? styles.numberTextSelected
-                  : styles.numberText
+                  ? styles.numberButtonSelected
+                  : styles.numberButton
               }
+              onPress={() => {
+                this.handlePress(2);
+              }}
             >
-              2
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={
-              this.state.noOfPlayers === 3
-                ? styles.numberButtonSelected
-                : styles.numberButton
-            }
-            onPress={() => {
-              this.handlePress(3);
-            }}
-          >
-            <Text
+              <Text
+                style={
+                  this.state.noOfPlayers === 2
+                    ? styles.numberTextSelected
+                    : styles.numberText
+                }
+              >
+                2
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={
                 this.state.noOfPlayers === 3
-                  ? styles.numberTextSelected
-                  : styles.numberText
+                  ? styles.numberButtonSelected
+                  : styles.numberButton
               }
+              onPress={() => {
+                this.handlePress(3);
+              }}
             >
-              3
-            </Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={
-              this.state.noOfPlayers === 4
-                ? styles.numberButtonSelected
-                : styles.numberButton
-            }
-            onPress={() => {
-              this.handlePress(4);
-            }}
-          >
-            <Text
+              <Text
+                style={
+                  this.state.noOfPlayers === 3
+                    ? styles.numberTextSelected
+                    : styles.numberText
+                }
+              >
+                3
+              </Text>
+            </TouchableOpacity>
+            <TouchableOpacity
               style={
                 this.state.noOfPlayers === 4
-                  ? styles.numberTextSelected
-                  : styles.numberText
+                  ? styles.numberButtonSelected
+                  : styles.numberButton
               }
+              onPress={() => {
+                this.handlePress(4);
+              }}
             >
-              4
-            </Text>
+              <Text
+                style={
+                  this.state.noOfPlayers === 4
+                    ? styles.numberTextSelected
+                    : styles.numberText
+                }
+              >
+                4
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        <View style={styles.buttonView}>
+          <TouchableOpacity onPress={this.handleCreate} style={styles.button}>
+            <Text style={styles.buttonText}>Create</Text>
           </TouchableOpacity>
         </View>
-        <TouchableOpacity onPress={this.handleCreate} style={styles.button}>
-          <Text style={styles.buttonText}>Create</Text>
-        </TouchableOpacity>
       </KeyboardAwareScrollView>
     );
   }
@@ -194,7 +217,15 @@ class CreateGameScreen extends React.Component {
 
 const styles = StyleSheet.create({
   text: {
-    fontSize: 17
+    fontSize: 20,
+    fontFamily: "sf-thin",
+    color: "#515151"
+  },
+  trailName: {
+    fontSize: 24,
+    fontFamily: "sf-light",
+    letterSpacing: 0.7,
+    color: "#8360c3"
   },
   backButton: {
     paddingLeft: 15,
@@ -202,39 +233,92 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: "white",
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: "sf-light",
+    letterSpacing: 0.7,
+    width: "100%",
+    textAlign: "center"
+  },
+  heading: {
+    borderColor: "black",
+    borderWidth: 0,
+    width: "100%",
+    flex: 3,
+    justifyContent: 'space-evenly',
+    alignItems: 'center'
+  },
+  inputs: {
+    borderColor: "black",
+    borderWidth: 0,
+    width: "100%",
+    flex: 7,
+    justifyContent: 'space-evenly',
+    alignItems: 'center'
+  },
+  players: {
+    borderColor: "black",
+    borderWidth: 0,
+    width: "100%",
+    flex: 4,
+    justifyContent: 'space-evenly',
+    alignItems: 'center'
+  },
+  buttonView: {
+    borderColor: "black",
+    borderWidth: 0,
+    width: "100%",
+    flex: 3,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#7B68BF",
+    justifyContent: 'center',
+    backgroundColor: "#8360c3",
     borderWidth: 0,
-    borderRadius: 9,
+    borderRadius: 11,
     // borderColor: "#515151",
     padding: 10,
-    margin: 30,
-    width: 300
+    width: "50%",
+    height: '50%'
   },
   buttonText: {
     color: "white",
-    fontSize: 20
+    fontSize: 22,
+    fontFamily: "sf-thin",
+    letterSpacing: 1
   },
+  // gradient: {
+  //   margin: 30,
+  //   borderRadius: 12,
+  //   width: '80%',
+  //   height: '10%',
+  //   alignItems: "center",
+  //   justifyContent: 'center',
+  // },
   input: {
-    margin: 30,
     borderColor: "#515151",
-    borderWidth: 0.5,
+    borderWidth: 0.8,
+    // backgroundColor: 'white',
     borderRadius: 12,
-    width: 250,
-    fontSize: 20,
-    padding: 10
+    // height: '97%',
+    // width: '98%',
+    width: "80%",
+    height: "23%",
+    fontSize: 22,
+    padding: 10,
+    fontFamily: "sf-thin",
+    letterSpacing: 0.5,
+    color: "#515151"
   },
   numberButton: {
     borderWidth: 0,
     borderColor: "#515151",
     borderRadius: 9,
     padding: 0,
-    margin: 10,
-    height: 40,
-    width: 40,
+    // margin: 13,
+    height: 43,
+    width: 43,
     backgroundColor: "rgba(62, 172, 154, 0.2)",
     justifyContent: "center"
   },
@@ -243,28 +327,31 @@ const styles = StyleSheet.create({
     borderColor: "#515151",
     borderRadius: 9,
     padding: 0,
-    margin: 10,
-    height: 40,
-    width: 40,
+    // margin: 13,
+    height: 43,
+    width: 43,
     backgroundColor: "rgba(62, 172, 154, 1.0)",
     justifyContent: "center"
   },
   numbers: {
     display: "flex",
     flexDirection: "row",
+    justifyContent: "space-between",
     borderColor: "black",
-    borderWidth: 0
+    borderWidth: 0,
+    width: '80%'
   },
   numberText: {
     color: "#515151",
-    fontSize: 23,
-    borderColor: "black",
-    textAlign: "center"
+    fontSize: 24,
+    textAlign: "center",
+    fontFamily: "sf-light"
   },
   numberTextSelected: {
     color: "white",
-    fontSize: 23,
-    textAlign: "center"
+    fontSize: 24,
+    textAlign: "center",
+    fontFamily: "sf-regular"
   }
 });
 export default CreateGameScreen;

@@ -5,8 +5,10 @@ import {
   createStackNavigator,
   createBottomTabNavigator,
   createAppContainer,
-  TabBarBottom
+  TabBarBottom,
+  withNavigation
 } from "react-navigation";
+import FontAwesome, { Icons, IconTypes } from "react-native-fontawesome";
 import LobbyScreen from "../screens/LobbyScreen";
 import SelectTrailScreen from "../screens/SelectTrailScreen";
 import CreateGameScreen from "../screens/CreateGameScreen";
@@ -17,7 +19,6 @@ import MapScreen from "../screens/MapScreen";
 import QuestionScreen from "../screens/QuestionScreen";
 import InfoScreen from "../screens/InfoScreen";
 import CompletedTasksScreen from "../screens/CompletedTasksScreen";
-// import Tabs from './TabNavigator'
 
 // TAB NAVIGATOR
 
@@ -40,7 +41,6 @@ const GameTab = createAppContainer(
       }
     },
     {
-      // defaultNavigationOptions: ({ navigation }) => ({}),
       initialRouteName: "Map",
       order: ["Camera", "Map", "Question"],
       tabBarOptions: {
@@ -52,12 +52,26 @@ const GameTab = createAppContainer(
 
 // DRAWER
 
+const DrawerIcon = ({navigation}) => {
+  return (
+    <TouchableOpacity
+      style={{ paddingLeft: 10, paddingRight: 15 }}
+      onPress={() => {
+        navigation.toggleDrawer()
+      }}
+    >
+      <Text style={{ color: "white", fontSize: 25 }}>
+        <FontAwesome>{Icons.bars}</FontAwesome>
+      </Text>
+    </TouchableOpacity>
+  );
+};
+
 const Drawer = createAppContainer(
   createDrawerNavigator(
     {
       Quit: {
-        screen: LobbyScreen,
-        header: null
+        screen: LobbyScreen
       },
       Info: {
         screen: InfoScreen
@@ -67,7 +81,6 @@ const Drawer = createAppContainer(
       },
       Game: {
         screen: GameTab,
-        header: null
       }
     },
     {
@@ -76,7 +89,6 @@ const Drawer = createAppContainer(
       drawerWidth: 150,
       drawerPosition: "right",
       drawerType: "front",
-      headerBackTitleVisible: false
     }
   )
 );
@@ -95,41 +107,64 @@ export default (Stack = createStackNavigator(
     SelectTrail: {
       screen: SelectTrailScreen,
       navigationOptions: {
-        title: "Select Trail"
+        title: "Select Trail",
+        gesturesEnabled: false
       }
     },
     CreateGame: {
       screen: CreateGameScreen,
       navigationOptions: {
-        title: "Create Game"
+        title: "Create Game",
+        gesturesEnabled: false
       }
     },
     JoinGame: {
       screen: JoinGameScreen,
       navigationOptions: {
-        title: "Join Game"
+        title: "Join Game",
+        gesturesEnabled: false
       }
     },
     Waiting: {
       screen: WaitingScreen,
       navigationOptions: {
-        title: "Waiting for Players"
+        title: "Waiting for Players",
+        gesturesEnabled: false
       }
     },
     Drawer: {
       screen: Drawer,
-      navigationOptions: {
-        headerTitle: <Text >Game Icon</Text>,
-        headerLeft: null,
-        headerRight: null
-      }
+      navigationOptions: ({
+        headerLeft: null
+      }),
+      navigationOptions: ({navigation}) => ({
+        gesturesEnabled: false,
+        // header: navigation => ({
+        //   title: 'My App',
+        //   left: <DrawerButton navigation={navigation} />,
+        // }),
+        headerTitle: null,
+        headerLeft: (
+          <Text
+            style={{
+              color: "white",
+              fontSize: 30,
+              paddingLeft: 10,
+              paddingRight: 10
+            }}
+          >
+            <FontAwesome>{Icons.searchLocation}</FontAwesome>
+          </Text>
+        ),
+        headerRight: <DrawerIcon navigation={navigation}/>
+      })
     }
   },
   {
     initialRoute: "Lobby",
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: "#3EAC9A"
+        backgroundColor: "#2ebf91"
         // align header title center in android
       },
       headerTintColor: "#fff"

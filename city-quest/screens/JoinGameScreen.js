@@ -27,7 +27,7 @@ class JoinGameScreen extends React.Component {
           <Ionicons name="ios-arrow-back" size={32} color="white" />
         </TouchableOpacity>
       ),
-      headerRight: null
+      headerRight: <Text />
     };
   };
   render() {
@@ -37,11 +37,15 @@ class JoinGameScreen extends React.Component {
       <KeyboardAwareScrollView
         contentContainerStyle={{
           flex: 1,
-          justifyContent: "center",
-          alignItems: "center"
+          justifyContent: "space-evenly",
+          alignItems: "center",
+          paddingBottom: 20
         }}
         enableOnAndroid={true}
       >
+        <Text adjustsFontSizeToFit numberOfLines={2} style={styles.text}>
+          To join a game, enter the invitation PIN and your name below:
+        </Text>
         <TextInput
           style={styles.input}
           placeholder="Game PIN"
@@ -79,7 +83,13 @@ const styles = StyleSheet.create({
   view: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignContent: "space-between"
+  },
+  text: {
+    width: "80%",
+    fontFamily: "sf-light",
+    fontSize: 20,
+    color: "#515151"
   },
   backButton: {
     paddingLeft: 15,
@@ -87,30 +97,40 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: "white",
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: "sf-light",
+    letterSpacing: 0.7,
+    width: "100%",
+    textAlign: "center"
   },
   input: {
-    margin: 30,
     borderColor: "#515151",
-    borderWidth: 0.5,
+    borderWidth: 0.7,
     borderRadius: 12,
-    width: 250,
-    fontSize: 20,
-    padding: 10
+    width: "80%",
+    height: "10%",
+    fontSize: 22,
+    padding: 10,
+    fontFamily: "sf-thin",
+    letterSpacing: 0.5,
+    color: "#515151"
   },
   button: {
     alignItems: "center",
-    backgroundColor: "#7B68BF",
+    justifyContent: "center",
+    backgroundColor: "#8360c3",
     borderWidth: 0,
-    borderRadius: 12,
+    borderRadius: 9,
     // borderColor: "#515151",
     padding: 10,
-    margin: 30,
-    width: 100
+    width: "30%",
+    height: "10%"
   },
   buttonText: {
     color: "white",
-    fontSize: 25
+    fontSize: 22,
+    fontFamily: "sf-thin",
+    letterSpacing: 1
   }
 });
 export default JoinGameScreen;

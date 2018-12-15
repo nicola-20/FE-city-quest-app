@@ -22,7 +22,6 @@ export const getTrails = async () => {
   //   throw err;
   // }
   const { data } = await axios.get(`${BASE_URL}/trails`)
-  console.log(data, "<<<<<");
   return data;
 };
 
@@ -40,10 +39,11 @@ export const createGame = async gameData => {
   return data;
 };
 export const createPlayer = async (PlayerName, gamePin) => {
-  console.log("got to create player");
+  // console.log("got to create player");
   const { data } = await axios.post(`${BASE_URL}/games/${gamePin}/players`, {
     playerName: PlayerName
   });
+  // console.log(data.playerName, 'playerName inside createPlayer')
   return data.playerName;
 };
 export const getGame = async gamePin => {
@@ -51,8 +51,8 @@ export const getGame = async gamePin => {
   //   let res = await api.get('/')
   // }
   const { data } = await axios.get(`${BASE_URL}/games/${gamePin}`);
-  console.log(data);
-  return data;
+  // console.log(data, 'inside GetGame');
+  return data.game;
 };
 
 export const suscribeToTimer = (interval, cb) => {

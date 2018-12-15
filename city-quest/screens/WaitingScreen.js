@@ -11,6 +11,7 @@ import {
 import * as api from "../api.js";
 import { AntDesign } from "@expo/vector-icons";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialIcons } from "@expo/vector-icons";
 
 class WaitingScreen extends React.Component {
   // constructor(props) {
@@ -23,13 +24,14 @@ class WaitingScreen extends React.Component {
     playersArray: [],
     gamePin: "",
     gameName: "",
-    timestamp: "no time stamp yet"
+    timestamp: "no time stamp yet",
+    isLoading: true
   };
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: <Text style={styles.headerTitle}>Waiting for players</Text>,
-      headerLeft: null,
-      headerRight: null
+      headerLeft: <Text />,
+      headerRight: <Text />
     };
   };
 
@@ -41,11 +43,20 @@ class WaitingScreen extends React.Component {
       if (playersArray[i]) currentPlayers.push(playersArray[i].playerName);
       else currentPlayers.push(null);
     }
-
+    // console.log(this.state, "STATE inside waiting screen");
+    // console.log(currentPlayers, "currentPlayers");
+    if (this.state.isLoading)
+      return (
+        <ActivityIndicator
+          size="large"
+          color="#8360c3"
+          style={{ margin: 30 }}
+        />
+      );
     return (
       <View style={styles.view}>
         <View style={styles.waitingHeader}>
-          <Text style={styles.welcome}>Welcome to:</Text>
+          <Text style={styles.welcome}>Welcome to</Text>
           <Text style={styles.gameName}>{this.state.gameName}</Text>
         </View>
         <View style={styles.players}>
@@ -54,47 +65,57 @@ class WaitingScreen extends React.Component {
               <View style={styles.player} key={index}>
                 <MaterialCommunityIcons
                   name="account"
-                  size={90}
-                  color="rgba(125, 100, 189, 1.0)"
+                  size={100}
+                  // color="rgba(131, 96, 195, 1.0)"
+                  color="rgba(110, 120, 183, 1.0)"
                 />
-                <Text style={styles.text}>{player}</Text>
+                {/* <MaterialIcons
+                  name="account-circle"
+                  size={90}
+                  color="rgba(131, 96, 195, 1.0)"
+                /> */}
+                <Text style={styles.playerText}>{player}</Text>
               </View>
             ) : (
               <View style={styles.player} key={index}>
                 <MaterialCommunityIcons
                   name="account"
-                  size={90}
-                  color="rgba(125, 100, 189, 0.2)"
+                  size={100}
+                  // color="rgba(131, 96, 195, 1.0)"
+                  color="rgba(110, 120, 183, 0.2)"
                 />
+                {/* <MaterialIcons
+                  name="account-circle"
+                  size={90}
+                  color="rgba(131, 96, 195, 0.2)"
+                /> */}
+                <Text />
               </View>
             );
           })}
         </View>
         <View style={styles.PIN}>
           <Text style={styles.text}>Game PIN:</Text>
-          <Text style={styles.PINtext}>{this.state.gamePin}</Text>
-        </View>
-        <Button
-          onPress={() => {
+          <Text style={styles.PINtext} onPress={() => {
             navigation.navigate("Game");
-          }}
-          title="Start Game"
-          color="#841584"
-        />
+          }}>{this.state.gamePin}</Text>
+        </View>
       </View>
     );
   }
 
-  // createGrid = () => {};
   componentDidMount() {
     const { navigation } = this.props;
     const GamePin = navigation.getParam("GamePin", "this is your game pin");
+    // console.log(GamePin, "GamePin inside component did mount");
     api.getGame(GamePin).then(game => {
+      // console.log(game, "game inside component did mount");
       this.setState({
         noOfPlayers: game.noOfPlayers,
         playersArray: game.playersArray,
         gamePin: game.gamePin,
-        gameName: game.gameName
+        gameName: game.gameName,
+        isLoading: false
       });
     });
   }
@@ -106,55 +127,87 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     borderColor: "black",
-    borderWidth: 0.5,
-    flex: 1
+    borderWidth: 0,
+    flex: 1,
+    fontFamily: 'sf-thin'
   },
   players: {
     display: "flex",
     flexDirection: "row",
     flexWrap: "wrap",
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "black",
-    borderWidth: 0.5,
-    flex: 1,
-    padding: 10
+    justifyContent: "space-evenly",
+    borderColor: "red",
+    borderWidth: 0,
+    flex: 7
   },
   waitingHeader: {
-    // flex: 1,
+    flex: 2,
     borderColor: "black",
-    borderWidth: 0.5,
+    borderWidth: 0,
     fontSize: 25,
-    padding: 10
+    padding: 10,
+    justifyContent: 'space-evenly',
+    alignContent: 'center'
   },
   PIN: {
-    // flex: 1,
+    flex: 3,
     borderColor: "black",
-    borderWidth: 0.5
+    borderWidth: 0,
+    width: '100%',
+    justifyContent: 'space-evenly',
+    alignItems: 'center'
   },
   player: {
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
     alignItems: "center",
-    margin: 10,
     borderColor: "black",
-    borderWidth: 0.5
+    borderWidth: 0,
+    margin: 13
   },
   text: {
-    fontSize: 17
+    fontSize: 20,
+    fontFamily: "sf-ultralight",
+    letterSpacing: 0.7,
+    color: '#515151',
+    justifyContent: 'center',
+    borderWidth: 0,
+    borderColor: 'blue'
+  },
+  playerText: {
+    fontSize: 20,
+    fontFamily: "sf-light",
+    letterSpacing: 0.9,
+    color: "rgba(110, 120, 183, 1.0)",
+    marginTop: -20
   },
   welcome: {
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: "sf-ultralight",
+    letterSpacing: 0.7,
+    color: '#515151',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    borderColor: 'black',
+    borderWidth: 0
   },
   gameName: {
-    fontSize: 30
+    fontSize: 30,
+    fontFamily: "sf-light",
+    letterSpacing: 0.7,
+    color: '#515151'
   },
   PINtext: {
-    fontSize: 30,
+    fontSize: 50,
+    fontFamily: "sf-regular",
     color: "rgba(95, 187, 148, 1.0)",
     letterSpacing: 5,
-    backgroundColor: "grey"
+    borderColor: 'magenta',
+    borderWidth: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   backButton: {
     paddingLeft: 15,
@@ -162,7 +215,11 @@ const styles = StyleSheet.create({
   },
   headerTitle: {
     color: "white",
-    fontSize: 20
+    fontSize: 20,
+    fontFamily: "sf-light",
+    letterSpacing: 0.7,
+    width: "100%",
+    textAlign: "center"
   },
   button: {
     alignItems: "center",
