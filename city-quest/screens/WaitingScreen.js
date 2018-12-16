@@ -11,9 +11,7 @@ import {
   RefreshControl
 } from "react-native";
 import * as api from "../api.js";
-import { AntDesign } from "@expo/vector-icons";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { MaterialIcons } from "@expo/vector-icons";
+import { Ionicons, AntDesign, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 class WaitingScreen extends React.Component {
   // constructor(props) {
@@ -129,24 +127,16 @@ class WaitingScreen extends React.Component {
     const { navigation } = this.props;
     const GamePin = navigation.getParam("GamePin", "this is your game pin");
     api.getGame(GamePin).then(game => {
-      console.log(game, "game inside component did mount");
       this.setState({
         game,
-        // noOfPlayers: game.noOfPlayers,
-        // playersArray: game.playersArray,
-        // gamePin: game.gamePin,
-        // gameName: game.gameName,
         isLoading: false
       });
     });
   }
   onRefresh = () => {
     const Pin = this.state.game.gamePin
-    console.log(Pin)
     this.setState({ refreshing: true });
-    console.log(this.state.game.gamePin, 'gamePin')
     api.getGame(Pin).then(game => {
-      console.log(game, 'game inside on Refresh')
       this.setState({
         game,
         refreshing: false

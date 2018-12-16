@@ -141,7 +141,8 @@ const styles = StyleSheet.create({
     width: "80%",
     fontFamily: "sf-light",
     fontSize: 20,
-    color: "#515151"
+    color: "#515151",
+    marginTop: 60
   },
   backButton: {
     paddingLeft: 15,

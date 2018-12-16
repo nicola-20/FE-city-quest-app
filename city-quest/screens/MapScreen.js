@@ -1,6 +1,5 @@
 import React from "react";
 import { Text, SafeAreaView } from "react-native";
-import Map from "./Map";
 import { Location, Permissions, MapView } from "expo";
 
 const Marker = MapView.Marker;

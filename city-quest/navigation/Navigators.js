@@ -9,6 +9,12 @@ import {
   withNavigation
 } from "react-navigation";
 import FontAwesome, { Icons, IconTypes } from "react-native-fontawesome";
+import {
+  Ionicons,
+  AntDesign,
+  MaterialCommunityIcons,
+  MaterialIcons
+} from "@expo/vector-icons";
 import LobbyScreen from "../screens/LobbyScreen";
 import SelectTrailScreen from "../screens/SelectTrailScreen";
 import CreateGameScreen from "../screens/CreateGameScreen";
@@ -43,8 +49,51 @@ const GameTab = createAppContainer(
     {
       initialRouteName: "Map",
       order: ["Camera", "Map", "Question"],
+      defaultNavigationOptions: ({ navigation }) => ({
+        tabBarIcon: ({ focused, horizontal, tintColor }) => {
+          const { routeName } = navigation.state;
+          if (routeName === "Map") {
+            return (
+              <Ionicons
+                name="md-map"
+                size={30}
+                color={tintColor}
+              />
+            );
+          } else if (routeName === "Camera") {
+            return (
+              <AntDesign
+                name="camera"
+                size={30}
+                color={tintColor}
+              />
+            );
+          } else if (routeName === "Question") {
+            return (
+              <AntDesign
+                name="questioncircle"
+                size={30}
+                color={tintColor}
+              />
+            );
+          }
+        }
+      }),
       tabBarOptions: {
-        activeTintColor: "#e91e63"
+        inactiveBackgroundColor: "rgba(110, 120, 183, 1.0)",
+        inactiveTintColor: "white",
+        activeBackgroundColor: "rgba(110, 120, 183, 0.8)",
+        activeTintColor: "white",
+        showLabel: false
+        // activeTintColor: "Label and icon color of the active tab",
+        // activeBackgroundColor: "Background color of the active tab",
+        // inactiveTintColor: "Label and icon color of the inactive tab",
+        // inactiveBackgroundColor: "Background color of the inactive tab",
+        // showLabel: "Whether to show label for tab, default is true",
+        // showIcon: "Whether to show icon for tab, default is true",
+        // style: "Style object for the tab bar",
+        // labelStyle: "Style object for the tab label",
+        // tabStyle: "Style object for the tab"
       }
     }
   )
@@ -52,12 +101,12 @@ const GameTab = createAppContainer(
 
 // DRAWER
 
-const DrawerIcon = ({navigation}) => {
+const DrawerIcon = ({ navigation }) => {
   return (
     <TouchableOpacity
       style={{ paddingLeft: 10, paddingRight: 15 }}
       onPress={() => {
-        navigation.toggleDrawer()
+        navigation.toggleDrawer();
       }}
     >
       <Text style={{ color: "white", fontSize: 25 }}>
@@ -80,7 +129,7 @@ const Drawer = createAppContainer(
         screen: CompletedTasksScreen
       },
       Game: {
-        screen: GameTab,
+        screen: GameTab
       }
     },
     {
@@ -88,7 +137,7 @@ const Drawer = createAppContainer(
       // contentComponent: DrawerScreen,
       drawerWidth: 150,
       drawerPosition: "right",
-      drawerType: "front",
+      drawerType: "front"
     }
   )
 );
@@ -134,7 +183,7 @@ export default (Stack = createStackNavigator(
     },
     Drawer: {
       screen: Drawer,
-      navigationOptions: ({navigation}) => ({
+      navigationOptions: ({ navigation }) => ({
         gesturesEnabled: false,
         // header: navigation => ({
         //   title: 'My App',
@@ -153,7 +202,7 @@ export default (Stack = createStackNavigator(
             <FontAwesome>{Icons.searchLocation}</FontAwesome>
           </Text>
         ),
-        headerRight: <DrawerIcon navigation={navigation}/>
+        headerRight: <DrawerIcon navigation={navigation} />
       })
     }
   },
