@@ -20,6 +20,29 @@ export default class GalleryScreen extends React.Component {
     selected: []
   };
 
+  render() {
+    return (
+      <View style={styles.container}>
+        <View style={styles.navbar}>
+          <TouchableOpacity style={styles.button} onPress={this.props.onPress}>
+            <Ionicons name="ios-arrow-back" size={30} color="white" />
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={this.saveToGallery}>
+            <Text style={styles.whiteText}>Save selected to gallery</Text>
+          </TouchableOpacity>
+          <TouchableOpacity style={styles.button} onPress={this.sendPhoto}>
+            <Text style={styles.whiteText}>Send selected as answer</Text>
+          </TouchableOpacity>
+        </View>
+        <ScrollView contentComponentStyle={{ flex: 1 }}>
+          <View style={styles.pictures}>
+            {this.state.photos.map(this.renderPhoto)}
+          </View>
+        </ScrollView>
+      </View>
+    );
+  }
+
   componentDidMount = async () => {
     const photos = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
     this.setState({ photos });
@@ -52,6 +75,23 @@ export default class GalleryScreen extends React.Component {
     }
   };
 
+  sendPhoto = async () => {
+    const photos = this.state.selected;
+    if (photos.length > 0) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== "granted") {
+        throw new Error("Denied CAMERA_ROLL permissions!");
+      }
+      //   const promises = photos.map(photoUri => {
+      //     return MediaLibrary.createAssetAsync(photoUri);
+      //   });
+      //   await Promise.all(promises);
+      //   alert("Successfully saved photos to user's gallery!");
+      // } else {
+      //   alert("No photos to save!");
+    }
+  };
+
   renderPhoto = fileName => (
     <Photo
       key={fileName}
@@ -59,38 +99,18 @@ export default class GalleryScreen extends React.Component {
       onSelectionToggle={this.toggleSelection}
     />
   );
-
-  render() {
-    return (
-      <View style={styles.container}>
-        <View style={styles.navbar}>
-          <TouchableOpacity style={styles.button} onPress={this.props.onPress}>
-            <Ionicons name="ios-arrow-back" size={30} color="#515151" />
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button} onPress={this.saveToGallery}>
-            <Text style={styles.whiteText}>Save selected to gallery</Text>
-          </TouchableOpacity>
-        </View>
-        <ScrollView contentComponentStyle={{ flex: 1 }}>
-          <View style={styles.pictures}>
-            {this.state.photos.map(this.renderPhoto)}
-          </View>
-        </ScrollView>
-      </View>
-    );
-  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "black"
+    backgroundColor: "white"
   },
   navbar: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "white"
+    backgroundColor: "#515151"
   },
   pictures: {
     flex: 1,
@@ -100,9 +120,10 @@ const styles = StyleSheet.create({
     paddingVertical: 8
   },
   button: {
-    padding: 20
+    paddingLeft: 20,
+    paddingRight: 20
   },
   whiteText: {
-    color: "#515151"
+    color: "white"
   }
 });

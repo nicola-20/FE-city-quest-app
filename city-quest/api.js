@@ -50,9 +50,9 @@ export const getGame = async gamePin => {
   // try {
   //   let res = await api.get('/')
   // }
-  console.log(gamePin, 'gamePin inside api get Game')
+  // console.log(gamePin, 'gamePin inside api get Game')
   const { data } = await axios.get(`${BASE_URL}/games/${gamePin}`);
-  console.log(data, 'data inside GetGame');
+  // console.log(data, 'data inside GetGame');
   return data.game;
 };
 

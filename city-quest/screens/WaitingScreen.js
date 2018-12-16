@@ -113,7 +113,8 @@ class WaitingScreen extends React.Component {
           <Text
             style={styles.PINtext}
             onPress={() => {
-              navigation.navigate("Game");
+              this.props.navigation.navigate("Drawer", { game: this.state.game });
+              // navigation.navigate("Game");
             }}
           >
             {this.state.game.gamePin}

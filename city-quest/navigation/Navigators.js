@@ -25,8 +25,18 @@ import MapScreen from "../screens/MapScreen";
 import QuestionScreen from "../screens/QuestionScreen";
 import InfoScreen from "../screens/InfoScreen";
 import CompletedTasksScreen from "../screens/CompletedTasksScreen";
+import PhotoPicker from '../screens/PhotoPicker'
 
 // TAB NAVIGATOR
+
+class GameScreen extends React.Component {
+  render () {
+    // console.log(this.props.navigation.getParam('game'), 'GAME inside gamescreen')
+    return (
+      <GameTab />
+    )
+  }
+}
 
 const GameTab = createAppContainer(
   createBottomTabNavigator(
@@ -116,6 +126,13 @@ const DrawerIcon = ({ navigation }) => {
   );
 };
 
+class DrawerScreen extends React.Component {
+  render () {
+    console.log(this.props.navigation.getParam('game'), 'GAME inside drawerscreen')
+    return (<Drawer />)
+  }
+}
+
 const Drawer = createAppContainer(
   createDrawerNavigator(
     {
@@ -128,8 +145,11 @@ const Drawer = createAppContainer(
       CompletedTasks: {
         screen: CompletedTasksScreen
       },
+      PhotoPicker: {
+        screen: PhotoPicker
+      },
       Game: {
-        screen: GameTab
+        screen: GameScreen
       }
     },
     {
@@ -182,7 +202,7 @@ export default (Stack = createStackNavigator(
       }
     },
     Drawer: {
-      screen: Drawer,
+      screen: DrawerScreen,
       navigationOptions: ({ navigation }) => ({
         gesturesEnabled: false,
         // header: navigation => ({

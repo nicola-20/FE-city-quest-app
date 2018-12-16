@@ -20,7 +20,8 @@ export default class MapScreen extends React.Component {
   };
 
   render() {
-    console.log(this.state.region);
+    // console.log(this.state.region);
+    // console.log(this.props, 'props inside map')
     return (
       <MapView
         style={styles.container}
