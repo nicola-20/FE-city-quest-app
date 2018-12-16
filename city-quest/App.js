@@ -57,7 +57,7 @@ export default class App extends React.Component {
         "sf-ultralight-italic": require("./assets/fonts/SF-Pro-Display-UltralightItalic.otf")
       }),
       Font.loadAsync({
-        "fa-solid": require("./assets/fonts/fa-solid-900.ttf"),
+        "fa_solid_900": require("./assets/fonts/fa_solid_900.ttf"),
         "FontAwesome5FreeSolid": require("./assets/fonts/FontAwesome5FreeSolid.ttf")
       })
     ]);

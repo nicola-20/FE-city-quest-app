@@ -5,25 +5,23 @@ import { MapView } from "expo";
 const Marker = MapView.Marker;
 
 export default class Map extends React.Component {
+  state = {
+    region: {}
+  }
   //   renderMarkers() {
   //     return this.props.places.map((place, i) => (
   //       <Marker key={i} title={place.name} coordinate={place.coords} />
   //     ))
   //   }
-  static navigationOptions = ({ navigation }) => {
-    return {
-      headerTitle: <Text style={styles.headerTitle}>Game Icon</Text>,
-      headerLeft: null,
-      headerRight: null
-    };
-  };
 
   render() {
     const { region } = this.props;
+    console.log(region, 'region')
     return (
       <MapView
         style={styles.container}
-        region={region}
+        region={this.state.region}
+        onRegionChange={this.onRegionChange}
         showsUserLocation
         showsMyLocationButton
       >
@@ -33,10 +31,16 @@ export default class Map extends React.Component {
       </MapView>
     );
   }
+
+ 
+
+  onRegionChange(region) {
+    this.setState({ region });
+  }
 }
 const styles = {
   container: {
     width: "100%",
-    height: "80%"
+    height: "100"
   }
 };

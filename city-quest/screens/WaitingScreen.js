@@ -6,7 +6,9 @@ import {
   Button,
   StyleSheet,
   Animated,
-  ActivityIndicator
+  ActivityIndicator,
+  ScrollView,
+  RefreshControl
 } from "react-native";
 import * as api from "../api.js";
 import { AntDesign } from "@expo/vector-icons";
@@ -21,11 +23,10 @@ class WaitingScreen extends React.Component {
 
   state = {
     noOfPlayers: 0,
-    playersArray: [],
-    gamePin: "",
-    gameName: "",
+    game: {},
     timestamp: "no time stamp yet",
-    isLoading: true
+    isLoading: true,
+    refreshing: false
   };
   static navigationOptions = ({ navigation }) => {
     return {
@@ -37,9 +38,10 @@ class WaitingScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { playersArray } = this.state;
+    const { playersArray } = this.state.game
+    console.log(this.state, 'STATE')
     const currentPlayers = [];
-    for (let i = 0; i < this.state.noOfPlayers; i++) {
+    for (let i = 0; i < this.state.game.noOfPlayers; i++) {
       if (playersArray[i]) currentPlayers.push(playersArray[i].playerName);
       else currentPlayers.push(null);
     }
@@ -54,10 +56,24 @@ class WaitingScreen extends React.Component {
         />
       );
     return (
-      <View style={styles.view}>
+      <ScrollView
+        style={styles.view}
+        contentContainerStyle={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center"
+        }}
+        refreshControl={
+          <RefreshControl
+            refreshing={this.state.refreshing}
+            onRefresh={this.onRefresh}
+          />
+        }
+      >
         <View style={styles.waitingHeader}>
           <Text style={styles.welcome}>Welcome to</Text>
-          <Text style={styles.gameName}>{this.state.gameName}</Text>
+          <Text style={styles.gameName}>{this.state.game.gameName}</Text>
         </View>
         <View style={styles.players}>
           {currentPlayers.map((player, index) => {
@@ -96,40 +112,54 @@ class WaitingScreen extends React.Component {
         </View>
         <View style={styles.PIN}>
           <Text style={styles.text}>Game PIN:</Text>
-          <Text style={styles.PINtext} onPress={() => {
-            navigation.navigate("Game");
-          }}>{this.state.gamePin}</Text>
+          <Text
+            style={styles.PINtext}
+            onPress={() => {
+              navigation.navigate("Game");
+            }}
+          >
+            {this.state.game.gamePin}
+          </Text>
         </View>
-      </View>
+      </ScrollView>
     );
   }
 
-  componentDidMount() {
+  componentWillMount() {
     const { navigation } = this.props;
     const GamePin = navigation.getParam("GamePin", "this is your game pin");
-    // console.log(GamePin, "GamePin inside component did mount");
     api.getGame(GamePin).then(game => {
-      // console.log(game, "game inside component did mount");
+      console.log(game, "game inside component did mount");
       this.setState({
-        noOfPlayers: game.noOfPlayers,
-        playersArray: game.playersArray,
-        gamePin: game.gamePin,
-        gameName: game.gameName,
+        game,
+        // noOfPlayers: game.noOfPlayers,
+        // playersArray: game.playersArray,
+        // gamePin: game.gamePin,
+        // gameName: game.gameName,
         isLoading: false
       });
     });
   }
+  onRefresh = () => {
+    const Pin = this.state.game.gamePin
+    console.log(Pin)
+    this.setState({ refreshing: true });
+    console.log(this.state.game.gamePin, 'gamePin')
+    api.getGame(Pin).then(game => {
+      console.log(game, 'game inside on Refresh')
+      this.setState({
+        game,
+        refreshing: false
+      });
+    });
+  };
 }
 const styles = StyleSheet.create({
   view: {
-    display: "flex",
-    flexDirection: "column",
-    justifyContent: "center",
-    alignItems: "center",
     borderColor: "black",
     borderWidth: 0,
     flex: 1,
-    fontFamily: 'sf-thin'
+    fontFamily: "sf-thin"
   },
   players: {
     display: "flex",
@@ -146,16 +176,16 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     fontSize: 25,
     padding: 10,
-    justifyContent: 'space-evenly',
-    alignContent: 'center'
+    justifyContent: "space-evenly",
+    alignContent: "center"
   },
   PIN: {
     flex: 3,
     borderColor: "black",
     borderWidth: 0,
-    width: '100%',
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
+    width: "100%",
+    justifyContent: "space-evenly",
+    alignItems: "center"
   },
   player: {
     display: "flex",
@@ -170,10 +200,10 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "sf-ultralight",
     letterSpacing: 0.7,
-    color: '#515151',
-    justifyContent: 'center',
+    color: "#515151",
+    justifyContent: "center",
     borderWidth: 0,
-    borderColor: 'blue'
+    borderColor: "blue"
   },
   playerText: {
     fontSize: 20,
@@ -186,28 +216,28 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "sf-ultralight",
     letterSpacing: 0.7,
-    color: '#515151',
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    borderColor: 'black',
+    color: "#515151",
+    justifyContent: "center",
+    alignItems: "center",
+    textAlign: "center",
+    borderColor: "black",
     borderWidth: 0
   },
   gameName: {
     fontSize: 30,
     fontFamily: "sf-light",
     letterSpacing: 0.7,
-    color: '#515151'
+    color: "#515151"
   },
   PINtext: {
     fontSize: 50,
     fontFamily: "sf-regular",
     color: "rgba(95, 187, 148, 1.0)",
     letterSpacing: 5,
-    borderColor: 'magenta',
+    borderColor: "magenta",
     borderWidth: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center"
   },
   backButton: {
     paddingLeft: 15,

@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, Button, TouchableOpacity, StyleSheet } from "react-native";
+import { View, Text, Button, TouchableOpacity, StyleSheet, StatusBar, Platform } from "react-native";
 import { LinearGradient } from "expo";
 
 class LobbyScreen extends React.Component {

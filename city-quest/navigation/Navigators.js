@@ -134,9 +134,6 @@ export default (Stack = createStackNavigator(
     },
     Drawer: {
       screen: Drawer,
-      navigationOptions: ({
-        headerLeft: null
-      }),
       navigationOptions: ({navigation}) => ({
         gesturesEnabled: false,
         // header: navigation => ({

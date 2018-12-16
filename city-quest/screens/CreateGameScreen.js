@@ -4,7 +4,9 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  TextInput
+  TextInput,
+  ScrollView,
+  Platform
 } from "react-native";
 import { LinearGradient } from "expo";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -43,7 +45,11 @@ class CreateGameScreen extends React.Component {
           justifyContent: "center",
           alignItems: "center"
         }}
-        enableOnAndroid={true}
+        // style={{height: '100%', borderColor: 'black', borderWidth: 0.5}}
+        // enableOnAndroid
+        // enableAutomaticScroll
+        // keyboardOpeningTime={0}
+        // extraHeight={Platform.select({ android: 200 })}
       >
         <View style={styles.heading}>
           <Text style={styles.text}>Selected trail:</Text>
