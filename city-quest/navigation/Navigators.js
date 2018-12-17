@@ -62,9 +62,9 @@ const GameTab = createAppContainer(
         tabBarIcon: ({ focused, horizontal, tintColor }) => {
           const { routeName } = navigation.state;
           if (routeName === "Map") {
-            return <Ionicons name="md-map" size={30} color={tintColor} />;
+            return <Ionicons name="md-map" size={35} color={tintColor} />;
           } else if (routeName === "Progress") {
-            return <FontAwesome name="users" size={30} color={tintColor} />;
+            return <MaterialIcons name="timelapse" size={35} color={tintColor} />;
           } else if (routeName === "Question") {
             return (
               <AntDesign name="questioncircle" size={30} color={tintColor} />

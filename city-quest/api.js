@@ -56,7 +56,20 @@ export const getGame = async gamePin => {
   return data.game;
 };
 
-export const suscribeToTimer = (interval, cb) => {
-  socket.once("timer", timestamp => cb(null, timestamp));
-  socket.emit("subscribeToTimer", 1000);
-};
+// export const suscribeToTimer = (interval, cb) => {
+//   socket.once("timer", timestamp => cb(null, timestamp));
+//   socket.emit("subscribeToTimer", 1000);
+// };
+
+export const getTrailById = async (trailId, playerName, index) => {
+  const { data } = await axios.post(`${BASE_URL}/trails/${trailId}`, {playerName, index})
+  console.log(data, 'data inside getTrailByid')
+  return data
+}
+
+export const analyseImage = async (image, gamePin, playerName) => {
+  console.log(image)
+  const {data} = await axios.patch(`${BASE_URL}/games/${gamePin}/${playerName}`, {encoded: image})
+  console.log(data, 'data inside analyse image')
+  return data
+}
