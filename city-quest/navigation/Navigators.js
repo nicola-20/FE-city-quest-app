@@ -1,18 +1,15 @@
 import React from "react";
-import { View, Text, Button, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, TouchableOpacity } from "react-native";
 import {
   createDrawerNavigator,
   createStackNavigator,
   createBottomTabNavigator,
-  createAppContainer,
-  TabBarBottom,
-  withNavigation
+  createAppContainer
 } from "react-navigation";
 import FontAwesome, { Icons, IconTypes } from "react-native-fontawesome";
 import {
   Ionicons,
   AntDesign,
-  MaterialCommunityIcons,
   MaterialIcons
 } from "@expo/vector-icons";
 import LobbyScreen from "../screens/LobbyScreen";
@@ -29,15 +26,6 @@ import PhotoPicker from "../screens/PhotoPicker";
 import DrawerMenu from '../screens/DrawerMenu';
 
 // TAB NAVIGATOR
-
-// class GameScreen extends React.Component {
-//   render() {
-//     // console.log(this.props.navigation.getParam('game'), 'GAME inside gamescreen')
-//     //     console.log(this.props.navigation.getParam('game'), 'GAME inside drawerscreen')
-//     //     console.log(this.props.navigation.getParam('playerName'), 'Player inside drawerscreen')
-//     return <GameTab />;
-//   }
-// }
 
 const GameTab = createAppContainer(
   createBottomTabNavigator(
@@ -72,10 +60,12 @@ const GameTab = createAppContainer(
           }
         }
       }),
-      tabBarOptions: {
-        inactiveBackgroundColor: "rgba(110, 120, 183, 1.0)",
+      tabBarOptions: { 
+        // inactiveBackgroundColor: "rgba(110, 120, 183, 1.0)",
+        inactiveBackgroundColor: "rgba(131, 96, 195, 1.0)",
         inactiveTintColor: "white",
         activeBackgroundColor: "rgba(110, 120, 183, 0.8)",
+        activeBackgroundColor: "rgba(131, 96, 195, 0.8)",
         activeTintColor: "white",
         showLabel: false
       }
@@ -88,7 +78,7 @@ const GameTab = createAppContainer(
 const DrawerIcon = ({ navigation }) => {
   return (
     <TouchableOpacity
-      style={{ paddingLeft: 10, paddingRight: 15 }}
+      style={{ padding: 5, paddingLeft: 10, paddingRight: 15 }}
       onPress={() => {
         navigation.toggleDrawer();
       }}
@@ -99,14 +89,6 @@ const DrawerIcon = ({ navigation }) => {
     </TouchableOpacity>
   );
 };
-
-// class DrawerScreen extends React.Component {
-//   render () {
-//     console.log(this.props.navigation.getParam('game'), 'GAME inside drawerscreen')
-//     console.log(this.props.navigation.getParam('playerName'), 'Player inside drawerscreen')
-//     return (<Drawer />)
-//   }
-// }
 
 const Drawer = createAppContainer(
   createDrawerNavigator(
@@ -180,10 +162,6 @@ export default (Stack = createStackNavigator(
       screen: Drawer,
       navigationOptions: ({ navigation }) => ({
         gesturesEnabled: false,
-        // header: navigation => ({
-        //   title: 'My App',
-        //   left: <DrawerButton navigation={navigation} />,
-        // }),
         headerTitle: null,
         headerLeft: (
           <Text
@@ -205,10 +183,12 @@ export default (Stack = createStackNavigator(
     initialRoute: "Lobby",
     defaultNavigationOptions: {
       headerStyle: {
-        backgroundColor: "#2ebf91"
-        // align header title center in android
+        backgroundColor: "#2ebf91",
+        borderBottomWidth: 0,
+        shadowColor: 'transparent'
       },
-      headerTintColor: "#fff"
+      headerTintColor: "#fff",
+      
     }
   }
 ));

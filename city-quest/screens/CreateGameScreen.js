@@ -36,9 +36,6 @@ class CreateGameScreen extends React.Component {
     };
   };
   render() {
-    // console.log(this.props);
-    // console.log(this.state);
-    console.log(this.state.blank);
     const { navigation } = this.props;
     const { blank } = this.state;
     return (
@@ -260,7 +257,8 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontFamily: "sf-light",
     letterSpacing: 0.7,
-    color: "#8360c3"
+    color: "#8360c3",
+    marginTop: 5
   },
   backButton: {
     paddingLeft: 15,
@@ -280,7 +278,8 @@ const styles = StyleSheet.create({
     width: "100%",
     flex: 3,
     justifyContent: "space-evenly",
-    alignItems: "center"
+    alignItems: "center",
+    marginTop: 10
   },
   inputs: {
     borderColor: "black",

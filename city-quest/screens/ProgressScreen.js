@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, View } from "react-native";
 import ProgressCircle from "react-native-progress-circle";
+import PercentageCircle from "react-native-percentage-circle";
 import * as api from "../api";
 
 class ProgressScreen extends React.Component {
@@ -10,7 +11,7 @@ class ProgressScreen extends React.Component {
     trail: this.props.navigation.state.params.trail
   };
   render() {
-    console.log(this.state.trail, "TRAIL");
+    // console.log(this.state.trail, "TRAIL");
     // const game = this.props.navigation.state.params.game;
     const game = this.state.game;
     const trail = this.state.trail;
@@ -20,38 +21,75 @@ class ProgressScreen extends React.Component {
     // console.log(this.props.navigation.state, "inside question screen");
     const players = game.playersArray;
     const route = trail.route;
-    console.log(typeof route);
+    // console.log(typeof route);
     const trailLength = route.length;
     return (
       <View style={styles.progressScreen}>
+        <Text style={styles.title}>Player Progress</Text>
         <View style={styles.progress}>
           {players.map((player, index) => {
             let playerPercent = Math.floor(
               (player.progress / trailLength) * 100
             );
+            console.log(playerPercent);
+            // playerPercent === 100 ? alert(`${player.playerName} won the game!!`) : ""
             return (
               <View key={index} style={styles.player}>
-                <ProgressCircle
+                {/* <ProgressCircle
                   percent={playerPercent}
                   radius={60}
-                  borderWidth={20}
+                  borderWidth={15}
                   color={
                     player.playerName === this.state.currentPlayer
-                      ? "rgba(46,191,145, 1.0)"
-                      : "rgba(131,96,195, 1.0)"
+                      ? "rgba(46, 191, 145, 1.0)"
+                      : "rgba(110, 120, 183, 1.0)"
                   }
-                  shadowColor="#515151"
+                  shadowColor={
+                    player.playerName === this.state.currentPlayer
+                      ? "rgba(46, 191, 145, 0.2)"
+                      : "rgba(110, 120, 183, 0.2)"
+                  }
                   bgColor="white"
                 >
-                  <Text style={{ fontSize: 18, color: "#515151" }}>
+                  <Text style={styles.text}>
                     {player.playerName === this.state.currentPlayer
                       ? "You"
                       : player.playerName}
                   </Text>
-                  <Text style={{ fontSize: 18, color: "#515151" }}>
-                    {playerPercent}%
+                  <Text style={styles.percentText}>
+                    {playerPercent === 100
+                      ? "Completed!"
+                      : `${player.progress}/${trailLength}`}
                   </Text>
-                </ProgressCircle>
+                </ProgressCircle> */}
+
+                <PercentageCircle
+                  radius={60}
+                  percent={playerPercent}
+                  color={
+                    player.playerName === this.state.currentPlayer
+                      ? "rgba(46, 191, 145, 1.0)"
+                      : "rgba(110, 120, 183, 1.0)"
+                  }
+                  bgcolor={
+                    player.playerName === this.state.currentPlayer
+                      ? "rgba(46, 191, 145, 0.2)"
+                      : "rgba(110, 120, 183, 0.2)"
+                  }
+                  innerColor={"white"}
+                  borderWidth={15}
+                >
+                  <Text style={styles.text}>
+                    {player.playerName === this.state.currentPlayer
+                      ? "You"
+                      : player.playerName}
+                  </Text>
+                  <Text style={styles.percentText}>
+                    {playerPercent === 100
+                      ? "Completed!"
+                      : `${player.progress}/${trailLength}`}
+                  </Text>
+                </PercentageCircle>
               </View>
             );
           })}
@@ -109,9 +147,10 @@ const styles = {
     height: "100%"
   },
   progress: {
+    flex: 6,
     width: "100%",
     height: "100%",
-    borderColor: "blue",
+    borderColor: "red",
     borderWidth: 0,
     display: "flex",
     flexDirection: "row",
@@ -120,8 +159,35 @@ const styles = {
   },
   player: {
     borderColor: "black",
-    borderWidth: 0.5,
-    marginTop: 70
+    borderWidth: 0,
+    marginBottom: 60,
+    marginTop: 10
+  },
+  text: {
+    fontFamily: "sf-thin",
+    fontSize: 18,
+    color: "#515151"
+  },
+  title: {
+    flex: 1,
+    fontFamily: "sf-light",
+    letterSpacing: 0.7,
+    fontSize: 25,
+    color: "#515151",
+    textAlign: "center",
+    justifyContent: "center",
+    textAlignVertical: "center",
+    alignItems: "center",
+    alignContent: "center",
+    borderColor: "blue",
+    borderWidth: 0,
+    paddingTop: 20,
+    marginBottom: 0
+  },
+  percentText: {
+    fontFamily: "sf-regular",
+    fontSize: 20,
+    color: "#515151"
   }
 };
 export default ProgressScreen;

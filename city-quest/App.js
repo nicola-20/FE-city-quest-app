@@ -36,6 +36,9 @@ export default class App extends React.Component {
         "sf-bold": require("./assets/fonts/SF-Pro-Display-Bold.otf")
       }),
       Font.loadAsync({
+        "sf-semibold": require("./assets/fonts/SF-Pro-Display-Semibold.otf")
+      }),
+      Font.loadAsync({
         "sf-medium": require("./assets/fonts/SF-Pro-Display-Medium.otf")
       }),
       Font.loadAsync({

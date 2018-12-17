@@ -63,13 +63,13 @@ export const getGame = async gamePin => {
 
 export const getTrailById = async (trailId, playerName, index) => {
   const { data } = await axios.post(`${BASE_URL}/trails/${trailId}`, {playerName, index})
-  console.log(data, 'data inside getTrailByid')
+  // console.log(data, 'data inside getTrailByid')
   return data
 }
 
 export const analyseImage = async (image, gamePin, playerName) => {
-  console.log(image)
+  // console.log(image)
   const {data} = await axios.patch(`${BASE_URL}/games/${gamePin}/${playerName}`, {encoded: image})
-  console.log(data, 'data inside analyse image')
+  // console.log(data, 'data inside analyse image')
   return data
 }

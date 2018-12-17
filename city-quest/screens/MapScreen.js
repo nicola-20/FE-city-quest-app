@@ -23,7 +23,7 @@ export default class MapScreen extends React.Component {
   };
 
   render() {
-    console.log(this.props.navigation.state.params.trail.region, "inside map screen");
+    // console.log(this.props.navigation.state.params.trail.region, "inside map screen");
     // console.log(this.state.region);
     // console.log(this.props, 'props inside map')
     return (

@@ -1,51 +1,97 @@
-import PropTypes from 'prop-types';
-import React, {Component} from 'react';
-import {NavigationActions} from 'react-navigation';
-import {ScrollView, Text, View} from 'react-native';
+import PropTypes from "prop-types";
+import React, { Component } from "react";
+import { NavigationActions } from "react-navigation";
+import { ScrollView, Text, View, TouchableOpacity } from "react-native";
+import { LinearGradient } from "expo";
 
 class SideMenu extends Component {
-  navigateToScreen = (route) => () => {
+  navigateToScreen = route => () => {
     const navigateAction = NavigationActions.navigate({
       routeName: route
     });
     this.props.navigation.dispatch(navigateAction);
-  }
+  };
 
-  render () {
+  render() {
     return (
-      <View style={styles.container}>
-          <View>
-            <Text style={styles.sectionHeadingStyle}>
-              Progress
-            </Text>
-            <View style={styles.navSectionStyle}>
-              <Text style={styles.navItemStyle} onPress={this.navigateToScreen('Info')}>
-              Info
-              </Text>
-            </View>
-          </View>
-          <View>
-            <Text style={styles.sectionHeadingStyle}>
-              Section 2
-            </Text>
-            <View style={styles.navSectionStyle}>
-              <Text style={styles.navItemStyle} onPress={this.navigateToScreen('PhotoPicker')}>
-                PhotoPicker
-              </Text>
-              <Text style={styles.navItemStyle} onPress={this.navigateToScreen('Game')}>
-                Game
-              </Text>
-            </View>
-          </View>
-        <View style={styles.footerContainer}>
-          <Text>This is my fixed footer</Text>
-        </View>
-      </View>
+      <LinearGradient style={styles.container} colors={["#2ebf91", "#8360c3"]}>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.navigateToScreen("Game")}
+        >
+          <Text
+            style={styles.buttonText}
+            adjustsFontSizeToFit
+            numberOfLines={2}
+          >
+            game
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.navigateToScreen("Info")}
+        >
+          <Text
+            style={styles.buttonText}
+            adjustsFontSizeToFit
+            numberOfLines={1}
+          >
+            info
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.navigateToScreen("Leaderboard")}
+        >
+          <Text
+            style={styles.buttonText}
+            adjustsFontSizeToFit
+            numberOfLines={2}
+          >
+            leader-board
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.navigateToScreen("Lobby")}
+        >
+          <Text
+            style={styles.buttonText}
+            adjustsFontSizeToFit
+            numberOfLines={1}
+          >
+            quit
+          </Text>
+        </TouchableOpacity>
+      </LinearGradient>
     );
   }
 }
 
-const styles={}
+const styles = {
+  container: {
+    height: "100%",
+    flex: 1,
+    justifyContent: 'space-evenly',
+    alignItems: 'center'
+  },
+  button: {
+    height: "10%",
+    width: "80%",
+    borderWidth: 0.7,
+    borderColor: "white",
+    borderRadius: 9,
+    padding: 6,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  buttonText: {
+    color: "white",
+    fontSize: 30,
+    fontFamily: "sf-thin",
+    letterSpacing: 0.7
+  }
+};
 
 SideMenu.propTypes = {
   navigation: PropTypes.object
