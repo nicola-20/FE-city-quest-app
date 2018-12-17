@@ -1,6 +1,7 @@
 import React from "react";
 import { Text, SafeAreaView } from "react-native";
 import { Location, Permissions, MapView } from "expo";
+import * as api from "../api";
 
 const Marker = MapView.Marker;
 
@@ -22,6 +23,7 @@ export default class MapScreen extends React.Component {
   render() {
     // console.log(this.state.region);
     // console.log(this.props, 'props inside map')
+    console.log(this.props.navigation.state.params.trail);
     return (
       <MapView
         style={styles.container}
@@ -37,6 +39,7 @@ export default class MapScreen extends React.Component {
   }
 
   componentDidMount() {
+    // api.getChallenge(challengeId);
     this.setState({
       region: {
         ...trailRegion,

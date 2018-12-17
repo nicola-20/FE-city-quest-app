@@ -21,7 +21,7 @@ export const getTrails = async () => {
   // } catch (err) {
   //   throw err;
   // }
-  const { data } = await axios.get(`${BASE_URL}/trails`)
+  const { data } = await axios.get(`${BASE_URL}/trails`);
   return data;
 };
 
@@ -60,3 +60,5 @@ export const suscribeToTimer = (interval, cb) => {
   socket.once("timer", timestamp => cb(null, timestamp));
   socket.emit("subscribeToTimer", 1000);
 };
+
+// export const getChallenge = async challengeId
