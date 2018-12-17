@@ -18,7 +18,8 @@ class CreateGameScreen extends React.Component {
     gameName: "",
     trailId: "",
     noOfPlayers: 0,
-    PlayerName: ""
+    PlayerName: "",
+    blank: null
   };
   static navigationOptions = ({ navigation }) => {
     return {
@@ -37,7 +38,9 @@ class CreateGameScreen extends React.Component {
   render() {
     // console.log(this.props);
     // console.log(this.state);
+    console.log(this.state.blank);
     const { navigation } = this.props;
+    const { blank } = this.state;
     return (
       <KeyboardAwareScrollView
         contentContainerStyle={{
@@ -56,6 +59,7 @@ class CreateGameScreen extends React.Component {
           <Text style={styles.trailName}>
             {navigation.getParam("trail_name", "Trail")}
           </Text>
+          <Text style={styles.blank}>{blank ? "All fields required" : ""}</Text>
         </View>
         {/* <LinearGradient
           style={styles.gradient}
@@ -65,7 +69,7 @@ class CreateGameScreen extends React.Component {
         > */}
         <View style={styles.inputs}>
           <TextInput
-            style={styles.input}
+            style={blank && blank.gameName ? styles.noInput : styles.input}
             placeholder="Game Name"
             onChangeText={text => {
               this.setState({ gameName: text });
@@ -79,7 +83,7 @@ class CreateGameScreen extends React.Component {
           colors={["#2ebf91", "#8360c3"]}
         > */}
           <TextInput
-            style={styles.input}
+            style={blank && blank.PlayerName ? styles.noInput : styles.input}
             placeholder="Your name here"
             onClick={() => {
               this.scroll.props.scrollToPosition(5, 5);
@@ -94,6 +98,7 @@ class CreateGameScreen extends React.Component {
         {/* </LinearGradient> */}
         <View style={styles.players}>
           <Text style={styles.text}>Select number of players:</Text>
+
           <View style={styles.numbers}>
             <TouchableOpacity
               style={
@@ -200,24 +205,38 @@ class CreateGameScreen extends React.Component {
     });
   };
   handleCreate = () => {
-    const gameData = {
-      gameName: this.state.gameName,
-      noOfPlayers: this.state.noOfPlayers,
-      trailId: this.state.trailId
+    const { gameName, PlayerName, noOfPlayers } = this.state;
+    const blank = this.validate(gameName, PlayerName, noOfPlayers);
+    if (blank.gameName || blank.PlayerName || blank.noOfplayers) {
+      this.setState({ blank });
+    } else {
+      const gameData = {
+        gameName: this.state.gameName,
+        noOfPlayers: this.state.noOfPlayers,
+        trailId: this.state.trailId
+      };
+      api
+        .createGame(gameData)
+        .then(({ gamePin }) => {
+          console.log(gamePin);
+          return Promise.all([
+            api.createPlayer(this.state.PlayerName, gamePin),
+            gamePin
+          ]);
+        })
+        .then(([player, gamePin]) => {
+          console.log(gamePin);
+          // this.setState({ blank: null });
+          this.props.navigation.navigate("Waiting", { GamePin: gamePin });
+        });
+    }
+  };
+  validate = (gameName, PlayerName, noOfPlayers) => {
+    return {
+      gameName: gameName.length === 0,
+      PlayerName: PlayerName.length === 0,
+      noOfplayers: noOfPlayers === 0
     };
-    api
-      .createGame(gameData)
-      .then(({ gamePin }) => {
-        console.log(gamePin);
-        return Promise.all([
-          api.createPlayer(this.state.PlayerName, gamePin),
-          gamePin
-        ]);
-      })
-      .then(([player, gamePin]) => {
-        console.log(gamePin);
-        this.props.navigation.navigate("Waiting", { GamePin: gamePin });
-      });
   };
 }
 
@@ -226,6 +245,16 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontFamily: "sf-thin",
     color: "#515151"
+  },
+  whiteTxt: {
+    fontSize: 20,
+    fontFamily: "sf-thin",
+    color: "white"
+  },
+  blank: {
+    fontSize: 20,
+    fontFamily: "sf-thin",
+    color: "red"
   },
   trailName: {
     fontSize: 24,
@@ -250,43 +279,43 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     width: "100%",
     flex: 3,
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
+    justifyContent: "space-evenly",
+    alignItems: "center"
   },
   inputs: {
     borderColor: "black",
     borderWidth: 0,
     width: "100%",
     flex: 7,
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
+    justifyContent: "space-evenly",
+    alignItems: "center"
   },
   players: {
     borderColor: "black",
     borderWidth: 0,
     width: "100%",
     flex: 4,
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
+    justifyContent: "space-evenly",
+    alignItems: "center"
   },
   buttonView: {
     borderColor: "black",
     borderWidth: 0,
     width: "100%",
     flex: 3,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   },
   button: {
     alignItems: "center",
-    justifyContent: 'center',
+    justifyContent: "center",
     backgroundColor: "#8360c3",
     borderWidth: 0,
     borderRadius: 11,
     // borderColor: "#515151",
     padding: 10,
     width: "50%",
-    height: '50%'
+    height: "50%"
   },
   buttonText: {
     color: "white",
@@ -302,6 +331,18 @@ const styles = StyleSheet.create({
   //   alignItems: "center",
   //   justifyContent: 'center',
   // },
+  noInput: {
+    borderColor: "red",
+    borderWidth: 0.8,
+    borderRadius: 12,
+    width: "80%",
+    height: "23%",
+    fontSize: 22,
+    padding: 10,
+    fontFamily: "sf-thin",
+    letterSpacing: 0.5,
+    color: "#515151"
+  },
   input: {
     borderColor: "#515151",
     borderWidth: 0.8,
@@ -345,7 +386,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     borderColor: "black",
     borderWidth: 0,
-    width: '80%'
+    width: "80%"
   },
   numberText: {
     color: "#515151",
