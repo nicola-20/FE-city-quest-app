@@ -20,35 +20,34 @@ import SelectTrailScreen from "../screens/SelectTrailScreen";
 import CreateGameScreen from "../screens/CreateGameScreen";
 import JoinGameScreen from "../screens/JoinGameScreen";
 import WaitingScreen from "../screens/WaitingScreen";
-import CameraScreen from "../screens/CameraScreen";
+import ProgressScreen from "../screens/ProgressScreen";
 import MapScreen from "../screens/MapScreen";
 import QuestionScreen from "../screens/QuestionScreen";
 import InfoScreen from "../screens/InfoScreen";
 import CompletedTasksScreen from "../screens/CompletedTasksScreen";
-import PhotoPicker from '../screens/PhotoPicker'
+import PhotoPicker from "../screens/PhotoPicker";
+import DrawerMenu from '../screens/DrawerMenu';
 
 // TAB NAVIGATOR
 
-class GameScreen extends React.Component {
-  render () {
-    // console.log(this.props.navigation.getParam('game'), 'GAME inside gamescreen')
-    return (
-      <GameTab />
-    )
-  }
-}
+// class GameScreen extends React.Component {
+//   render() {
+//     // console.log(this.props.navigation.getParam('game'), 'GAME inside gamescreen')
+//     //     console.log(this.props.navigation.getParam('game'), 'GAME inside drawerscreen')
+//     //     console.log(this.props.navigation.getParam('playerName'), 'Player inside drawerscreen')
+//     return <GameTab />;
+//   }
+// }
 
 const GameTab = createAppContainer(
   createBottomTabNavigator(
     {
-      Camera: {
-        screen: CameraScreen,
-        // path: 'camera',
-        title: "Camera"
+      Progress: {
+        screen: ProgressScreen,
+        title: "Progress"
       },
       Map: {
         screen: MapScreen,
-        // path: 'map',
         title: "Map"
       },
       Question: {
@@ -58,33 +57,17 @@ const GameTab = createAppContainer(
     },
     {
       initialRouteName: "Map",
-      order: ["Camera", "Map", "Question"],
+      order: ["Progress", "Map", "Question"],
       defaultNavigationOptions: ({ navigation }) => ({
         tabBarIcon: ({ focused, horizontal, tintColor }) => {
           const { routeName } = navigation.state;
           if (routeName === "Map") {
-            return (
-              <Ionicons
-                name="md-map"
-                size={30}
-                color={tintColor}
-              />
-            );
-          } else if (routeName === "Camera") {
-            return (
-              <AntDesign
-                name="camera"
-                size={30}
-                color={tintColor}
-              />
-            );
+            return <Ionicons name="md-map" size={30} color={tintColor} />;
+          } else if (routeName === "Progress") {
+            return <FontAwesome name="users" size={30} color={tintColor} />;
           } else if (routeName === "Question") {
             return (
-              <AntDesign
-                name="questioncircle"
-                size={30}
-                color={tintColor}
-              />
+              <AntDesign name="questioncircle" size={30} color={tintColor} />
             );
           }
         }
@@ -95,15 +78,6 @@ const GameTab = createAppContainer(
         activeBackgroundColor: "rgba(110, 120, 183, 0.8)",
         activeTintColor: "white",
         showLabel: false
-        // activeTintColor: "Label and icon color of the active tab",
-        // activeBackgroundColor: "Background color of the active tab",
-        // inactiveTintColor: "Label and icon color of the inactive tab",
-        // inactiveBackgroundColor: "Background color of the inactive tab",
-        // showLabel: "Whether to show label for tab, default is true",
-        // showIcon: "Whether to show icon for tab, default is true",
-        // style: "Style object for the tab bar",
-        // labelStyle: "Style object for the tab label",
-        // tabStyle: "Style object for the tab"
       }
     }
   )
@@ -126,12 +100,13 @@ const DrawerIcon = ({ navigation }) => {
   );
 };
 
-class DrawerScreen extends React.Component {
-  render () {
-    console.log(this.props.navigation.getParam('game'), 'GAME inside drawerscreen')
-    return (<Drawer />)
-  }
-}
+// class DrawerScreen extends React.Component {
+//   render () {
+//     console.log(this.props.navigation.getParam('game'), 'GAME inside drawerscreen')
+//     console.log(this.props.navigation.getParam('playerName'), 'Player inside drawerscreen')
+//     return (<Drawer />)
+//   }
+// }
 
 const Drawer = createAppContainer(
   createDrawerNavigator(
@@ -149,12 +124,12 @@ const Drawer = createAppContainer(
         screen: PhotoPicker
       },
       Game: {
-        screen: GameScreen
+        screen: GameTab
       }
     },
     {
       initialRouteName: "Game",
-      // contentComponent: DrawerScreen,
+      contentComponent: DrawerMenu,
       drawerWidth: 150,
       drawerPosition: "right",
       drawerType: "front"
@@ -202,7 +177,7 @@ export default (Stack = createStackNavigator(
       }
     },
     Drawer: {
-      screen: DrawerScreen,
+      screen: Drawer,
       navigationOptions: ({ navigation }) => ({
         gesturesEnabled: false,
         // header: navigation => ({

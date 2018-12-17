@@ -36,7 +36,7 @@ export default class MapScreen extends React.Component {
     );
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.setState({
       region: {
         ...trailRegion,

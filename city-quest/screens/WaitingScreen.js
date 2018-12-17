@@ -37,7 +37,6 @@ class WaitingScreen extends React.Component {
   render() {
     const { navigation } = this.props;
     const { playersArray } = this.state.game
-    console.log(this.state, 'STATE')
     const currentPlayers = [];
     for (let i = 0; i < this.state.game.noOfPlayers; i++) {
       if (playersArray[i]) currentPlayers.push(playersArray[i].playerName);
@@ -113,7 +112,7 @@ class WaitingScreen extends React.Component {
           <Text
             style={styles.PINtext}
             onPress={() => {
-              this.props.navigation.navigate("Drawer", { game: this.state.game });
+              this.props.navigation.navigate("Drawer", { game: this.state.game, playerName: navigation.getParam("PlayerName", "Player") });
               // navigation.navigate("Game");
             }}
           >

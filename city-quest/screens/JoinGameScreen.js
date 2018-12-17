@@ -115,7 +115,7 @@ class JoinGameScreen extends Component {
     const { GamePin, PlayerName } = this.state;
     api.createPlayer(PlayerName, GamePin)
     .then((PlayerName) => {
-      this.props.navigation.navigate("Waiting", { GamePin: GamePin });
+      this.props.navigation.navigate("Waiting", { GamePin: GamePin, PlayerName: PlayerName });
     })
   };
 }

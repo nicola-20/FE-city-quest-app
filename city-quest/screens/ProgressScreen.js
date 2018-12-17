@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text } from 'react-native'
 
-class QuestionScreen extends React.Component {
+class ProgressScreen extends React.Component {
   render() {
     console.log(this.props.navigation.state, 'inside question screen')
     return (
@@ -9,4 +9,4 @@ class QuestionScreen extends React.Component {
     )
   }
 }
-export default QuestionScreen
+export default ProgressScreen
