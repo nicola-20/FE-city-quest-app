@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import { ScrollView, Text, View, TouchableOpacity } from "react-native";
+import { ScrollView, Text, View, TouchableOpacity, StyleSheet } from "react-native";
 import { LinearGradient } from "expo";
 
 class SideMenu extends Component {
@@ -25,6 +25,18 @@ class SideMenu extends Component {
             numberOfLines={2}
           >
             game
+          </Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={this.navigateToScreen("CompletedTasks")}
+        >
+          <Text
+            style={styles.buttonText}
+            adjustsFontSizeToFit
+            numberOfLines={1}
+          >
+            completed tasks
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
@@ -68,7 +80,7 @@ class SideMenu extends Component {
   }
 }
 
-const styles = {
+const styles = StyleSheet.create({
   container: {
     height: "100%",
     flex: 1,
@@ -91,7 +103,7 @@ const styles = {
     fontFamily: "sf-thin",
     letterSpacing: 0.7
   }
-};
+});
 
 SideMenu.propTypes = {
   navigation: PropTypes.object

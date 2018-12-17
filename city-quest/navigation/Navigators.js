@@ -24,6 +24,7 @@ import InfoScreen from "../screens/InfoScreen";
 import CompletedTasksScreen from "../screens/CompletedTasksScreen";
 import PhotoPicker from "../screens/PhotoPicker";
 import DrawerMenu from '../screens/DrawerMenu';
+import LeaderboardScreen from "../screens/LeaderboardScreen";
 
 // TAB NAVIGATOR
 
@@ -107,6 +108,9 @@ const Drawer = createAppContainer(
       },
       Game: {
         screen: GameTab
+      },
+      Leaderboard: {
+        screen: LeaderboardScreen
       }
     },
     {
