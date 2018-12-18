@@ -13,52 +13,48 @@ const api = new Frisbee({
 });
 
 export const getTrails = async () => {
-  // try {
-  //   let res = await api.get("/trails");
-
-  //   if (res.err) throw res.err;
-  //   return res.body;
-  // } catch (err) {
-  //   throw err;
-  // }
   const { data } = await axios.get(`${BASE_URL}/trails`);
   return data;
 };
 
 export const createGame = async gameData => {
-  // try {
-  //   let res = await api.post('/games')
-  //   console.log('response', res.body)
-  //   if(res.err) throw res.err
-
-  // } catch (err) {
-  //   throw err;
-  // }
   const { data } = await axios.post(`${BASE_URL}/games`, gameData);
-
   return data;
 };
 export const createPlayer = async (PlayerName, gamePin) => {
-  // console.log("got to create player");
   const { data } = await axios.post(`${BASE_URL}/games/${gamePin}/players`, {
     playerName: PlayerName
   });
-  // console.log(data.playerName, 'playerName inside createPlayer')
   return data.playerName;
 };
 export const getGame = async gamePin => {
-  // try {
-  //   let res = await api.get('/')
-  // }
-  // console.log(gamePin, 'gamePin inside api get Game')
   const { data } = await axios.get(`${BASE_URL}/games/${gamePin}`);
-  // console.log(data, 'data inside GetGame');
   return data.game;
 };
 
-export const suscribeToTimer = (interval, cb) => {
-  socket.once("timer", timestamp => cb(null, timestamp));
-  socket.emit("subscribeToTimer", 1000);
+export const getTrailById = async (trailId, playerName, index) => {
+  const { data } = await axios.post(`${BASE_URL}/trails/${trailId}`, {
+    playerName,
+    index
+  });
+  return data;
 };
 
-// export const getChallenge = async challengeId
+export const analyseImage = async (image, gamePin, playerName) => {
+  const { data } = await axios.patch(
+    `${BASE_URL}/games/${gamePin}/${playerName}`,
+    { encoded: image }
+  );
+  return data;
+};
+export const getChallenge = async challengeId => {
+  const { data } = await axios.get(`${BASE_URL}/challenges/${challengeId}`);
+  return data.challenge;
+};
+
+export const updatePlayer = async (gamePin, updateCondition) => {
+  const { data } = await axios.patch(
+    `${BASE_URL}/games/${gamePin}/players?${updateCondition}`
+  );
+  console.log(data);
+};
