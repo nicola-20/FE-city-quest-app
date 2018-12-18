@@ -21,8 +21,6 @@ export default class MapScreen extends React.Component {
   };
 
   render() {
-    // console.log(this.state.region);
-    // console.log(this.props, 'props inside map')
     console.log(this.props.navigation.state.params.trail);
     return (
       <MapView

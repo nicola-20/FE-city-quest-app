@@ -14,6 +14,7 @@ class QuestionScreen extends React.Component {
     const { challenge, answer } = this.state;
     console.log(challenge);
     return (
+
       <KeyboardAwareScrollView
         // ref={ref => (this.scroll = ref)}
         style={styles.container}
