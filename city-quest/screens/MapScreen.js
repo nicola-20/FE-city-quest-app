@@ -17,15 +17,13 @@ const trailRegion = {
 
 export default class MapScreen extends React.Component {
   state = {
-    region: {
-      latitude: this.props.navigation.state.params.trail.region.lat,
-      longitude: this.props.navigation.state.params.trail.region.long,
-      ...deltas
-    }
+    region: {},
+    locations: [],
+    progress: 0
   };
 
   render() {
-    console.log(this.props.navigation.state.params.trail);
+    console.log(this.state.progress);
     return (
       <MapView
         style={styles.container}
@@ -33,20 +31,38 @@ export default class MapScreen extends React.Component {
         showsUserLocation
         showsMyLocationButton
       >
-        {
-          //this.renderMarkers()
-        }
+        {this.renderMarkers()}
       </MapView>
     );
   }
 
-  componentDidMount() {
-    // api.getChallenge(challengeId);
+  renderMarkers() {
+    const { locations, progress } = this.state;
+    //console.log("this is our locations,", locations, progress);
+    return (
+      <Marker
+        coordinate={{
+          latitude: locations[progress].lat,
+          longitude: locations[progress].long
+        }}
+      />
+    );
+  }
+
+  componentDidUpdate(prevProps) {
+    const { progress } = this.props.navigation.state.params;
+    if (prevProps.progress !== progress) {
+      this.setState({ progress });
+    }
+  }
+
+  componentWillMount() {
     this.setState({
       region: {
         ...trailRegion,
         ...deltas
-      }
+      },
+      locations: this.props.navigation.state.params.trail.route
     });
     this.getLocationAsync();
   }
