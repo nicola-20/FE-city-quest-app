@@ -20,22 +20,22 @@ const firebaseConfig = {
   projectId: "treasure-hunt-dcd8e",
   storageBucket: "treasure-hunt-dcd8e.appspot.com",
   messagingSenderId: "382195712102"
- };
+};
 
 firebase.initializeApp(firebaseConfig);
 
 class QuestionScreen extends React.Component {
-state = {
-      challenge: "",
-      answer: "",
-      playerAnswer: "",
-      progress: 0,
-      isLoading: true,
-      playerName: "",
-      challengeType: "",
-      analysis: {},
-      image: null
-    };
+  state = {
+    challenge: "",
+    answer: "",
+    playerAnswer: "",
+    progress: 0,
+    isLoading: true,
+    playerName: "",
+    challengeType: "",
+    analysis: {},
+    image: null
+  };
 
   render() {
     const { challenge, answer, image } = this.state;
@@ -69,6 +69,7 @@ state = {
           <TextInput
             style={styles.input}
             placeholder="Player Answer"
+            value={this.state.playerAnswer}
             onChangeText={text => {
               this.setState({ playerAnswer: text });
             }}
@@ -164,16 +165,19 @@ state = {
               challenge: challenge.challenge,
               answer: challenge.answer,
               progress: progress,
-              isLoading: false
+              isLoading: false,
+              playerAnswer: ""
             });
           } else if (challenge.challengeType === "image") {
+            console.log(challenge.analysis, "analysis");
             this.setState({
               playerName,
               challengeType: challenge.challengeType,
               challenge: challenge.challenge,
               analysis: challenge.analysis,
               progress: progress,
-              isLoading: false
+              isLoading: false,
+              playerAnswer: ""
             });
           }
         })
@@ -189,23 +193,12 @@ state = {
     if (status !== "granted") {
       throw new Error("Denied CAMERA permissions!");
     }
-    const result = await ImagePicker.launchCameraAsync({
-      // mediaTypes: "Images",
-      // base64: true
-    });
-    this.setState({
-      image: result.uri
-    })
-    // if (!result.cancelled) {
-    //   console.log(result.uri);
-    //   this.setState({
-    //     image: result.uri,
-    //     base64: result.base64
-    //   });
-    // }
-    // if (!result.cancelled) {
-    //   this.uploadImage(result.uri); 
-    // }
+    const result = await ImagePicker.launchCameraAsync();
+    if (!result.cancelled) {
+      this.setState({
+        image: result.uri
+      });
+    }
   };
 
   pickImage = async () => {
@@ -214,23 +207,14 @@ state = {
       throw new Error("Denied CAMERA_ROLL permissions!");
     }
     const result = await ImagePicker.launchImageLibraryAsync();
-    // if (!result.cancelled) {
+    if (!result.cancelled) {
       this.setState({
-        image: result.uri,
+        image: result.uri
       });
-    // }
+    }
   };
 
-  // uploadImageAsync = async(uri) => {
-  //   const response = await fetch(uri);
-  //   const blob = await response.blob();
-  //   var ref = firebase.storage().ref().child("my-image");
-  //   return ref.put(blob);
-  // }
-
-  uploadImageAsync = async (uri) => {
-    // Why are we using XMLHttpRequest? See:
-    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+  uploadImageAsync = async uri => {
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
       xhr.onload = function() {
@@ -238,104 +222,85 @@ state = {
       };
       xhr.onerror = function(e) {
         console.log(e);
-        reject(new TypeError('Network request failed'));
+        reject(new TypeError("Network request failed"));
       };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uri, true);
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
       xhr.send(null);
     });
-  
+
     const ref = firebase
       .storage()
       .ref()
-      .child('image57625o');
+      .child("image57625o");
     const snapshot = await ref.put(blob);
     blob.close();
-  
-    return await snapshot.ref.getDownloadURL();
-  }
 
-  // uploadImage = async () => {
-  //   const uri = this.state.image;
-  //   const imageName = `${this.state.playerName}${this.state.progress}`;
-  //   // const response = await fetch(uri);
-  //   // const blob = await response.blob();
-  //   // let ref = firebase
-  //   //   .storage()
-  //   //   .ref()
-  //   //   .child("images/" + imageName);
-  //   // return ref.put(blob);
-  //   const snapshot = await firebase.storage().ref()
-  //   .child("images")
-  //   .child(imageName)
-  //   .putString(this.state.base64)
-  //   return await snapshot.downloadURL
-  //   // const uri = this.state.image;
-  //   // const { image } = this.state;
-  //   // const uploadTask = storage.ref(`images/${imageName}`).put(image);
-  //   // uploadTask.on(
-  //   //   "state_changed",
-  //   //   snapshot => {
-  //   //     // progress function
-  //   //   },
-  //   //   error => {
-  //   //     console.log(error); //complete function
-  //   //   },
-  //   //   () => {
-  //   //     //complete function
-  //   //     storage
-  //   //       .ref("images")
-  //   //       .child(imageName)
-  //   //       .getDownloadURL()
-  //   //       .then(url => {
-  //   //         console.log(url, "URL");
-  //   //         this.props.setURL(url);
-  //   //       });
-  //   //   }
-  //   // );
-  // };
+    return await snapshot.ref.getDownloadURL();
+  };
 
   handleSubmit = () => {
     const { game } = this.props.navigation.state.params;
     const { trail } = this.props.navigation.state.params;
     const { answer, playerAnswer, progress, playerName } = this.state;
     if (answer.toLowerCase() === playerAnswer.toLowerCase()) {
-      // render the next location and switch to map screen
-      // get next question?
       if (trail.route.length - 1 === progress) {
         api
           .updatePlayer(game.gamePin, "advance=true&&end=true", playerName)
           .then(() => {
-            alert('game over')
+            alert("game over");
           });
       } else {
-        api
-          .updatePlayer(game.gamePin, "advance=true", playerName)
-          .then(() => {
-            this.getCurrentChallenge()
-          });
+        api.updatePlayer(game.gamePin, "advance=true", playerName).then(() => {
+          this.getCurrentChallenge();
+        });
       }
+    } else {
+      alert("Wrong answer, try again!");
     }
   };
-  handleSubmitPhoto = async () => {
-    const gamePin = this.props.navigation.state.params.game.gamePin
-    const playerName = this.state.playerName
-    const uploadUrl = await this.uploadImageAsync(this.state.image)
-    console.log(uploadUrl, 'URl hello')
-    // .then(result => {
-    //   alert('Success')
-    //   console.log(result);
-    // })
-    // .catch((error) => {
-    //   console.log(error)
-    // })
 
-    // // const url = this.state.image
-    // const url = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/John_Bright.jpg/220px-John_Bright.jpg"
-    api.analyseImage(gamePin, playerName, uploadUrl)
-    .then((result) => {
-      console.log(result, 'rsult')
-    })
+  handleSubmitPhoto = async () => {
+    const { game } = this.props.navigation.state.params;
+    const { trail } = this.props.navigation.state.params;
+    const { progress, playerName, analysis } = this.state;
+    const gamePin = this.props.navigation.state.params.game.gamePin;
+    const uploadUrl = await this.uploadImageAsync(this.state.image);
+    api.analyseImage(gamePin, playerName, uploadUrl).then(result => {
+      this.setState({
+        playerImageAnalysis: result
+      });
+      const answerKeys = Object.keys(analysis);
+      console.log(answerKeys, 'answerkeys')
+      const playerKeys = Object.keys(result);
+      console.log(playerKeys, 'playerkeys')
+      let count = 0;
+      for (let i = 0; i < answerKeys.length; i++) {
+        for (let j = 0; j < playerKeys.length; j++) {
+          if (answerKeys[i] === playerKeys[j]) {
+            count++;
+          }
+        }
+      }
+      console.log(count, 'count')
+      if (count >= 3) {
+        if (trail.route.length - 1 === progress) {
+          api
+            .updatePlayer(game.gamePin, "advance=true&&end=true", playerName)
+            .then(() => {
+              alert("game over");
+            });
+        } else {
+          api
+            .updatePlayer(game.gamePin, "advance=true", playerName)
+            .then(() => {
+              this.getCurrentChallenge();
+            });
+        }
+      } else {
+        alert("Wrong answer, try again!");
+      }
+    });
   };
 }
 
