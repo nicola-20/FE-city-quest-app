@@ -5,11 +5,6 @@ import PercentageCircle from "react-native-percentage-circle";
 import * as api from "../api";
 
 class ProgressScreen extends React.Component {
-  state = {
-    game: this.props.navigation.state.params.game,
-    currentPlayer: this.props.navigation.state.params.playerName,
-    trail: this.props.navigation.state.params.trail
-  };
   render() {
     // console.log(this.state.trail, "TRAIL");
     // const game = this.props.navigation.state.params.game;
@@ -96,46 +91,11 @@ class ProgressScreen extends React.Component {
         </View>
       </View>
     );
-  }
-  componentWillMount() {
-    // console.log(
-    //   this.props.navigation.state.params,
-    //   "params inside progress screen"
-    // );
-    const trail = this.props.navigation.state.params.trail;
-    const currentPlayer = this.props.navigation.state.params.playerName;
-    const Pin = this.props.navigation.state.params.game.gamePin;
-    const intervalID = setInterval(this.updateProgress, 30000);
-    api.getGame(Pin).then(game => {
-      this.setState({
-        game,
-        trail,
-        currentPlayer,
-        intervalID
-      });
-    });
-  }
-  // componentDidMount() {
-  //   const Pin = this.props.navigation.state.params.game.gamePin;
-  //   const intervalID = setInterval(this.updateProgress, 2000)
-  //   this.setState({
-  //     intervalID
-  //   })
-  // }
 
-  componentWillUnmount = () => {
-    clearInterval(this.state.intervalID);
-  };
-
-  updateProgress = () => {
-    const Pin = this.props.navigation.state.params.game.gamePin;
-    api.getGame(Pin).then(game => {
-      this.setState({
-        game
-      });
-    });
-  };
+  }
 }
+export default ProgressScreen
+
 const styles = {
   progressScreen: {
     flex: 1,

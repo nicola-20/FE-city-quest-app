@@ -1,8 +1,10 @@
 import React from "react";
 import { Text, SafeAreaView } from "react-native";
 import { Location, Permissions, MapView } from "expo";
+import * as api from "../api";
 
 const Marker = MapView.Marker;
+
 const deltas = {
   latitudeDelta: 0.012,
   longitudeDelta: 0.013
@@ -15,17 +17,11 @@ const trailRegion = {
 
 export default class MapScreen extends React.Component {
   state = {
-    region: {
-      latitude: this.props.navigation.state.params.trail.region.lat,
-      longitude: this.props.navigation.state.params.trail.region.long,
-      ...deltas
-    }
+    region: {}
   };
 
   render() {
-    // console.log(this.props.navigation.state.params.trail.region, "inside map screen");
-    // console.log(this.state.region);
-    // console.log(this.props, 'props inside map')
+    console.log(this.props.navigation.state.params.trail);
     return (
       <MapView
         style={styles.container}
@@ -41,6 +37,7 @@ export default class MapScreen extends React.Component {
   }
 
   componentDidMount() {
+    // api.getChallenge(challengeId);
     this.setState({
       region: {
         ...trailRegion,

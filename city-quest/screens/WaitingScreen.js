@@ -11,12 +11,7 @@ import {
   RefreshControl
 } from "react-native";
 import * as api from "../api.js";
-import {
-  Ionicons,
-  AntDesign,
-  MaterialCommunityIcons,
-  MaterialIcons
-} from "@expo/vector-icons";
+import { Ionicons, AntDesign, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
 
 class WaitingScreen extends React.Component {
   // constructor(props) {
@@ -27,8 +22,6 @@ class WaitingScreen extends React.Component {
   state = {
     noOfPlayers: 0,
     game: {},
-    trail: {},
-    playerName: "",
     timestamp: "no time stamp yet",
     isLoading: true,
     refreshing: false
@@ -43,7 +36,7 @@ class WaitingScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { playersArray } = this.state.game;
+    const { playersArray } = this.state.game
     const currentPlayers = [];
     for (let i = 0; i < this.state.game.noOfPlayers; i++) {
       if (playersArray[i]) currentPlayers.push(playersArray[i].playerName);
@@ -163,15 +156,13 @@ class WaitingScreen extends React.Component {
         });
       }
       this.setState({
-        game
+        game,
+        isLoading: false
       });
     });
-  };
-  componentWillUnmount = () => {
-    clearInterval(this.state.intervalID);
-  };
+  }
   onRefresh = () => {
-    const Pin = this.state.game.gamePin;
+    const Pin = this.state.game.gamePin
     this.setState({ refreshing: true });
     api.getGame(Pin).then(game => {
       this.setState({
