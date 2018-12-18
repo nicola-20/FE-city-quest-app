@@ -1,16 +1,7 @@
 import axios from "axios";
 const BASE_URL = "https://city-quest-game.herokuapp.com/api";
-const Frisbee = require("frisbee");
 import openSocket from "socket.io-client";
 const socket = openSocket(BASE_URL);
-
-const api = new Frisbee({
-  baseURI: "https://city-quest-game.herokuapp.com/api",
-  headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json"
-  }
-});
 
 export const getTrails = async () => {
   const { data } = await axios.get(`${BASE_URL}/trails`);
@@ -42,14 +33,6 @@ export const getTrailById = async (trailId, playerName, index) => {
   return data;
 };
 
-// export const analyseImage = async (image, gamePin, playerName) => {
-//   const { data } = await axios.patch(
-//     `${BASE_URL}/games/${gamePin}/${playerName}`,
-//     { encoded: image }
-//   );
-//   return data;
-// };
-
 export const getChallenge = async challengeId => {
   const { data } = await axios.get(`${BASE_URL}/challenges/${challengeId}`);
   return data.challenge;
@@ -60,7 +43,6 @@ export const updatePlayer = async (gamePin, updateCondition, playerName) => {
     `${BASE_URL}/games/${gamePin}/players?${updateCondition}`,
     { playerName }
   );
-  console.log(data);
   return data;
 };
 
@@ -70,16 +52,6 @@ export const getAllPlayers = async () => {
 };
 
 export const analyseImage = async (gamePin, playerName, URL) => {
-  console.log(gamePin, 'gamePin inside api')
-  console.log(playerName, 'playerName inside api')
-  // console.log(url, 'url inside api before function')
-  await axios.patch(`${BASE_URL}/games/${gamePin}/${playerName}`, { URL })
-  .then((response) => {
-    console.log(response, 'response')
-  })
-  .catch((error) => {
-    console.log(error, 'error')
-  })
-  // console.log(data, 'data inside analyse image')
-  return data
+  const {data} = await axios.patch(`${BASE_URL}/games/${gamePin}/${playerName}`, { URL })
+  return data.labelObj;
 }

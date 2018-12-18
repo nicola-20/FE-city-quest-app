@@ -9,12 +9,9 @@ import {
   Image
 } from "react-native";
 import { DocumentPicker, ImagePicker, Permissions } from "expo";
-// import { storage } from "../firebase";
 import * as firebase from "firebase";
 import * as api from "../api";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import PhotoPicker from "./PhotoPicker";
-// import  firebaseConfig  from "../firebase/index";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCNArqiZbX3ChYKYMEeGLom-ieH-yk6Jvg",
@@ -196,8 +193,9 @@ state = {
       // mediaTypes: "Images",
       // base64: true
     });
-    uploadUrl = await this.uploadImageAsync(result.uri)
-    console.log(uploadUrl, 'URL hereeeee')
+    this.setState({
+      image: result.uri
+    })
     // if (!result.cancelled) {
     //   console.log(result.uri);
     //   this.setState({
@@ -216,12 +214,11 @@ state = {
       throw new Error("Denied CAMERA_ROLL permissions!");
     }
     const result = await ImagePicker.launchImageLibraryAsync();
-    if (!result.cancelled) {
+    // if (!result.cancelled) {
       this.setState({
         image: result.uri,
-        base64: result.base64
       });
-    }
+    // }
   };
 
   // uploadImageAsync = async(uri) => {
@@ -253,8 +250,6 @@ state = {
       .ref()
       .child('image57625o');
     const snapshot = await ref.put(blob);
-  
-    // We're done with the blob, close and release it
     blob.close();
   
     return await snapshot.ref.getDownloadURL();
@@ -310,35 +305,37 @@ state = {
       if (trail.route.length - 1 === progress) {
         api
           .updatePlayer(game.gamePin, "advance=true&&end=true", playerName)
-          .then(() => {});
+          .then(() => {
+            alert('game over')
+          });
       } else {
         api
           .updatePlayer(game.gamePin, "advance=true", playerName)
-          .then(() => {});
+          .then(() => {
+            this.getCurrentChallenge()
+          });
       }
     }
   };
-  handleSubmitPhoto = async() => {
-    const {URL} = await this.uploadImage()
-    console.log(URL, 'URl hello')
-    .then(result => {
-      alert('Success')
-      console.log(result);
-    })
-    .catch((error) => {
-      console.log(error)
-    })
+  handleSubmitPhoto = async () => {
+    const gamePin = this.props.navigation.state.params.game.gamePin
+    const playerName = this.state.playerName
+    const uploadUrl = await this.uploadImageAsync(this.state.image)
+    console.log(uploadUrl, 'URl hello')
+    // .then(result => {
+    //   alert('Success')
+    //   console.log(result);
+    // })
+    // .catch((error) => {
+    //   console.log(error)
+    // })
 
-    // const gamePin = this.props.navigation.state.params.game.gamePin
-    // console.log(gamePin, 'GamePin')
-    // const playerName = this.state.playerName
-    // console.log(playerName, 'playerName')
     // // const url = this.state.image
     // const url = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/John_Bright.jpg/220px-John_Bright.jpg"
-    // api.analyseImage(gamePin, playerName, url)
-    // .then((result) => {
-    //   console.log(result, 'rsult')
-    // })
+    api.analyseImage(gamePin, playerName, uploadUrl)
+    .then((result) => {
+      console.log(result, 'rsult')
+    })
   };
 }
 
