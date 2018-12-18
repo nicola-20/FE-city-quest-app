@@ -17,7 +17,11 @@ const trailRegion = {
 
 export default class MapScreen extends React.Component {
   state = {
-    region: {}
+    region: {
+      latitude: this.props.navigation.state.params.trail.region.lat,
+      longitude: this.props.navigation.state.params.trail.region.long,
+      ...deltas
+    }
   };
 
   render() {

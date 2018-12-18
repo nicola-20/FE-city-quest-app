@@ -51,10 +51,7 @@ class QuestionScreen extends React.Component {
       const currentPlayer = game.playersArray.filter(player => {
         return player.playerName === game.playerName;
       });
-      console.log(trail, "Route!!!");
-      // console.log(this.props.navigation.state.params);
-      // const progress = currentPlayer[0].progress;
-      const progress = 0; // temporary fix
+      const progress = currentPlayer[0].progress;
       const challengeId = trail.route[progress].challengeId;
       api
         .getChallenge(challengeId)
@@ -62,6 +59,7 @@ class QuestionScreen extends React.Component {
           console.log(challenge, "CHALLENGE!!");
           if (challenge.challengeType === "question") {
             this.setState({
+              challengeType: challenge.challengeType,
               challenge: challenge.question,
               answer: challenge.answer,
               progress: progress
