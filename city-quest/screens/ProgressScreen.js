@@ -31,7 +31,6 @@ class ProgressScreen extends React.Component {
             let playerPercent = Math.floor(
               (player.progress / trailLength) * 100
             );
-            console.log(playerPercent);
             // playerPercent === 100 ? alert(`${player.playerName} won the game!!`) : ""
             return (
               <View key={index} style={styles.player}>
