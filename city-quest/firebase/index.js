@@ -1,6 +1,6 @@
 import firebase from "firebase";
 
-const config = {
+export default firebaseConfig = {
  apiKey: "AIzaSyCNArqiZbX3ChYKYMEeGLom-ieH-yk6Jvg",
  authDomain: "treasure-hunt-dcd8e.firebaseapp.com",
  databaseURL: "https://treasure-hunt-dcd8e.firebaseio.com",
@@ -8,8 +8,4 @@ const config = {
  storageBucket: "treasure-hunt-dcd8e.appspot.com",
  messagingSenderId: "382195712102"
 };
-firebase.initializeApp(config);
 
-const storage = firebase.storage();
-
-export { storage, firebase as default };

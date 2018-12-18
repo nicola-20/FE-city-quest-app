@@ -9,23 +9,37 @@ import {
   Image
 } from "react-native";
 import { DocumentPicker, ImagePicker, Permissions } from "expo";
-import { storage } from "../firebase";
+// import { storage } from "../firebase";
+import * as firebase from "firebase";
 import * as api from "../api";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import PhotoPicker from "./PhotoPicker";
+// import  firebaseConfig  from "../firebase/index";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCNArqiZbX3ChYKYMEeGLom-ieH-yk6Jvg",
+  authDomain: "treasure-hunt-dcd8e.firebaseapp.com",
+  databaseURL: "https://treasure-hunt-dcd8e.firebaseio.com",
+  projectId: "treasure-hunt-dcd8e",
+  storageBucket: "treasure-hunt-dcd8e.appspot.com",
+  messagingSenderId: "382195712102"
+ };
+
+firebase.initializeApp(firebaseConfig);
 
 class QuestionScreen extends React.Component {
-  state = {
-    challenge: "",
-    answer: "",
-    playerAnswer: "",
-    progress: 0,
-    isLoading: true,
-    playerName: "",
-    challengeType: "",
-    analysis: {},
-    image: null
-  };
+state = {
+      challenge: "",
+      answer: "",
+      playerAnswer: "",
+      progress: 0,
+      isLoading: true,
+      playerName: "",
+      challengeType: "",
+      analysis: {},
+      image: null
+    };
+
   render() {
     const { challenge, answer, image } = this.state;
     if (this.state.isLoading)
@@ -133,7 +147,7 @@ class QuestionScreen extends React.Component {
       );
     }
   }
-  componentDidMount() {
+  getCurrentChallenge = () => {
     const { gamePin } = this.props.navigation.state.params.game;
     const { trail } = this.props.navigation.state.params;
     const playerName = this.props.navigation.state.params.playerName;
@@ -168,6 +182,9 @@ class QuestionScreen extends React.Component {
         })
         .catch(console.log);
     });
+  };
+  componentDidMount() {
+    this.getCurrentChallenge();
   }
 
   takeImage = async () => {
@@ -176,13 +193,21 @@ class QuestionScreen extends React.Component {
       throw new Error("Denied CAMERA permissions!");
     }
     const result = await ImagePicker.launchCameraAsync({
-      mediaTypes: "Images"
+      // mediaTypes: "Images",
+      // base64: true
     });
-    if (!result.cancelled) {
-      this.setState({
-        image: result.uri
-      });
-    }
+    uploadUrl = await this.uploadImageAsync(result.uri)
+    console.log(uploadUrl, 'URL hereeeee')
+    // if (!result.cancelled) {
+    //   console.log(result.uri);
+    //   this.setState({
+    //     image: result.uri,
+    //     base64: result.base64
+    //   });
+    // }
+    // if (!result.cancelled) {
+    //   this.uploadImage(result.uri); 
+    // }
   };
 
   pickImage = async () => {
@@ -190,42 +215,90 @@ class QuestionScreen extends React.Component {
     if (status !== "granted") {
       throw new Error("Denied CAMERA_ROLL permissions!");
     }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: "Images"
-    });
+    const result = await ImagePicker.launchImageLibraryAsync();
     if (!result.cancelled) {
       this.setState({
-        image: result.uri
+        image: result.uri,
+        base64: result.base64
       });
     }
   };
 
-  postPicture = () => {
-    const imageName = `${this.state.playerName}${this.state.progress}`
-    // const uri = this.state.image;
-    const { image } = this.state;
-    const uploadTask = storage.ref(`images/${imageName}`).put(image);
-    uploadTask.on(
-      "state_changed",
-      snapshot => {
-        // progress function
-      },
-      error => {
-        console.log(error); //complete function
-      },
-      () => {
-        //complete function
-        storage
-          .ref("images")
-          .child(imageName)
-          .getDownloadURL()
-          .then(url => {
-            console.log(url, "URL");
-            this.props.setURL(url);
-          });
-      }
-    );
-  };
+  // uploadImageAsync = async(uri) => {
+  //   const response = await fetch(uri);
+  //   const blob = await response.blob();
+  //   var ref = firebase.storage().ref().child("my-image");
+  //   return ref.put(blob);
+  // }
+
+  uploadImageAsync = async (uri) => {
+    // Why are we using XMLHttpRequest? See:
+    // https://github.com/expo/expo/issues/2402#issuecomment-443726662
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function(e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+  
+    const ref = firebase
+      .storage()
+      .ref()
+      .child('image57625o');
+    const snapshot = await ref.put(blob);
+  
+    // We're done with the blob, close and release it
+    blob.close();
+  
+    return await snapshot.ref.getDownloadURL();
+  }
+
+  // uploadImage = async () => {
+  //   const uri = this.state.image;
+  //   const imageName = `${this.state.playerName}${this.state.progress}`;
+  //   // const response = await fetch(uri);
+  //   // const blob = await response.blob();
+  //   // let ref = firebase
+  //   //   .storage()
+  //   //   .ref()
+  //   //   .child("images/" + imageName);
+  //   // return ref.put(blob);
+  //   const snapshot = await firebase.storage().ref()
+  //   .child("images")
+  //   .child(imageName)
+  //   .putString(this.state.base64)
+  //   return await snapshot.downloadURL
+  //   // const uri = this.state.image;
+  //   // const { image } = this.state;
+  //   // const uploadTask = storage.ref(`images/${imageName}`).put(image);
+  //   // uploadTask.on(
+  //   //   "state_changed",
+  //   //   snapshot => {
+  //   //     // progress function
+  //   //   },
+  //   //   error => {
+  //   //     console.log(error); //complete function
+  //   //   },
+  //   //   () => {
+  //   //     //complete function
+  //   //     storage
+  //   //       .ref("images")
+  //   //       .child(imageName)
+  //   //       .getDownloadURL()
+  //   //       .then(url => {
+  //   //         console.log(url, "URL");
+  //   //         this.props.setURL(url);
+  //   //       });
+  //   //   }
+  //   // );
+  // };
 
   handleSubmit = () => {
     const { game } = this.props.navigation.state.params;
@@ -245,21 +318,27 @@ class QuestionScreen extends React.Component {
       }
     }
   };
-  handleSubmitPhoto = () => {
-    // this.postPicture()
-    // call postPhoto
-    // which needs to return analysis
-    // compare analysis
-    const gamePin = this.props.navigation.state.params.game.gamePin
-    console.log(gamePin, 'GamePin')
-    const playerName = this.state.playerName
-    console.log(playerName, 'playerName')
-    // const url = this.state.image
-    const url = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/John_Bright.jpg/220px-John_Bright.jpg"
-    api.analyseImage(gamePin, playerName, url)
-    .then((result) => {
-      console.log(result, 'rsult')
+  handleSubmitPhoto = async() => {
+    const {URL} = await this.uploadImage()
+    console.log(URL, 'URl hello')
+    .then(result => {
+      alert('Success')
+      console.log(result);
     })
+    .catch((error) => {
+      console.log(error)
+    })
+
+    // const gamePin = this.props.navigation.state.params.game.gamePin
+    // console.log(gamePin, 'GamePin')
+    // const playerName = this.state.playerName
+    // console.log(playerName, 'playerName')
+    // // const url = this.state.image
+    // const url = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/John_Bright.jpg/220px-John_Bright.jpg"
+    // api.analyseImage(gamePin, playerName, url)
+    // .then((result) => {
+    //   console.log(result, 'rsult')
+    // })
   };
 }
 
