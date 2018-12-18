@@ -20,24 +20,25 @@ const firebaseConfig = {
   projectId: "treasure-hunt-dcd8e",
   storageBucket: "treasure-hunt-dcd8e.appspot.com",
   messagingSenderId: "382195712102"
- };
+};
 
 firebase.initializeApp(firebaseConfig);
 
 class QuestionScreen extends React.Component {
-state = {
-      challenge: "",
-      answer: "",
-      playerAnswer: "",
-      progress: 0,
-      isLoading: true,
-      playerName: "",
-      challengeType: "",
-      analysis: {},
-      image: null
-    };
+  state = {
+    challenge: "",
+    answer: "",
+    playerAnswer: "",
+    progress: 0,
+    isLoading: true,
+    playerName: "",
+    challengeType: "",
+    analysis: {},
+    image: null
+  };
 
   render() {
+    console.log(this.state.progress, "this is your progress in state");
     const { challenge, answer, image } = this.state;
     if (this.state.isLoading)
       return (
@@ -195,7 +196,7 @@ state = {
     });
     this.setState({
       image: result.uri
-    })
+    });
     // if (!result.cancelled) {
     //   console.log(result.uri);
     //   this.setState({
@@ -204,7 +205,7 @@ state = {
     //   });
     // }
     // if (!result.cancelled) {
-    //   this.uploadImage(result.uri); 
+    //   this.uploadImage(result.uri);
     // }
   };
 
@@ -215,9 +216,9 @@ state = {
     }
     const result = await ImagePicker.launchImageLibraryAsync();
     // if (!result.cancelled) {
-      this.setState({
-        image: result.uri,
-      });
+    this.setState({
+      image: result.uri
+    });
     // }
   };
 
@@ -228,7 +229,7 @@ state = {
   //   return ref.put(blob);
   // }
 
-  uploadImageAsync = async (uri) => {
+  uploadImageAsync = async uri => {
     // Why are we using XMLHttpRequest? See:
     // https://github.com/expo/expo/issues/2402#issuecomment-443726662
     const blob = await new Promise((resolve, reject) => {
@@ -238,22 +239,22 @@ state = {
       };
       xhr.onerror = function(e) {
         console.log(e);
-        reject(new TypeError('Network request failed'));
+        reject(new TypeError("Network request failed"));
       };
-      xhr.responseType = 'blob';
-      xhr.open('GET', uri, true);
+      xhr.responseType = "blob";
+      xhr.open("GET", uri, true);
       xhr.send(null);
     });
-  
+
     const ref = firebase
       .storage()
       .ref()
-      .child('image57625o');
+      .child("image57625o");
     const snapshot = await ref.put(blob);
     blob.close();
-  
+
     return await snapshot.ref.getDownloadURL();
-  }
+  };
 
   // uploadImage = async () => {
   //   const uri = this.state.image;
@@ -306,22 +307,28 @@ state = {
         api
           .updatePlayer(game.gamePin, "advance=true&&end=true", playerName)
           .then(() => {
-            alert('game over')
+            alert("game over");
           });
       } else {
         api
           .updatePlayer(game.gamePin, "advance=true", playerName)
           .then(() => {
-            this.getCurrentChallenge()
+            this.getCurrentChallenge();
+          })
+          .then(() => {
+            const newValue = this.state.progress + 1;
+            this.props.navigation.navigate("Map", {
+              progress: 3
+            });
           });
       }
     }
   };
   handleSubmitPhoto = async () => {
-    const gamePin = this.props.navigation.state.params.game.gamePin
-    const playerName = this.state.playerName
-    const uploadUrl = await this.uploadImageAsync(this.state.image)
-    console.log(uploadUrl, 'URl hello')
+    const gamePin = this.props.navigation.state.params.game.gamePin;
+    const playerName = this.state.playerName;
+    const uploadUrl = await this.uploadImageAsync(this.state.image);
+    console.log(uploadUrl, "URl hello");
     // .then(result => {
     //   alert('Success')
     //   console.log(result);
@@ -332,10 +339,9 @@ state = {
 
     // // const url = this.state.image
     // const url = "https://upload.wikimedia.org/wikipedia/commons/thumb/9/92/John_Bright.jpg/220px-John_Bright.jpg"
-    api.analyseImage(gamePin, playerName, uploadUrl)
-    .then((result) => {
-      console.log(result, 'rsult')
-    })
+    api.analyseImage(gamePin, playerName, uploadUrl).then(result => {
+      console.log(result, "rsult");
+    });
   };
 }
 

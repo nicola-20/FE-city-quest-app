@@ -38,6 +38,7 @@ export default class MapScreen extends React.Component {
 
   renderMarkers() {
     const { locations, progress } = this.state;
+    console.log(progress);
     //console.log("this is our locations,", locations, progress);
     return (
       <Marker
@@ -50,10 +51,11 @@ export default class MapScreen extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { progress } = this.props.navigation.state.params;
-    if (prevProps.progress !== progress) {
-      this.setState({ progress });
-    }
+    console.log("update progress");
+    console.log(this.props.navigation.state.params.progress);
+    // if (this.state.progress !== this.props.navigation.state.params.progress) {
+    //   this.setState({ progress: this.props.navigation.state.params.progress });
+    // }
   }
 
   componentWillMount() {
