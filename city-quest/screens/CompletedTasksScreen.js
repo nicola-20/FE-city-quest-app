@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, ScrollView, View, StyleSheet } from "react-native";
+import { Text, ScrollView, View, StyleSheet, ActivityIndicator } from "react-native";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 class CompletedTasksScreen extends React.Component {

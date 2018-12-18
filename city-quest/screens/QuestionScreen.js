@@ -5,7 +5,7 @@ class QuestionScreen extends React.Component {
   render() {
     console.log(this.props.navigation.state, 'inside question screen')
     return (
-      <Text>Question Component</Text>
+      <Text>Question Component player: {this.props.navigation.state.params.playerName}</Text>
     )
   }
 }

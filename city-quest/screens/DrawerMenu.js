@@ -60,7 +60,7 @@ class SideMenu extends Component {
             adjustsFontSizeToFit
             numberOfLines={2}
           >
-            leader-board
+            leaderboard
           </Text>
         </TouchableOpacity>
         <TouchableOpacity
