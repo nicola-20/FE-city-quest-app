@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { StyleSheet, Image, View, Text, TouchableOpacity } from "react-native";
 import { DocumentPicker, ImagePicker, Permissions } from "expo";
+import { storage } from "../firebase";
 // import { SERVER_URI, PostFunStuff } from "../../constant";
 
 export default class PhotoPicker extends React.Component {
@@ -10,6 +11,7 @@ export default class PhotoPicker extends React.Component {
   };
 
   render() {
+    console.log(this.props.navigation.state.params, 'params inside photopicker')
     let { image } = this.state;
 
     return (
@@ -33,14 +35,12 @@ export default class PhotoPicker extends React.Component {
       throw new Error("Denied CAMERA permissions!");
     }
     const result = await ImagePicker.launchCameraAsync({
-      base64: true,
       mediaTypes: "Images"
     });
     console.log(result);
     if (!result.cancelled) {
       this.setState({
         image: result.uri,
-        base64: result.base64
       });
     }
   };
@@ -51,36 +51,46 @@ export default class PhotoPicker extends React.Component {
         throw new Error("Denied CAMERA_ROLL permissions!");
       }
     const result = await ImagePicker.launchImageLibraryAsync({
-      base64: true,
       mediaTypes: "Images"
     });
     console.log(result);
     if (!result.cancelled) {
       this.setState({
         image: result.uri,
-        base64: result.base64
       });
     }
   };
-  // postPicture() {
-  //   const apiUrl = `${SERVER_URI}/upload`;
-  //   const uri = this.state.image;
-  //   const uriParts = uri.split(".");
-  //   const fileType = uriParts[uriParts.length - 1];
-  //   const formData = new FormData();
-  //   formData.append("photo", {
-  //     uri,
-  //     name: `photo.${fileType}`,
-  //     type: `image/${fileType}`
-  //   });
-  //   const options = {
-  //     method: "POST",
-  //     body: formData,
-  //     headers: {
-  //       Accept: "application/json",
-  //       "Content-Type": "multipart/form-data"
-  //     }
-  //   };
-  //   return fetch(apiUrl, options);
-  // }
+
+// upload image to firebase
+// use url to call the api function
+// analyse image
+// /api/games/gamePin/playerName patch url in body
+
+
+  postPicture = () => {
+    const imageName = 'player10'
+    const uri = this.state.image;
+    const { image } = this.state;
+    const uploadTask = storage.ref(`images/${imageName}`).put(image);
+    uploadTask.on(
+      "state_changed",
+      snapshot => {
+        // progress function
+      },
+      error => {
+        console.log(error); //complete function
+      },
+      () => {
+        //complete function
+        storage
+          .ref("images")
+          .child(imageName)
+          .getDownloadURL()
+          .then(url => {
+            console.log(url, 'URL')
+            this.props.setURL(url);
+          });
+      }
+    );
+  }
 }

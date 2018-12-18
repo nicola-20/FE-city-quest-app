@@ -224,7 +224,7 @@ class CreateGameScreen extends React.Component {
         .then(([player, gamePin]) => {
           console.log(gamePin);
           // this.setState({ blank: null });
-          this.props.navigation.navigate("Waiting", { GamePin: gamePin });
+          this.props.navigation.navigate("Waiting", { GamePin: gamePin, PlayerName: PlayerName });
         });
     }
   };
