@@ -52,6 +52,9 @@ export const getAllPlayers = async () => {
 };
 
 export const analyseImage = async (gamePin, playerName, URL) => {
-  const {data} = await axios.patch(`${BASE_URL}/games/${gamePin}/${playerName}`, { URL })
+  const { data } = await axios.patch(
+    `${BASE_URL}/games/${gamePin}/${playerName}`,
+    { URL }
+  );
   return data.labelObj;
-}
+};

@@ -42,38 +42,38 @@ class JoinGameScreen extends Component {
         ref={ref => (this.scroll = ref)}
         style={styles.container}
         contentContainerStyle={{
-          alignItems: 'center',
-          justifyContent: 'space-evenly',
+          alignItems: "center",
+          justifyContent: "space-evenly"
         }}
         enableOnAndroid
         extraHeight={Platform.OS === "android" ? 10 : undefined}
       >
         {/* <View style={styles.view}> */}
-          <Text adjustsFontSizeToFit numberOfLines={2} style={styles.text}>
-            To join a game, enter the invitation PIN and your name below:
-          </Text>
-          <TextInput
-            // onFocus={this.handleOnFocus}
-            style={styles.input}
-            placeholder="Game PIN"
-            onChangeText={text => {
-              this.setState({ GamePin: text });
-            }}
-          />
-          <TextInput
-            // onFocus={this.handleOnFocus}
-            style={styles.input}
-            placeholder="Your name here"
-            returnKeyType="join"
-            returnKeyLabel="join"
-            onSubmitEditing={this.handleJoin}
-            onChangeText={text => {
-              this.setState({ PlayerName: text });
-            }}
-          />
-          <TouchableOpacity onPress={this.handleJoin} style={styles.button}>
-            <Text style={styles.buttonText}>Join</Text>
-          </TouchableOpacity>
+        <Text adjustsFontSizeToFit numberOfLines={2} style={styles.text}>
+          To join a game, enter the invitation PIN and your name below:
+        </Text>
+        <TextInput
+          // onFocus={this.handleOnFocus}
+          style={styles.input}
+          placeholder="Game PIN"
+          onChangeText={text => {
+            this.setState({ GamePin: text });
+          }}
+        />
+        <TextInput
+          // onFocus={this.handleOnFocus}
+          style={styles.input}
+          placeholder="Your name here"
+          returnKeyType="join"
+          returnKeyLabel="join"
+          onSubmitEditing={this.handleJoin}
+          onChangeText={text => {
+            this.setState({ PlayerName: text });
+          }}
+        />
+        <TouchableOpacity onPress={this.handleJoin} style={styles.button}>
+          <Text style={styles.buttonText}>Join</Text>
+        </TouchableOpacity>
         {/* </View> */}
         <Animated.View style={{ height: this.state.keyboardHeight }} />
       </KeyboardAwareScrollView>
@@ -113,10 +113,20 @@ class JoinGameScreen extends Component {
   // };
   handleJoin = () => {
     const { GamePin, PlayerName } = this.state;
-    api.createPlayer(PlayerName, GamePin)
-    .then((PlayerName) => {
-      this.props.navigation.navigate("Waiting", { GamePin: GamePin, PlayerName: PlayerName });
-    })
+    api
+      .createPlayer(PlayerName, GamePin)
+      .then(PlayerName => {
+        this.props.navigation.navigate("Waiting", {
+          GamePin: GamePin,
+          PlayerName: PlayerName
+        });
+      })
+      .catch(err =>
+        this.props.navigation.navigate("ErrorScreen", {
+          msg: "Cannot create player",
+          err
+        })
+      );
   };
 }
 
@@ -167,7 +177,7 @@ const styles = StyleSheet.create({
     fontFamily: "sf-thin",
     letterSpacing: 0.5,
     color: "#515151",
-    marginTop: 60,
+    marginTop: 60
     // marginBottom: 30,
   },
   button: {

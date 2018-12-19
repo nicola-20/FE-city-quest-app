@@ -7,11 +7,7 @@ import {
   createAppContainer
 } from "react-navigation";
 import FontAwesome, { Icons, IconTypes } from "react-native-fontawesome";
-import {
-  Ionicons,
-  AntDesign,
-  MaterialIcons
-} from "@expo/vector-icons";
+import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
 import LobbyScreen from "../screens/LobbyScreen";
 import SelectTrailScreen from "../screens/SelectTrailScreen";
 import CreateGameScreen from "../screens/CreateGameScreen";
@@ -23,8 +19,9 @@ import QuestionScreen from "../screens/QuestionScreen";
 import InfoScreen from "../screens/InfoScreen";
 import CompletedTasksScreen from "../screens/CompletedTasksScreen";
 import PhotoPicker from "../screens/PhotoPicker";
-import DrawerMenu from '../screens/DrawerMenu';
+import DrawerMenu from "../screens/DrawerMenu";
 import LeaderboardScreen from "../screens/LeaderboardScreen";
+import ErrorScreen from "../screens/ErrorScreen";
 
 // TAB NAVIGATOR
 
@@ -53,7 +50,9 @@ const GameTab = createAppContainer(
           if (routeName === "Map") {
             return <Ionicons name="md-map" size={30} color={tintColor} />;
           } else if (routeName === "Progress") {
-            return <MaterialIcons name="timelapse" size={35} color={tintColor} />;
+            return (
+              <MaterialIcons name="timelapse" size={35} color={tintColor} />
+            );
           } else if (routeName === "Question") {
             return (
               <AntDesign name="questioncircle" size={30} color={tintColor} />
@@ -61,7 +60,7 @@ const GameTab = createAppContainer(
           }
         }
       }),
-      tabBarOptions: { 
+      tabBarOptions: {
         // inactiveBackgroundColor: "rgba(110, 120, 183, 1.0)",
         inactiveBackgroundColor: "rgba(131, 96, 195, 1.0)",
         inactiveTintColor: "white",
@@ -162,6 +161,13 @@ export default (Stack = createStackNavigator(
         gesturesEnabled: false
       }
     },
+    Error: {
+      screen: ErrorScreen,
+      navigationOptions: {
+        title: "Something went wrong",
+        gesturesEnabled: false
+      }
+    },
     Drawer: {
       screen: Drawer,
       navigationOptions: ({ navigation }) => ({
@@ -189,10 +195,9 @@ export default (Stack = createStackNavigator(
       headerStyle: {
         backgroundColor: "#2ebf91",
         borderBottomWidth: 0,
-        shadowColor: 'transparent'
+        shadowColor: "transparent"
       },
-      headerTintColor: "#fff",
-      
+      headerTintColor: "#fff"
     }
   }
 ));

@@ -41,8 +41,11 @@ class CameraScreen extends React.Component {
   componentDidMount() {
     FileSystem.makeDirectoryAsync(
       FileSystem.documentDirectory + "photos"
-    ).catch(e => {
-      console.log(e, "Directory exists");
+    ).catch(err => {
+      this.props.navigation.navigate("ErrorScreen", {
+        msg: "Camera Error",
+        err
+      });
     });
   }
 
@@ -64,10 +67,17 @@ class CameraScreen extends React.Component {
 
   takePicture = () => {
     if (this.camera) {
-      this.camera.takePictureAsync({ onPictureSaved: this.onPictureSaved })
-      .then(() => {
-        alert('To view pictures, head to the gallery ->')
-      })
+      this.camera
+        .takePictureAsync({ onPictureSaved: this.onPictureSaved })
+        .then(() => {
+          alert("To view pictures, head to the gallery ->");
+        })
+        .catch(err => {
+          this.props.navigation.navigate("ErrorScreen", {
+            msg: "Camera Error",
+            err
+          });
+        });
     }
   };
 
@@ -110,25 +120,22 @@ class CameraScreen extends React.Component {
       </Text>
     </View>
   );
-  renderTopBar = () => (
-    <View style={styles.topBar}>
-    </View>
-  );
+  renderTopBar = () => <View style={styles.topBar} />;
 
   renderBottomBar = () => (
     <View style={styles.bottomBar}>
       <TouchableOpacity style={styles.toggleButton} onPress={this.toggleFacing}>
         <Ionicons name="ios-reverse-camera" size={35} color="white" />
       </TouchableOpacity>
-        <TouchableOpacity
-          onPress={this.takePicture}
-          style={{ alignSelf: "center" }}
-        >
-          <Ionicons name="ios-radio-button-on" size={70} color="white" />
-        </TouchableOpacity>
+      <TouchableOpacity
+        onPress={this.takePicture}
+        style={{ alignSelf: "center" }}
+      >
+        <Ionicons name="ios-radio-button-on" size={70} color="white" />
+      </TouchableOpacity>
       <TouchableOpacity style={styles.bottomButton} onPress={this.toggleView}>
-          <Foundation name="thumbnails" size={35} color="white" />
-          {this.state.newPhotos && <View style={styles.newPhotosDot} />}
+        <Foundation name="thumbnails" size={35} color="white" />
+        {this.state.newPhotos && <View style={styles.newPhotosDot} />}
       </TouchableOpacity>
     </View>
   );
@@ -186,7 +193,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     flex: 0.2,
     flexDirection: "row",
-    width: '100%'
+    width: "100%"
   },
   noPermissions: {
     flex: 1,
@@ -203,11 +210,11 @@ const styles = StyleSheet.create({
     flex: 0.3,
     alignItems: "center",
     justifyContent: "center",
-    height: '100%'
+    height: "100%"
   },
   bottomButton: {
     flex: 0.3,
-    height: '100%',
+    height: "100%",
     justifyContent: "center",
     alignItems: "center"
   },
