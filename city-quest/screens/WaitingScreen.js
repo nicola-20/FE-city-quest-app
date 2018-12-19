@@ -126,6 +126,13 @@ class WaitingScreen extends React.Component {
     api
       .getGame(GamePin)
       .then(game => {
+        // console.log(game)
+        // if (game.noOfPlayers === game.playersArray.length) {
+        //   console.log(game)
+        //   this.props.navigation.navigate("ErrorScreen", {
+        //     msg: "Sorry game full"
+        //   })
+        // }
         this.setState({
           game,
           isLoading: false,

@@ -250,7 +250,7 @@ class QuestionScreen extends React.Component {
     const { game } = this.props.navigation.state.params;
     const { trail } = this.props.navigation.state.params;
     const { answer, playerAnswer, progress, playerName } = this.state;
-    if (answer.toLowerCase() === playerAnswer.toLowerCase()) {
+    if (answer.toLowerCase().trim() === playerAnswer.toLowerCase().trim()) {
       if (trail.route.length - 1 === progress) {
         api
           .updatePlayer(game.gamePin, "advance=true&&end=true", playerName)
