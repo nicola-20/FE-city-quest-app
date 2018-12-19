@@ -22,9 +22,9 @@ import MapScreen from "../screens/MapScreen";
 import QuestionScreen from "../screens/QuestionScreen";
 import InfoScreen from "../screens/InfoScreen";
 import CompletedTasksScreen from "../screens/CompletedTasksScreen";
-import PhotoPicker from "../screens/PhotoPicker";
 import DrawerMenu from '../screens/DrawerMenu';
 import LeaderboardScreen from "../screens/LeaderboardScreen";
+import PlayerCompleteScreen from '../screens/PlayerCompleteScreen';
 
 // TAB NAVIGATOR
 
@@ -103,9 +103,6 @@ const Drawer = createAppContainer(
       CompletedTasks: {
         screen: CompletedTasksScreen
       },
-      PhotoPicker: {
-        screen: PhotoPicker
-      },
       Game: {
         screen: GameTab
       },
@@ -162,6 +159,13 @@ export default (Stack = createStackNavigator(
         gesturesEnabled: false
       }
     },
+    PlayerCompleteScreen: {
+      screen: PlayerCompleteScreen,
+      navigationOptions: {
+        title: "Trail Completed",
+        gesturesEnabled: false
+    }
+  },
     Drawer: {
       screen: Drawer,
       navigationOptions: ({ navigation }) => ({

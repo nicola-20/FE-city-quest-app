@@ -1,7 +1,6 @@
 import axios from "axios";
 const BASE_URL = "https://city-quest-game.herokuapp.com/api";
-import openSocket from "socket.io-client";
-const socket = openSocket(BASE_URL);
+
 
 export const getTrails = async () => {
   const { data } = await axios.get(`${BASE_URL}/trails`);

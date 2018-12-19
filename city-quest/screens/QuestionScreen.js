@@ -248,9 +248,19 @@ class QuestionScreen extends React.Component {
     if (answer.toLowerCase() === playerAnswer.toLowerCase()) {
       if (trail.route.length - 1 === progress) {
         api
-          .updatePlayer(game.gamePin, "advance=true&&end=true", playerName)
+          .updatePlayer(game.gamePin, "end=true", playerName)
           .then(() => {
-            alert("game over");
+            return api.getGame(game.gamePin)
+
+          })
+          .then((game) => {
+            const totalTime = game.playersArray.reduce((acc, player) => {
+              if (player.playerName === playerName) {
+                return acc += player.totalTime
+              } else return acc
+            }, '')
+            navigation.navigate('PlayerCompleteScreen', {gameName:game.gameName, trail: trail.name, playerName, totalTime});
+
           });
       } else {
         api
