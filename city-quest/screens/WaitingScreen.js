@@ -11,7 +11,12 @@ import {
   RefreshControl
 } from "react-native";
 import * as api from "../api.js";
-import { Ionicons, AntDesign, MaterialCommunityIcons, MaterialIcons } from "@expo/vector-icons";
+import {
+  Ionicons,
+  AntDesign,
+  MaterialCommunityIcons,
+  MaterialIcons
+} from "@expo/vector-icons";
 
 class WaitingScreen extends React.Component {
   // constructor(props) {
@@ -36,7 +41,7 @@ class WaitingScreen extends React.Component {
 
   render() {
     const { navigation } = this.props;
-    const { playersArray } = this.state.game
+    const { playersArray } = this.state.game;
     const currentPlayers = [];
     for (let i = 0; i < this.state.game.noOfPlayers; i++) {
       if (playersArray[i]) currentPlayers.push(playersArray[i].playerName);
@@ -145,34 +150,56 @@ class WaitingScreen extends React.Component {
           trail: data.trail,
           playerName: data.playerName
         });
-      });
+      })
+      .catch(err =>
+        this.props.navigation.navigate("ErrorScreen", {
+          msg: "Game failed",
+          err
+        })
+      );
   }
   updatePlayers = () => {
     const Pin = this.state.game.gamePin;
-    api.getGame(Pin).then(game => {
-      if (game.playersArray.length >= game.noOfPlayers) {
-        clearInterval(this.state.intervalID)
-        this.props.navigation.navigate("Drawer", {
-          game: this.state.game,
-          playerName: this.state.playerName,
-          trail: this.state.trail
+    api
+      .getGame(Pin)
+      .then(game => {
+        if (game.playersArray.length >= game.noOfPlayers) {
+          clearInterval(this.state.intervalID)
+          this.props.navigation.navigate("Drawer", {
+            game: this.state.game,
+            playerName: this.state.playerName,
+            trail: this.state.trail
+          });
+        }
+        this.setState({
+          game,
+          isLoading: false
         });
-      }
-      this.setState({
-        game,
-        isLoading: false
-      });
-    });
-  }
+      })
+      .catch(err =>
+        this.props.navigation.navigate("ErrorScreen", {
+          msg: "Cannot create game",
+          err
+        })
+      );
+  };
   onRefresh = () => {
-    const Pin = this.state.game.gamePin
+    const Pin = this.state.game.gamePin;
     this.setState({ refreshing: true });
-    api.getGame(Pin).then(game => {
-      this.setState({
-        game,
-        refreshing: false
-      });
-    });
+    api
+      .getGame(Pin)
+      .then(game => {
+        this.setState({
+          game,
+          refreshing: false
+        });
+      })
+      .catch(err =>
+        this.props.navigation.navigate("ErrorScreen", {
+          msg: "Cannot get pin",
+          err
+        })
+      );
   };
 }
 const styles = StyleSheet.create({
