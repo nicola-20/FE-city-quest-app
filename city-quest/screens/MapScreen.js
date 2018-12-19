@@ -44,6 +44,7 @@ export default class MapScreen extends React.Component {
           latitude: locations[progress].lat,
           longitude: locations[progress].long
         }}
+        image={require('../assets/images/marker.png')}
       />
     );
   }
