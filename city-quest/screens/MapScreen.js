@@ -54,8 +54,8 @@ export default class MapScreen extends React.Component {
         Alert.alert(
           "Correct! New Challenge...",
           `Go to ${
-            this.state.locations[this.props.navigation.state.params.progress]
-              .name
+          this.state.locations[this.props.navigation.state.params.progress]
+            .name
           } and view the challenge when you arrive`, //location name off state and progress
           [
             {
@@ -73,7 +73,7 @@ export default class MapScreen extends React.Component {
       Alert.alert(
         "Here's your first challenge!",
         `Go to ${
-          this.state.locations[0].name
+        this.state.locations[0].name
         } and view the challenge when you arrive`, //location name off state and progress
         [
           {
@@ -103,14 +103,26 @@ export default class MapScreen extends React.Component {
   };
 
   getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION);
+    let { status } = await Permissions.askAsync(Permissions.LOCATION)
+      .catch(err => {
+        this.props.navigation.navigate("ErrorScreen", {
+          msg: "Couldn't get location",
+          err
+        });
+      })
     if (status !== "granted") {
       this.setState({
         errorMessage: "Permission to access location was denied"
       });
     }
 
-    let location = await Location.getCurrentPositionAsync({});
+    let location = await Location.getCurrentPositionAsync({})
+      .catch(err => {
+        this.props.navigation.navigate("ErrorScreen", {
+          msg: "Couldn't save image",
+          err
+        });
+      })
     const region = {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,

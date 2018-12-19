@@ -13,9 +13,7 @@ class LeaderboardScreen extends React.Component {
     isLoading: true,
     players: []
   };
-  // get api/players - returns list of players and times in ms
   render() {
-    console.log(this.props.navigation.state, "inside question screen");
     if (this.state.isLoading)
       return (
         <ActivityIndicator
@@ -47,18 +45,24 @@ class LeaderboardScreen extends React.Component {
     );
   }
   componentDidMount() {
-    api.getAllPlayers().then(players => {
-      console.log(players);
-      players.sort((a, b) => {
-        if (a.totalTime < b.totalTime) return -1;
-        if (a.totalTime > b.totalTime) return 1;
-        else return 0;
-      });
-      this.setState({
-        players,
-        isLoading: false
-      });
-    });
+    api.getAllPlayers()
+      .then(players => {
+        players.sort((a, b) => {
+          if (a.totalTime < b.totalTime) return -1;
+          if (a.totalTime > b.totalTime) return 1;
+          else return 0;
+        });
+        this.setState({
+          players,
+          isLoading: false
+        });
+      })
+      .catch(err => {
+        this.props.navigation.navigate("ErrorScreen", {
+          msg: "No players",
+          err
+        });
+      })
   }
 }
 

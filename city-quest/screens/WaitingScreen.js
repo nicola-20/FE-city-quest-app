@@ -19,11 +19,6 @@ import {
 } from "@expo/vector-icons";
 
 class WaitingScreen extends React.Component {
-  // constructor(props) {
-  //   super(props);
-  //   subscribeToTimer((err, timestamp) => this.setState({timestamp}))
-  // }
-
   state = {
     noOfPlayers: 0,
     game: {},
@@ -88,16 +83,16 @@ class WaitingScreen extends React.Component {
                 <Text style={styles.playerText}>{player}</Text>
               </View>
             ) : (
-              <View style={styles.player} key={index}>
-                <MaterialCommunityIcons
-                  name="account"
-                  size={100}
-                  // color="rgba(131, 96, 195, 1.0)"
-                  color="rgba(110, 120, 183, 0.2)"
-                />
-                <Text />
-              </View>
-            );
+                <View style={styles.player} key={index}>
+                  <MaterialCommunityIcons
+                    name="account"
+                    size={100}
+                    // color="rgba(131, 96, 195, 1.0)"
+                    color="rgba(110, 120, 183, 0.2)"
+                  />
+                  <Text />
+                </View>
+              );
           })}
         </View>
         <View style={styles.PIN}>

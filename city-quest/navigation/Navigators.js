@@ -18,7 +18,6 @@ import MapScreen from "../screens/MapScreen";
 import QuestionScreen from "../screens/QuestionScreen";
 import InfoScreen from "../screens/InfoScreen";
 import CompletedTasksScreen from "../screens/CompletedTasksScreen";
-import PhotoPicker from "../screens/PhotoPicker";
 import DrawerMenu from "../screens/DrawerMenu";
 import LeaderboardScreen from "../screens/LeaderboardScreen";
 import ErrorScreen from "../screens/ErrorScreen";
@@ -102,9 +101,6 @@ const Drawer = createAppContainer(
       CompletedTasks: {
         screen: CompletedTasksScreen
       },
-      PhotoPicker: {
-        screen: PhotoPicker
-      },
       Game: {
         screen: GameTab
       },
@@ -161,7 +157,7 @@ export default (Stack = createStackNavigator(
         gesturesEnabled: false
       }
     },
-    Error: {
+    ErrorScreen: {
       screen: ErrorScreen,
       navigationOptions: {
         title: "Something went wrong",

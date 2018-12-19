@@ -11,17 +11,14 @@ class ProgressScreen extends React.Component {
     trail: this.props.navigation.state.params.trail
   };
   render() {
-    // console.log(this.state.trail, "TRAIL");
     // const game = this.props.navigation.state.params.game;
     const game = this.state.game;
     const trail = this.state.trail;
     // const trail = this.props.navigation.state.params.trail;
     // const currentPlayer = this.props.navigation.state.params.playerName;
     // const { game, currentPlayer, trail } = this.state
-    // console.log(this.props.navigation.state, "inside question screen");
     const players = game.playersArray;
     const route = trail.route;
-    // console.log(typeof route);
     const trailLength = route.length;
     return (
       <View style={styles.progressScreen}>
@@ -98,10 +95,6 @@ class ProgressScreen extends React.Component {
   }
 
   componentWillMount() {
-    // console.log(
-    //   this.props.navigation.state.params,
-    //   "params inside progress screen"
-    // );
     const trail = this.props.navigation.state.params.trail;
     const currentPlayer = this.props.navigation.state.params.playerName;
     const Pin = this.props.navigation.state.params.game.gamePin;
@@ -113,7 +106,13 @@ class ProgressScreen extends React.Component {
         currentPlayer,
         intervalID
       });
-    });
+    })
+      .catch(err => {
+        this.props.navigation.navigate("ErrorScreen", {
+          msg: "Couldn't update",
+          err
+        });
+      })
   }
   // componentDidMount() {
   //   const Pin = this.props.navigation.state.params.game.gamePin;
@@ -129,11 +128,18 @@ class ProgressScreen extends React.Component {
 
   updateProgress = () => {
     const Pin = this.props.navigation.state.params.game.gamePin;
-    api.getGame(Pin).then(game => {
-      this.setState({
-        game
-      });
-    });
+    api.getGame(Pin)
+      .then(game => {
+        this.setState({
+          game
+        });
+      })
+      .catch(err => {
+        this.props.navigation.navigate("ErrorScreen", {
+          msg: "Couldn't update",
+          err
+        });
+      })
   };
 }
 export default ProgressScreen;

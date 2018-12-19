@@ -121,11 +121,13 @@ class JoinGameScreen extends Component {
           PlayerName: PlayerName
         });
       })
-      .catch(err =>
+      .catch(err => {
+        console.log(err)
         this.props.navigation.navigate("ErrorScreen", {
           msg: "Cannot create player",
           err
         })
+      }
       );
   };
 }
