@@ -2,6 +2,7 @@ import React from "react";
 import {
   View,
   Text,
+  Image,
   Button,
   TouchableOpacity,
   StyleSheet,
@@ -24,7 +25,7 @@ class LobbyScreen extends React.Component {
     return (
       <LinearGradient style={styles.view} colors={["#2ebf91", "#8360c3"]}>
         <View style={styles.title}>
-          <Text
+          {/* <Text
             adjustsFontSizeToFit
             numberOfLines={1}
             style={{
@@ -40,7 +41,11 @@ class LobbyScreen extends React.Component {
               {Icons.searchLocation}
             </FontAwesome>
             UEST
-          </Text>
+          </Text> */}
+          <Image
+                source={require('../assets/images/title.png')}
+                style={{ width: 260 , height: 130 / (600 / 260) }}
+              />
         </View>
         <View style={styles.buttons}>
           <TouchableOpacity
@@ -91,16 +96,16 @@ const styles = StyleSheet.create({
   button: {
     alignItems: "center",
     // backgroundColor: "#841584",
-    borderWidth: 0.7,
+    borderWidth: 0.8,
     borderRadius: 9,
     borderColor: "white",
     padding: 10,
-    width: "80%"
+    width: 260
   },
   buttonText: {
     color: "white",
     fontSize: 22,
-    fontFamily: "sf-thin",
+    fontFamily: "sf-light",
     letterSpacing: 1
   }
 });

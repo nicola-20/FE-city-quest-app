@@ -48,12 +48,10 @@ class JoinGameScreen extends Component {
         enableOnAndroid
         extraHeight={Platform.OS === "android" ? 10 : undefined}
       >
-        {/* <View style={styles.view}> */}
         <Text adjustsFontSizeToFit numberOfLines={2} style={styles.text}>
           To join a game, enter the invitation PIN and your name below:
         </Text>
         <TextInput
-          // onFocus={this.handleOnFocus}
           style={styles.input}
           placeholder="Game PIN"
           onChangeText={text => {
@@ -61,7 +59,6 @@ class JoinGameScreen extends Component {
           }}
         />
         <TextInput
-          // onFocus={this.handleOnFocus}
           style={styles.input}
           placeholder="Your name here"
           returnKeyType="join"
@@ -74,7 +71,6 @@ class JoinGameScreen extends Component {
         <TouchableOpacity onPress={this.handleJoin} style={styles.button}>
           <Text style={styles.buttonText}>Join</Text>
         </TouchableOpacity>
-        {/* </View> */}
         <Animated.View style={{ height: this.state.keyboardHeight }} />
       </KeyboardAwareScrollView>
     );
@@ -100,17 +96,6 @@ class JoinGameScreen extends Component {
       );
     }
   }
-
-  // scrollToInput = reactNode => {
-  //   this.scroll.scrollToFocusedInput(reactNode);
-  // };
-
-  // handleOnFocus = e => {
-  //   if (Platform.OS === "android") {
-  //     console.log(typeof e.target, 'inside input focus')
-  //     this.scrollToInput(ReactNative.findNodeHandle(e.target));
-  //   }
-  // };
   handleJoin = () => {
     const { GamePin, PlayerName } = this.state;
     api

@@ -98,7 +98,6 @@ class QuestionScreen extends React.Component {
           <Text adjustsFontSizeToFit numberOfLines={2} style={styles.text}>
             {challenge}
           </Text>
-          {/* Photo Picker Component */}
           <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
@@ -289,8 +288,7 @@ class QuestionScreen extends React.Component {
                   gamePin: game.gamePin,
                   trail: trail.name,
                   playerName,
-                  totalTime,
-                  gam
+                  totalTime
                 });
               });
             }

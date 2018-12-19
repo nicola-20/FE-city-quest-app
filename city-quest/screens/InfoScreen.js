@@ -8,7 +8,6 @@ class InfoScreen extends React.Component {
     info: {}
   }
   render() {
-    // console.log(this.props.navigation.state, "inside info screen");
     if (this.state.isLoading)
     return (
       <ActivityIndicator

@@ -37,7 +37,6 @@ export default class MapScreen extends React.Component {
 
   renderMarkers() {
     const { locations, progress } = this.state;
-    //console.log("this is our locations,", locations, progress);
     return (
       <Marker
         coordinate={{

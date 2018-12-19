@@ -58,12 +58,10 @@ export const analyseImage = async (gamePin, playerName, URL) => {
 };
 
 export const completeTrail = async (playerName, totalTime, trailName) => {
-  console.log(playerName, totalTime, trailName)
   const { data } = await axios.post(`${BASE_URL}/players/${playerName}`, {
     trailName,
     totalTime
   });
-  console.log(data, 'data inside complete trail api ')
   return data;
 };
 

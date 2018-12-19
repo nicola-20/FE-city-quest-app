@@ -27,7 +27,6 @@ export default class PlayerCompleteScreen extends React.Component {
   };
 
   render() {
-    console.log(this.props.navigation.state.params);
     if (this.state.isLoading)
       return (
         <ActivityIndicator
