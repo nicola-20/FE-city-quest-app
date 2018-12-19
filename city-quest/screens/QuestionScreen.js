@@ -38,7 +38,6 @@ class QuestionScreen extends React.Component {
   };
 
   render() {
-    console.log(this.state.progress, "this is your progress in state");
     const { challenge, answer, image } = this.state;
     if (this.state.isLoading)
       return (
@@ -316,9 +315,8 @@ class QuestionScreen extends React.Component {
             this.getCurrentChallenge();
           })
           .then(() => {
-            const newValue = this.state.progress + 1;
             this.props.navigation.navigate("Map", {
-              progress: 3
+              progress: this.state.progress + 1
             });
           });
       }
