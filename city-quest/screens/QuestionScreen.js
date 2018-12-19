@@ -8,7 +8,7 @@ import {
   ActivityIndicator,
   Image
 } from "react-native";
-import { DocumentPicker, ImagePicker, Permissions } from "expo";
+import { ImagePicker, Permissions } from "expo";
 import * as firebase from "firebase";
 import * as api from "../api";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -113,7 +113,7 @@ class QuestionScreen extends React.Component {
                 margin: 20
               }}
             >
-              <Text>Pick an image from camera roll</Text>
+              <Text>Choose from album</Text>
             </TouchableOpacity>
             {image && (
               <Image
@@ -132,7 +132,7 @@ class QuestionScreen extends React.Component {
                 margin: 20
               }}
             >
-              <Text>Take a new image</Text>
+              <Text>Take new photo</Text>
             </TouchableOpacity>
           </View>
           <TouchableOpacity
@@ -198,7 +198,6 @@ class QuestionScreen extends React.Component {
     if (status !== "granted") {
       throw new Error("Denied CAMERA permissions!");
     }
-
     const result = await ImagePicker.launchCameraAsync();
     if (!result.cancelled) {
       this.setState({
@@ -213,7 +212,6 @@ class QuestionScreen extends React.Component {
       throw new Error("Denied CAMERA_ROLL permissions!");
     }
     const result = await ImagePicker.launchImageLibraryAsync();
-
     if (!result.cancelled) {
       this.setState({
         image: result.uri
@@ -249,13 +247,53 @@ class QuestionScreen extends React.Component {
   handleSubmit = () => {
     const { game } = this.props.navigation.state.params;
     const { trail } = this.props.navigation.state.params;
+    const trailName = trail.name;
     const { answer, playerAnswer, progress, playerName } = this.state;
     if (answer.toLowerCase().trim() === playerAnswer.toLowerCase().trim()) {
       if (trail.route.length - 1 === progress) {
         api
-          .updatePlayer(game.gamePin, "advance=true&&end=true", playerName)
+          .updatePlayer(game.gamePin, "end=true", playerName)
           .then(() => {
-            alert("game over");
+            return api.getGame(game.gamePin);
+          })
+          .then(game => {
+            const { playersArray } = game;
+            const totalTime = playersArray.reduce((acc, player) => {
+              if (player.playerName === playerName) {
+                return (acc += player.totalTime);
+              } else return acc;
+            }, "");
+            if (
+              playersArray.every(player => {
+                return player.totalTime;
+              })
+            ) {
+              api
+                .completeTrail(playerName, totalTime, trailName)
+                .then(() => {
+                  return api.endGame(game.gamePin);
+                })
+                .then(() => {
+                  this.props.navigation.navigate("PlayerCompleteScreen", {
+                    gameName: game.gameName,
+                    gamePin: game.gamePin,
+                    trail: trail.name,
+                    playerName,
+                    totalTime
+                  });
+                });
+            } else {
+              api.completeTrail(playerName, totalTime, trailName).then(() => {
+                this.props.navigation.navigate("PlayerCompleteScreen", {
+                  gameName: game.gameName,
+                  gamePin: game.gamePin,
+                  trail: trail.name,
+                  playerName,
+                  totalTime,
+                  gam
+                });
+              });
+            }
           });
       } else {
         api
@@ -268,13 +306,11 @@ class QuestionScreen extends React.Component {
               progress: this.state.progress + 1
             });
           });
-
       }
     } else {
       alert("Wrong answer, try again!");
     }
   };
-
 
   handleSubmitPhoto = async () => {
     const { game } = this.props.navigation.state.params;
@@ -287,9 +323,9 @@ class QuestionScreen extends React.Component {
         playerImageAnalysis: result
       });
       const answerKeys = Object.keys(analysis);
-      console.log(answerKeys, 'answerkeys')
+      console.log(answerKeys, "answerkeys");
       const playerKeys = Object.keys(result);
-      console.log(playerKeys, 'playerkeys')
+      console.log(playerKeys, "playerkeys");
       let count = 0;
       for (let i = 0; i < answerKeys.length; i++) {
         for (let j = 0; j < playerKeys.length; j++) {
@@ -298,13 +334,50 @@ class QuestionScreen extends React.Component {
           }
         }
       }
-      console.log(count, 'count')
       if (count >= 3) {
         if (trail.route.length - 1 === progress) {
           api
-            .updatePlayer(game.gamePin, "advance=true&&end=true", playerName)
+            .updatePlayer(game.gamePin, "end=true", playerName)
             .then(() => {
-              alert("game over");
+              return api.getGame(game.gamePin);
+            })
+            .then(game => {
+              const { playersArray } = game;
+              const totalTime = playersArray.reduce((acc, player) => {
+                if (player.playerName === playerName) {
+                  return (acc += player.totalTime);
+                } else return acc;
+              }, "");
+              if (
+                playersArray.every(player => {
+                  return player.totalTime;
+                })
+              ) {
+                api
+                  .completeTrail(playerName, totalTime, trailName)
+                  .then(() => {
+                    return api.endGame(game.gamePin);
+                  })
+                  .then(() => {
+                    this.props.navigation.navigate("PlayerCompleteScreen", {
+                      gameName: game.gameName,
+                      gamePin: game.gamePin,
+                      trail: trail.name,
+                      playerName,
+                      totalTime
+                    });
+                  });
+              } else {
+                api.completeTrail(playerName, totalTime, trailName).then(() => {
+                  this.props.navigation.navigate("PlayerCompleteScreen", {
+                    gameName: game.gameName,
+                    gamePin: game.gamePin,
+                    trail: trail.name,
+                    playerName,
+                    totalTime
+                  });
+                });
+              }
             });
         } else {
           api

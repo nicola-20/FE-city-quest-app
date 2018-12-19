@@ -18,6 +18,7 @@ import MapScreen from "../screens/MapScreen";
 import QuestionScreen from "../screens/QuestionScreen";
 import InfoScreen from "../screens/InfoScreen";
 import CompletedTasksScreen from "../screens/CompletedTasksScreen";
+import PlayerCompleteScreen from '../screens/PlayerCompleteScreen';
 import DrawerMenu from "../screens/DrawerMenu";
 import LeaderboardScreen from "../screens/LeaderboardScreen";
 import ErrorScreen from "../screens/ErrorScreen";
@@ -157,7 +158,16 @@ export default (Stack = createStackNavigator(
         gesturesEnabled: false
       }
     },
-    ErrorScreen: {
+
+
+    PlayerCompleteScreen: {
+      screen: PlayerCompleteScreen,
+      navigationOptions: {
+        title: "Trail Completed",
+        gesturesEnabled: false
+    }
+  },
+    Error: {
       screen: ErrorScreen,
       navigationOptions: {
         title: "Something went wrong",

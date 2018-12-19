@@ -1,7 +1,5 @@
 import axios from "axios";
 const BASE_URL = "https://city-quest-game.herokuapp.com/api";
-import openSocket from "socket.io-client";
-const socket = openSocket(BASE_URL);
 
 export const getTrails = async () => {
   const { data } = await axios.get(`${BASE_URL}/trails`);
@@ -57,4 +55,19 @@ export const analyseImage = async (gamePin, playerName, URL) => {
     { URL }
   );
   return data.labelObj;
+};
+
+export const completeTrail = async (playerName, totalTime, trailName) => {
+  console.log(playerName, totalTime, trailName)
+  const { data } = await axios.post(`${BASE_URL}/players/${playerName}`, {
+    trailName,
+    totalTime
+  });
+  console.log(data, 'data inside complete trail api ')
+  return data;
+};
+
+export const endGame = async gamePin => {
+  const { data } = await axios.delete(`${BASE_URL}/games/${gamePin}`);
+  return data;
 };
