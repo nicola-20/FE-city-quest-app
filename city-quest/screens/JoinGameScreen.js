@@ -98,6 +98,7 @@ class JoinGameScreen extends Component {
   }
   handleJoin = () => {
     const { GamePin, PlayerName } = this.state;
+    console.log(GamePin)
     api
       .createPlayer(PlayerName, GamePin)
       .then(PlayerName => {

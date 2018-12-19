@@ -167,7 +167,7 @@ export default (Stack = createStackNavigator(
         gesturesEnabled: false
     }
   },
-    Error: {
+    ErrorScreen: {
       screen: ErrorScreen,
       navigationOptions: {
         title: "Something went wrong",

@@ -48,6 +48,9 @@ export default class App extends React.Component {
         "sf-light": require("./assets/fonts/SF-Pro-Display-Light.otf")
       }),
       Font.loadAsync({
+        "sf-lightitalic": require("./assets/fonts/SF-Pro-Display-LightItalic.otf")
+      }),
+      Font.loadAsync({
         "sf-thin": require("./assets/fonts/SF-Pro-Display-Thin.otf")
       }),
       Font.loadAsync({

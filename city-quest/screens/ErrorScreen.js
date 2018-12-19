@@ -21,17 +21,21 @@ class ErrorScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
     return {
       headerTitle: <Text style={styles.headerTitle}>Oh no!</Text>,
-      headerLeft: <Text></Text>,
-      headerRight: <Text></Text>
+      headerLeft: <Text />,
+      headerRight: <Text />
     };
   };
   render() {
-    const { err } = this.state
+    const { err } = this.state;
     return (
       <View style={styles.container}>
-        <Text style={styles.text}>{err}</Text>
-        <Text style={styles.icon}><AntDesign name="meh" size={70}
-          color="#43A79E" /></Text>
+        <Text style={{ ...styles.text, color: "#8360C3", fontSize: 22 }}>
+          Something went wrong!
+        </Text>
+        <Text style={styles.text}>"{err}"</Text>
+        <Text style={styles.icon}>
+          <AntDesign name="meh" size={70} color="#43A79E" />
+        </Text>
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate("Lobby");
@@ -44,7 +48,7 @@ class ErrorScreen extends React.Component {
             style={styles.buttonText}
           >
             Restart
-            </Text>
+          </Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => this.props.navigation.goBack()}
@@ -55,17 +59,17 @@ class ErrorScreen extends React.Component {
             numberOfLines={1}
             style={styles.buttonText}
           >
-            Go Back
-            </Text>
+            Go back
+          </Text>
         </TouchableOpacity>
       </View>
-    )
+    );
   }
   componentDidMount() {
-    const { msg } = this.props.navigation.state.params
+    const { msg } = this.props.navigation.state.params;
     this.setState({
       err: msg
-    })
+    });
   }
 }
 
@@ -74,8 +78,10 @@ const styles = StyleSheet.create({
     display: "flex",
     flex: 1,
     justifyContent: "center",
+    alignItems: "center"
   },
   text: {
+    fontFamily: "sf-light",
     textAlign: "center",
     fontSize: 20,
     paddingTop: 15,
@@ -108,16 +114,14 @@ const styles = StyleSheet.create({
     borderRadius: 9,
     borderColor: "white",
     padding: 8,
-    margin: 10,
-    marginBottom: 0,
-    marginTop: 20,
-    width: "88%",
-    minWidth: "88%"
+    margin: 20,
+    width: "60%",
+    minWidth: "60%"
   },
   buttonText: {
     color: "white",
-    fontSize: 20,
-    fontFamily: "sf-light",
+    fontSize: 22,
+    fontFamily: "sf-thin",
     letterSpacing: 1
   },
   smallButtonText: {

@@ -215,6 +215,7 @@ class CreateGameScreen extends React.Component {
       api
         .createGame(gameData)
         .then(({ gamePin }) => {
+          console.log(gamePin)
           return Promise.all([
             api.createPlayer(this.state.PlayerName, gamePin),
             gamePin

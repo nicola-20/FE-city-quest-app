@@ -12,6 +12,7 @@ import { ImagePicker, Permissions } from "expo";
 import * as firebase from "firebase";
 import * as api from "../api";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { AntDesign } from "@expo/vector-icons";
 
 const firebaseConfig = {
   apiKey: "AIzaSyCNArqiZbX3ChYKYMEeGLom-ieH-yk6Jvg",
@@ -34,11 +35,12 @@ class QuestionScreen extends React.Component {
     playerName: "",
     challengeType: "",
     analysis: {},
-    image: null
+    image: null,
+    analysing: false
   };
 
   render() {
-    const { challenge, answer, image } = this.state;
+    const { challenge, image, analysing } = this.state;
     if (this.state.isLoading)
       return (
         <ActivityIndicator
@@ -56,14 +58,21 @@ class QuestionScreen extends React.Component {
             justifyContent: "space-evenly"
           }}
         >
-          <Text>
-            {
-              this.props.navigation.state.params.trail.route[
-                this.state.progress
-              ].name
-            }
-          </Text>
-          <Text adjustsFontSizeToFit numberOfLines={2} style={styles.text}>
+          <View style={styles.title}>
+            <Text style={styles.welcome}>Welcome to</Text>
+            <Text
+              adjustsFontSizeToFit
+              numberOfLines={1}
+              style={styles.locationName}
+            >
+              {
+                this.props.navigation.state.params.trail.route[
+                  this.state.progress
+                ].name
+              }
+            </Text>
+          </View>
+          <Text adjustsFontSizeToFit numberOfLines={3} style={styles.text}>
             {challenge}
           </Text>
           <TextInput
@@ -88,51 +97,66 @@ class QuestionScreen extends React.Component {
             justifyContent: "space-evenly"
           }}
         >
-          <Text>
-            {
-              this.props.navigation.state.params.trail.route[
-                this.state.progress
-              ].name
-            }
-          </Text>
-          <Text adjustsFontSizeToFit numberOfLines={2} style={styles.text}>
-            {challenge}
-          </Text>
+          <View style={styles.title}>
+            <Text style={styles.welcome}>Welcome to</Text>
+            <Text
+              adjustsFontSizeToFit
+              numberOfLines={1}
+              style={styles.locationName}
+            >
+              {
+                this.props.navigation.state.params.trail.route[
+                  this.state.progress
+                ].name
+              }
+            </Text>
+          </View>
           <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
-            <TouchableOpacity
+            <Text adjustsFontSizeToFit numberOfLines={3} style={styles.text}>
+              {challenge}
+            </Text>
+          </View>
+          <View
+            style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
+          >
+            {/* <TouchableOpacity
               onPress={this.pickImage}
-              style={{
-                height: 50,
-                width: "80%",
-                borderWidth: 0.5,
-                borderColor: "black",
-                padding: 10,
-                margin: 20
-              }}
+              style={styles.imageButton}
             >
               <Text>Choose from album</Text>
+            </TouchableOpacity> */}
+            <TouchableOpacity
+              onPress={this.takeImage}
+              style={styles.imageButton}
+              // style={{
+              //   height: 50,
+              //   width: "80%",
+              //   borderWidth: 0.5,
+              //   borderColor: "black",
+              //   padding: 10,
+              //   margin: 20
+              // }}
+            >
+              <Text style={styles.icon}>
+                <AntDesign name="camera" size={70} color="#43A79E" />
+              </Text>
+              <Text>Take new photo</Text>
             </TouchableOpacity>
             {image && (
               <Image
                 source={{ uri: image }}
-                style={{ width: 200, height: 200 }}
+                style={{ width: 200, height: 300 }}
               />
             )}
-            <TouchableOpacity
-              onPress={this.takeImage}
-              style={{
-                height: 50,
-                width: "80%",
-                borderWidth: 0.5,
-                borderColor: "black",
-                padding: 10,
-                margin: 20
-              }}
-            >
-              <Text>Take new photo</Text>
-            </TouchableOpacity>
+            {analysing && (
+              <ActivityIndicator
+                size="large"
+                color="#8360c3"
+                // style={{ margin: 30 }}
+              />
+            )}
           </View>
           <TouchableOpacity
             onPress={this.handleSubmitPhoto}
@@ -148,45 +172,44 @@ class QuestionScreen extends React.Component {
     const { gamePin } = this.props.navigation.state.params.game;
     const { trail } = this.props.navigation.state.params;
     const playerName = this.props.navigation.state.params.playerName;
-    api.getGame(gamePin)
-      .then(game => {
-        const currentPlayer = game.playersArray.filter(player => {
-          return player.playerName === playerName;
-        });
-        const progress = currentPlayer[0].progress;
-        const challengeId = trail.route[progress].challengeId;
-        api
-          .getChallenge(challengeId)
-          .then(challenge => {
-            if (challenge.challengeType === "question") {
-              this.setState({
-                playerName,
-                challengeType: challenge.challengeType,
-                challenge: challenge.challenge,
-                answer: challenge.answer,
-                progress: progress,
-                isLoading: false,
-                playerAnswer: ""
-              });
-            } else if (challenge.challengeType === "image") {
-              this.setState({
-                playerName,
-                challengeType: challenge.challengeType,
-                challenge: challenge.challenge,
-                analysis: challenge.analysis,
-                progress: progress,
-                isLoading: false,
-                playerAnswer: ""
-              });
-            }
-          })
-          .catch(err => {
-            this.props.navigation.navigate("ErrorScreen", {
-              msg: "Couldn't get question",
-              err
-            });
-          })
+    api.getGame(gamePin).then(game => {
+      const currentPlayer = game.playersArray.filter(player => {
+        return player.playerName === playerName;
       });
+      const progress = currentPlayer[0].progress;
+      const challengeId = trail.route[progress].challengeId;
+      api
+        .getChallenge(challengeId)
+        .then(challenge => {
+          if (challenge.challengeType === "question") {
+            this.setState({
+              playerName,
+              challengeType: challenge.challengeType,
+              challenge: challenge.challenge,
+              answer: challenge.answer,
+              progress: progress,
+              isLoading: false,
+              playerAnswer: ""
+            });
+          } else if (challenge.challengeType === "image") {
+            this.setState({
+              playerName,
+              challengeType: challenge.challengeType,
+              challenge: challenge.challenge,
+              analysis: challenge.analysis,
+              progress: progress,
+              isLoading: false,
+              playerAnswer: ""
+            });
+          }
+        })
+        .catch(err => {
+          this.props.navigation.navigate("ErrorScreen", {
+            msg: "Couldn't get question",
+            err
+          });
+        });
+    });
   };
   componentDidMount() {
     this.getCurrentChallenge();
@@ -219,12 +242,13 @@ class QuestionScreen extends React.Component {
   };
 
   uploadImageAsync = async uri => {
+    const { playerName, progress } = this.state;
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.onload = function () {
+      xhr.onload = function() {
         resolve(xhr.response);
       };
-      xhr.onerror = function (e) {
+      xhr.onerror = function(e) {
         console.log(e);
         reject(new TypeError("Network request failed"));
       };
@@ -236,7 +260,7 @@ class QuestionScreen extends React.Component {
     const ref = firebase
       .storage()
       .ref()
-      .child("image57625o");
+      .child(`${playerName}${progress}`);
     const snapshot = await ref.put(blob);
     blob.close();
 
@@ -311,6 +335,7 @@ class QuestionScreen extends React.Component {
   };
 
   handleSubmitPhoto = async () => {
+    this.setState({ analysing: true });
     const { game } = this.props.navigation.state.params;
     const { trail } = this.props.navigation.state.params;
     const { progress, playerName, analysis } = this.state;
@@ -318,7 +343,8 @@ class QuestionScreen extends React.Component {
     const uploadUrl = await this.uploadImageAsync(this.state.image);
     api.analyseImage(gamePin, playerName, uploadUrl).then(result => {
       this.setState({
-        playerImageAnalysis: result
+        playerImageAnalysis: result,
+        analysing: false
       });
       const answerKeys = Object.keys(analysis);
       console.log(answerKeys, "answerkeys");
@@ -401,8 +427,36 @@ const styles = StyleSheet.create({
     width: "80%",
     fontFamily: "sf-light",
     fontSize: 20,
-    color: "black",
-    marginTop: 60
+    color: "#515151",
+    marginTop: 30,
+    alignContent: "center",
+    alignItems: "center",
+    justifyContent: "center",
+    alignSelf: "center",
+    borderColor: "black",
+    borderWidth: 0.5
+  },
+  title: {
+    width: "80%",
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  welcome: {
+    fontFamily: "sf-thin",
+    fontSize: 20,
+    color: "#515151",
+    marginTop: 30,
+    alignItems: "center",
+    justifyContent: "center"
+  },
+  locationName: {
+    fontFamily: "sf-light",
+    fontSize: 26,
+    letterSpacing: 1,
+    color: "#8360c3",
+    marginTop: 10,
+    alignItems: "center",
+    justifyContent: "center"
   },
   input: {
     borderColor: "#515151",

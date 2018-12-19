@@ -1,16 +1,6 @@
 import React from "react";
-import {
-  View,
-  Text,
-  Image,
-  Button,
-  TouchableOpacity,
-  StyleSheet,
-  StatusBar,
-  Platform
-} from "react-native";
+import { View, Text, Image, TouchableOpacity, StyleSheet } from "react-native";
 import { LinearGradient } from "expo";
-import FontAwesome, { Icons, IconTypes } from "react-native-fontawesome";
 
 class LobbyScreen extends React.Component {
   static navigationOptions = ({ navigation }) => {
@@ -25,27 +15,10 @@ class LobbyScreen extends React.Component {
     return (
       <LinearGradient style={styles.view} colors={["#2ebf91", "#8360c3"]}>
         <View style={styles.title}>
-          {/* <Text
-            adjustsFontSizeToFit
-            numberOfLines={1}
-            style={{
-              color: "white",
-              fontFamily: "sf-bold",
-              fontSize: 50,
-              letterSpacing: 4,
-              width: "80%",
-            }}
-          >
-            CITY{' '}
-            <FontAwesome style={{fontSize: 60}}>
-              {Icons.searchLocation}
-            </FontAwesome>
-            UEST
-          </Text> */}
           <Image
-                source={require('../assets/images/title.png')}
-                style={{ width: 260 , height: 130 / (600 / 260) }}
-              />
+            source={require("../assets/images/title.png")}
+            style={{ width: 260, height: 130 / (600 / 260) }}
+          />
         </View>
         <View style={styles.buttons}>
           <TouchableOpacity
@@ -73,29 +46,25 @@ class LobbyScreen extends React.Component {
 const styles = StyleSheet.create({
   view: {
     flex: 1
-    // flexDirection: "column",
-    // justifyContent: "space-evenly",
-    // alignItems: "center"
   },
   title: {
     flex: 2,
     width: "100%",
-    borderColor: 'red',
+    borderColor: "red",
     borderWidth: 0,
     justifyContent: "space-evenly",
-    alignItems: "center",
+    alignItems: "center"
   },
   buttons: {
     flex: 2,
     width: "100%",
     justifyContent: "space-evenly",
     alignItems: "center",
-    borderColor: 'white',
+    borderColor: "white",
     borderWidth: 0
   },
   button: {
     alignItems: "center",
-    // backgroundColor: "#841584",
     borderWidth: 0.8,
     borderRadius: 9,
     borderColor: "white",
