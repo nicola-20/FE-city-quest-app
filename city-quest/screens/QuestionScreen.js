@@ -193,6 +193,7 @@ class QuestionScreen extends React.Component {
     if (status !== "granted") {
       throw new Error("Denied CAMERA permissions!");
     }
+
     const result = await ImagePicker.launchCameraAsync();
     if (!result.cancelled) {
       this.setState({
@@ -207,6 +208,7 @@ class QuestionScreen extends React.Component {
       throw new Error("Denied CAMERA_ROLL permissions!");
     }
     const result = await ImagePicker.launchImageLibraryAsync();
+
     if (!result.cancelled) {
       this.setState({
         image: result.uri
@@ -251,14 +253,23 @@ class QuestionScreen extends React.Component {
             alert("game over");
           });
       } else {
-        api.updatePlayer(game.gamePin, "advance=true", playerName).then(() => {
-          this.getCurrentChallenge();
-        });
+        api
+          .updatePlayer(game.gamePin, "advance=true", playerName)
+          .then(() => {
+            this.getCurrentChallenge();
+          })
+          .then(() => {
+            this.props.navigation.navigate("Map", {
+              progress: this.state.progress + 1
+            });
+          });
+
       }
     } else {
       alert("Wrong answer, try again!");
     }
   };
+
 
   handleSubmitPhoto = async () => {
     const { game } = this.props.navigation.state.params;

@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, SafeAreaView } from "react-native";
+import { Text, SafeAreaView, Alert } from "react-native";
 import { Location, Permissions, MapView } from "expo";
 import * as api from "../api";
 
@@ -23,7 +23,6 @@ export default class MapScreen extends React.Component {
   };
 
   render() {
-    console.log(this.state.progress);
     return (
       <MapView
         style={styles.container}
@@ -49,10 +48,41 @@ export default class MapScreen extends React.Component {
     );
   }
 
-  componentDidUpdate(prevProps) {
-    const { progress } = this.props.navigation.state.params;
-    if (prevProps.progress !== progress) {
-      this.setState({ progress });
+  componentDidUpdate() {
+    if (this.props.navigation.state.params.progress) {
+      if (this.props.navigation.state.params.progress !== this.state.progress) {
+        Alert.alert(
+          "Correct! New Challenge...",
+          `Go to ${
+            this.state.locations[this.props.navigation.state.params.progress]
+              .name
+          } and view the challenge when you arrive`, //location name off state and progress
+          [
+            {
+              text: "OK",
+              onPress: () => console.log("ok pressed")
+            }
+          ],
+          { cancelable: false }
+        );
+        this.setState({
+          progress: this.props.navigation.state.params.progress
+        });
+      }
+    } else {
+      Alert.alert(
+        "Here's your first challenge!",
+        `Go to ${
+          this.state.locations[0].name
+        } and view the challenge when you arrive`, //location name off state and progress
+        [
+          {
+            text: "OK",
+            onPress: () => console.log("ok pressed")
+          }
+        ],
+        { cancelable: false }
+      );
     }
   }
 
@@ -62,7 +92,8 @@ export default class MapScreen extends React.Component {
         ...trailRegion,
         ...deltas
       },
-      locations: this.props.navigation.state.params.trail.route
+      locations: this.props.navigation.state.params.trail.route,
+      progress: 0
     });
     this.getLocationAsync();
   }
