@@ -1,7 +1,6 @@
 import axios from "axios";
 const BASE_URL = "https://city-quest-game.herokuapp.com/api";
 
-
 export const getTrails = async () => {
   const { data } = await axios.get(`${BASE_URL}/trails`);
   return data;
@@ -51,6 +50,24 @@ export const getAllPlayers = async () => {
 };
 
 export const analyseImage = async (gamePin, playerName, URL) => {
-  const {data} = await axios.patch(`${BASE_URL}/games/${gamePin}/${playerName}`, { URL })
+  const { data } = await axios.patch(
+    `${BASE_URL}/games/${gamePin}/${playerName}`,
+    { URL }
+  );
   return data.labelObj;
-}
+};
+
+export const completeTrail = async (playerName, totalTime, trailName) => {
+  console.log(playerName, totalTime, trailName)
+  const { data } = await axios.post(`${BASE_URL}/players/${playerName}`, {
+    trailName,
+    totalTime
+  });
+  console.log(data, 'data inside complete trail api ')
+  return data;
+};
+
+export const endGame = async gamePin => {
+  const { data } = await axios.delete(`${BASE_URL}/games/${gamePin}`);
+  return data;
+};

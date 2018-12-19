@@ -113,7 +113,9 @@ class WaitingScreen extends React.Component {
       </ScrollView>
     );
   }
-
+  componentWillUnmount() {
+    clearInterval(this.state.intervalID)
+  }
   componentWillMount() {
     const { navigation } = this.props;
     const GamePin = navigation.getParam("GamePin", "this is your game pin");
@@ -149,6 +151,7 @@ class WaitingScreen extends React.Component {
     const Pin = this.state.game.gamePin;
     api.getGame(Pin).then(game => {
       if (game.playersArray.length >= game.noOfPlayers) {
+        clearInterval(this.state.intervalID)
         this.props.navigation.navigate("Drawer", {
           game: this.state.game,
           playerName: this.state.playerName,
