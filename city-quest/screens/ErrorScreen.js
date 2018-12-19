@@ -14,36 +14,16 @@ import { Ionicons } from "@expo/vector-icons";
 import * as api from "../api.js";
 import convertTime from "../utils/index.js";
 
-class SelectTrailScreen extends React.Component {
+class ErrorScreen extends React.Component {
   state = {
-    trails: [],
-    isLoading: true
+    err: null
   };
   static navigationOptions = ({ navigation }) => {
     return {
-      headerTitle: <Text style={styles.headerTitle}>Select Trail</Text>,
-      headerLeft: (
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => navigation.navigate("Lobby")}
-        >
-          <Ionicons name="ios-arrow-back" size={32} color="white" />
-        </TouchableOpacity>
-      ),
-      headerRight: <Text />
+      headerTitle: <Text style={styles.headerTitle}>Something went wrong</Text>
     };
   };
   render() {
-    const { navigation } = this.props;
-    const { trails } = this.state;
-    if (this.state.isLoading)
-      return (
-        <ActivityIndicator
-          size="large"
-          color="#8360c3"
-          style={{ margin: 30 }}
-        />
-      );
     return (
       // <LinearGradient style={styles.view} colors={["#2ebf91", "#8360c3"]}>
       <FlatList
@@ -53,17 +33,9 @@ class SelectTrailScreen extends React.Component {
         }}
         keyExtractor={(item, index) => item.id}
         renderItem={({ item }) => (
-          // <LinearGradient
-          //   style={styles.gradient}
-          //   start={{x: 0.0, y: 1.0}} end={{x: 1.0, y: 1.0}}
-          //   colors={["#2ebf91", "#8360c3"]}
-          // >
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("CreateGame", {
-                trailId: item.id,
-                trail_name: item.name
-              });
+              navigation.navigate("Lobby");
             }}
             style={styles.button}
           >
@@ -72,33 +44,14 @@ class SelectTrailScreen extends React.Component {
               numberOfLines={1}
               style={styles.buttonText}
             >
-              {item.name}
-            </Text>
-            <Text
-              adjustsFontSizeToFit
-              numberOfLines={1}
-              style={styles.smallButtonText}
-            >
-              Region: {item.region.city}, Time:{" "}
-              {convertTime(item.duration) || "N/A"}
+              Restart
             </Text>
           </TouchableOpacity>
         )}
       />
-      // </LinearGradient>
     );
   }
-  componentDidMount() {
-    api
-      .getTrails()
-      .then(({ trails }) => this.setState({ trails, isLoading: false }))
-      .catch(err =>
-        this.props.navigation.navigate("ErrorScreen", {
-          msg: "No trails available",
-          err
-        })
-      );
-  }
+  componentDidMount() {}
 }
 
 const styles = StyleSheet.create({
@@ -163,4 +116,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default SelectTrailScreen;
+export default ErrorScreen;

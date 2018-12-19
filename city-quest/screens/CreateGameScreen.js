@@ -215,17 +215,23 @@ class CreateGameScreen extends React.Component {
       api
         .createGame(gameData)
         .then(({ gamePin }) => {
-          console.log(gamePin);
           return Promise.all([
             api.createPlayer(this.state.PlayerName, gamePin),
             gamePin
           ]);
         })
         .then(([player, gamePin]) => {
-          console.log(gamePin);
-          // this.setState({ blank: null });
-          this.props.navigation.navigate("Waiting", { GamePin: gamePin, PlayerName: PlayerName });
-        });
+          this.props.navigation.navigate("Waiting", {
+            GamePin: gamePin,
+            PlayerName: PlayerName
+          });
+        })
+        .catch(err =>
+          this.props.navigation.navigate("ErrorScreen", {
+            msg: "Cannot create game",
+            err
+          })
+        );
     }
   };
   validate = (gameName, PlayerName, noOfPlayers) => {
