@@ -44,9 +44,15 @@ export default class GalleryScreen extends React.Component {
   }
 
   componentDidMount = async () => {
-    const photos = await FileSystem.readDirectoryAsync(PHOTOS_DIR);
-    this.setState({ photos });
-  };
+    const photos = await FileSystem.readDirectoryAsync(PHOTOS_DIR).catch(err => {
+      this.props.navigation.navigate("ErrorScreen", {
+        msg: "Something went wrong",
+        err
+      });
+      this.setState({ photos });
+
+    });
+  }
 
   toggleSelection = (uri, isSelected) => {
     let selected = this.state.selected;
@@ -67,7 +73,13 @@ export default class GalleryScreen extends React.Component {
       }
       const promises = photos.map(photoUri => {
         return MediaLibrary.createAssetAsync(photoUri);
-      });
+      })
+      // .catch(err => {
+      //   this.props.navigation.navigate("ErrorScreen", {
+      //     msg: "Couldn't save image",
+      //     err
+      //   });
+      // })
       await Promise.all(promises);
       alert("Successfully saved photos to user's gallery!");
     } else {

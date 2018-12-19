@@ -149,40 +149,45 @@ class QuestionScreen extends React.Component {
     const { gamePin } = this.props.navigation.state.params.game;
     const { trail } = this.props.navigation.state.params;
     const playerName = this.props.navigation.state.params.playerName;
-    api.getGame(gamePin).then(game => {
-      const currentPlayer = game.playersArray.filter(player => {
-        return player.playerName === playerName;
+    api.getGame(gamePin)
+      .then(game => {
+        const currentPlayer = game.playersArray.filter(player => {
+          return player.playerName === playerName;
+        });
+        const progress = currentPlayer[0].progress;
+        const challengeId = trail.route[progress].challengeId;
+        api
+          .getChallenge(challengeId)
+          .then(challenge => {
+            if (challenge.challengeType === "question") {
+              this.setState({
+                playerName,
+                challengeType: challenge.challengeType,
+                challenge: challenge.challenge,
+                answer: challenge.answer,
+                progress: progress,
+                isLoading: false,
+                playerAnswer: ""
+              });
+            } else if (challenge.challengeType === "image") {
+              this.setState({
+                playerName,
+                challengeType: challenge.challengeType,
+                challenge: challenge.challenge,
+                analysis: challenge.analysis,
+                progress: progress,
+                isLoading: false,
+                playerAnswer: ""
+              });
+            }
+          })
+          .catch(err => {
+            this.props.navigation.navigate("ErrorScreen", {
+              msg: "Couldn't get question",
+              err
+            });
+          })
       });
-      const progress = currentPlayer[0].progress;
-      const challengeId = trail.route[progress].challengeId;
-      api
-        .getChallenge(challengeId)
-        .then(challenge => {
-          if (challenge.challengeType === "question") {
-            this.setState({
-              playerName,
-              challengeType: challenge.challengeType,
-              challenge: challenge.challenge,
-              answer: challenge.answer,
-              progress: progress,
-              isLoading: false,
-              playerAnswer: ""
-            });
-          } else if (challenge.challengeType === "image") {
-            console.log(challenge.analysis, "analysis");
-            this.setState({
-              playerName,
-              challengeType: challenge.challengeType,
-              challenge: challenge.challenge,
-              analysis: challenge.analysis,
-              progress: progress,
-              isLoading: false,
-              playerAnswer: ""
-            });
-          }
-        })
-        .catch(console.log);
-    });
   };
   componentDidMount() {
     this.getCurrentChallenge();
@@ -217,10 +222,10 @@ class QuestionScreen extends React.Component {
   uploadImageAsync = async uri => {
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.onload = function() {
+      xhr.onload = function () {
         resolve(xhr.response);
       };
-      xhr.onerror = function(e) {
+      xhr.onerror = function (e) {
         console.log(e);
         reject(new TypeError("Network request failed"));
       };
@@ -244,7 +249,7 @@ class QuestionScreen extends React.Component {
     const { trail } = this.props.navigation.state.params;
     const trailName = trail.name;
     const { answer, playerAnswer, progress, playerName } = this.state;
-    if (answer.toLowerCase() === playerAnswer.toLowerCase()) {
+    if (answer.toLowerCase().trim() === playerAnswer.toLowerCase().trim()) {
       if (trail.route.length - 1 === progress) {
         api
           .updatePlayer(game.gamePin, "end=true", playerName)

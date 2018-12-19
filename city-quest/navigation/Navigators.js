@@ -158,6 +158,8 @@ export default (Stack = createStackNavigator(
         gesturesEnabled: false
       }
     },
+
+
     PlayerCompleteScreen: {
       screen: PlayerCompleteScreen,
       navigationOptions: {
