@@ -6,7 +6,7 @@ import {
   createBottomTabNavigator,
   createAppContainer
 } from "react-navigation";
-import FontAwesome, { Icons, IconTypes } from "react-native-fontawesome";
+import FontAwesome, { Icons } from "react-native-fontawesome";
 import { Ionicons, AntDesign, MaterialIcons } from "@expo/vector-icons";
 import LobbyScreen from "../screens/LobbyScreen";
 import SelectTrailScreen from "../screens/SelectTrailScreen";
@@ -45,7 +45,7 @@ const GameTab = createAppContainer(
       initialRouteName: "Map",
       order: ["Progress", "Map", "Question"],
       defaultNavigationOptions: ({ navigation }) => ({
-        tabBarIcon: ({ focused, horizontal, tintColor }) => {
+        tabBarIcon: ({ tintColor }) => {
           const { routeName } = navigation.state;
           if (routeName === "Map") {
             return <Ionicons name="md-map" size={30} color={tintColor} />;
@@ -61,7 +61,6 @@ const GameTab = createAppContainer(
         }
       }),
       tabBarOptions: {
-        // inactiveBackgroundColor: "rgba(110, 120, 183, 1.0)",
         inactiveBackgroundColor: "rgba(131, 96, 195, 1.0)",
         inactiveTintColor: "white",
         activeBackgroundColor: "rgba(110, 120, 183, 0.8)",
@@ -158,8 +157,6 @@ export default (Stack = createStackNavigator(
         gesturesEnabled: false
       }
     },
-
-
     PlayerCompleteScreen: {
       screen: PlayerCompleteScreen,
       navigationOptions: {

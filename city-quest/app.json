@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "city-quest",
+    "name": "City Quest",
     "slug": "city-quest",
     "privacy": "public",
     "sdkVersion": "31.0.0",
@@ -24,6 +24,7 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": ""
   }
 }

@@ -4,11 +4,8 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  TextInput,
-  ScrollView,
-  Platform
+  TextInput
 } from "react-native";
-import { LinearGradient } from "expo";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Ionicons } from "@expo/vector-icons";
 import * as api from "../api.js";
@@ -45,11 +42,6 @@ class CreateGameScreen extends React.Component {
           justifyContent: "center",
           alignItems: "center"
         }}
-        // style={{height: '100%', borderColor: 'black', borderWidth: 0.5}}
-        // enableOnAndroid
-        // enableAutomaticScroll
-        // keyboardOpeningTime={0}
-        // extraHeight={Platform.select({ android: 200 })}
       >
         <View style={styles.heading}>
           <Text style={styles.text}>Selected trail:</Text>
@@ -58,12 +50,6 @@ class CreateGameScreen extends React.Component {
           </Text>
           <Text style={styles.blank}>{blank ? "All fields required" : ""}</Text>
         </View>
-        {/* <LinearGradient
-          style={styles.gradient}
-          start={{ x: 0.0, y: 1.0 }}
-          end={{ x: 1.0, y: 1.0 }}
-          colors={["#2ebf91", "#8360c3"]}
-        > */}
         <View style={styles.inputs}>
           <TextInput
             style={blank && blank.gameName ? styles.noInput : styles.input}
@@ -72,13 +58,6 @@ class CreateGameScreen extends React.Component {
               this.setState({ gameName: text });
             }}
           />
-          {/* </LinearGradient> */}
-          {/* <LinearGradient
-          style={styles.gradient}
-          start={{ x: 0.0, y: 1.0 }}
-          end={{ x: 1.0, y: 1.0 }}
-          colors={["#2ebf91", "#8360c3"]}
-        > */}
           <TextInput
             style={blank && blank.PlayerName ? styles.noInput : styles.input}
             placeholder="Your name here"
@@ -92,10 +71,8 @@ class CreateGameScreen extends React.Component {
             }}
           />
         </View>
-        {/* </LinearGradient> */}
         <View style={styles.players}>
           <Text style={styles.text}>Select number of players:</Text>
-
           <View style={styles.numbers}>
             <TouchableOpacity
               style={
@@ -215,7 +192,7 @@ class CreateGameScreen extends React.Component {
       api
         .createGame(gameData)
         .then(({ gamePin }) => {
-          console.log(gamePin)
+          console.log(gamePin);
           return Promise.all([
             api.createPlayer(this.state.PlayerName, gamePin),
             gamePin
@@ -318,7 +295,6 @@ const styles = StyleSheet.create({
     backgroundColor: "#8360c3",
     borderWidth: 0,
     borderRadius: 11,
-    // borderColor: "#515151",
     padding: 10,
     width: "50%",
     height: "50%"
@@ -329,14 +305,6 @@ const styles = StyleSheet.create({
     fontFamily: "sf-thin",
     letterSpacing: 1
   },
-  // gradient: {
-  //   margin: 30,
-  //   borderRadius: 12,
-  //   width: '80%',
-  //   height: '10%',
-  //   alignItems: "center",
-  //   justifyContent: 'center',
-  // },
   noInput: {
     borderColor: "red",
     borderWidth: 0.8,
@@ -352,10 +320,7 @@ const styles = StyleSheet.create({
   input: {
     borderColor: "#515151",
     borderWidth: 0.8,
-    // backgroundColor: 'white',
     borderRadius: 12,
-    // height: '97%',
-    // width: '98%',
     width: "80%",
     height: "23%",
     fontSize: 22,
@@ -369,7 +334,6 @@ const styles = StyleSheet.create({
     borderColor: "#515151",
     borderRadius: 9,
     padding: 0,
-    // margin: 13,
     height: 43,
     width: 43,
     backgroundColor: "rgba(62, 172, 154, 0.2)",
@@ -380,7 +344,6 @@ const styles = StyleSheet.create({
     borderColor: "#515151",
     borderRadius: 9,
     padding: 0,
-    // margin: 13,
     height: 43,
     width: 43,
     backgroundColor: "rgba(62, 172, 154, 1.0)",

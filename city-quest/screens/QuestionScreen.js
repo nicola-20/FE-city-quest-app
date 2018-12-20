@@ -121,42 +121,24 @@ class QuestionScreen extends React.Component {
           <View
             style={{ flex: 1, alignItems: "center", justifyContent: "center" }}
           >
-            {/* <TouchableOpacity
-              onPress={this.pickImage}
-              style={styles.imageButton}
-            >
-              <Text>Choose from album</Text>
-            </TouchableOpacity> */}
             <TouchableOpacity
               onPress={this.takeImage}
               style={styles.imageButton}
-              // style={{
-              //   height: 50,
-              //   width: "80%",
-              //   borderWidth: 0.5,
-              //   borderColor: "black",
-              //   padding: 10,
-              //   margin: 20
-              // }}
             >
-              <Text style={styles.icon}>
-                <AntDesign name="camera" size={70} color="#43A79E" />
+              <Text
+                style={{ borderColor: "black", borderWidth: 0, padding: -5 }}
+              >
+                <AntDesign name="camera" size={70} color="white" />
               </Text>
-              <Text>Take new photo</Text>
+              <Text style={styles.buttonText}>Take photo</Text>
             </TouchableOpacity>
             {image && (
               <Image
                 source={{ uri: image }}
-                style={{ width: 200, height: 300 }}
+                style={{ width: 200, height: 200, margin: 10, borderRadius: 9}}
               />
             )}
-            {analysing && (
-              <ActivityIndicator
-                size="large"
-                color="#8360c3"
-                // style={{ margin: 30 }}
-              />
-            )}
+            {analysing && <ActivityIndicator size="large" color="#8360c3" />}
           </View>
           <TouchableOpacity
             onPress={this.handleSubmitPhoto}
@@ -256,14 +238,12 @@ class QuestionScreen extends React.Component {
       xhr.open("GET", uri, true);
       xhr.send(null);
     });
-
     const ref = firebase
       .storage()
       .ref()
       .child(`${playerName}${progress}`);
     const snapshot = await ref.put(blob);
     blob.close();
-
     return await snapshot.ref.getDownloadURL();
   };
 
@@ -341,79 +321,92 @@ class QuestionScreen extends React.Component {
     const { progress, playerName, analysis } = this.state;
     const gamePin = this.props.navigation.state.params.game.gamePin;
     const uploadUrl = await this.uploadImageAsync(this.state.image);
-    api.analyseImage(gamePin, playerName, uploadUrl).then(result => {
-      this.setState({
-        playerImageAnalysis: result,
-        analysing: false
-      });
-      const answerKeys = Object.keys(analysis);
-      console.log(answerKeys, "answerkeys");
-      const playerKeys = Object.keys(result);
-      console.log(playerKeys, "playerkeys");
-      let count = 0;
-      for (let i = 0; i < answerKeys.length; i++) {
-        for (let j = 0; j < playerKeys.length; j++) {
-          if (answerKeys[i] === playerKeys[j]) {
-            count++;
+    api
+      .analyseImage(gamePin, playerName, uploadUrl)
+      .catch(err => {
+        this.props.navigation.navigate("ErrorScreen", {
+          msg: "Couldn't get question",
+          err
+        });
+      })
+      .then(result => {
+        this.setState({
+          playerImageAnalysis: result,
+          analysing: false
+        });
+        const answerKeys = Object.keys(analysis);
+        const playerKeys = Object.keys(result);
+        let count = 0;
+        for (let i = 0; i < answerKeys.length; i++) {
+          for (let j = 0; j < playerKeys.length; j++) {
+            if (answerKeys[i] === playerKeys[j]) {
+              count++;
+            }
           }
         }
-      }
-      if (count >= 3) {
-        if (trail.route.length - 1 === progress) {
-          api
-            .updatePlayer(game.gamePin, "end=true", playerName)
-            .then(() => {
-              return api.getGame(game.gamePin);
-            })
-            .then(game => {
-              const { playersArray } = game;
-              const totalTime = playersArray.reduce((acc, player) => {
-                if (player.playerName === playerName) {
-                  return (acc += player.totalTime);
-                } else return acc;
-              }, "");
-              if (
-                playersArray.every(player => {
-                  return player.totalTime;
-                })
-              ) {
-                api
-                  .completeTrail(playerName, totalTime, trailName)
-                  .then(() => {
-                    return api.endGame(game.gamePin);
+        if (count >= 3) {
+          if (trail.route.length - 1 === progress) {
+            api
+              .updatePlayer(game.gamePin, "end=true", playerName)
+              .then(() => {
+                return api.getGame(game.gamePin);
+              })
+              .then(game => {
+                const { playersArray } = game;
+                const totalTime = playersArray.reduce((acc, player) => {
+                  if (player.playerName === playerName) {
+                    return (acc += player.totalTime);
+                  } else return acc;
+                }, "");
+                if (
+                  playersArray.every(player => {
+                    return player.totalTime;
                   })
-                  .then(() => {
-                    this.props.navigation.navigate("PlayerCompleteScreen", {
-                      gameName: game.gameName,
-                      gamePin: game.gamePin,
-                      trail: trail.name,
-                      playerName,
-                      totalTime
+                ) {
+                  api
+                    .completeTrail(playerName, totalTime, trailName)
+                    .then(() => {
+                      return api.endGame(game.gamePin);
+                    })
+                    .then(() => {
+                      this.props.navigation.navigate("PlayerCompleteScreen", {
+                        gameName: game.gameName,
+                        gamePin: game.gamePin,
+                        trail: trail.name,
+                        playerName,
+                        totalTime
+                      });
                     });
-                  });
-              } else {
-                api.completeTrail(playerName, totalTime, trailName).then(() => {
-                  this.props.navigation.navigate("PlayerCompleteScreen", {
-                    gameName: game.gameName,
-                    gamePin: game.gamePin,
-                    trail: trail.name,
-                    playerName,
-                    totalTime
-                  });
+                } else {
+                  api
+                    .completeTrail(playerName, totalTime, trailName)
+                    .then(() => {
+                      this.props.navigation.navigate("PlayerCompleteScreen", {
+                        gameName: game.gameName,
+                        gamePin: game.gamePin,
+                        trail: trail.name,
+                        playerName,
+                        totalTime
+                      });
+                    });
+                }
+              });
+          } else {
+            api
+              .updatePlayer(game.gamePin, "advance=true", playerName)
+              .then(() => {
+                this.getCurrentChallenge();
+              })
+              .then(() => {
+                this.props.navigation.navigate("Map", {
+                  progress: this.state.progress + 1
                 });
-              }
-            });
+              });
+          }
         } else {
-          api
-            .updatePlayer(game.gamePin, "advance=true", playerName)
-            .then(() => {
-              this.getCurrentChallenge();
-            });
+          alert("Wrong answer, try again!");
         }
-      } else {
-        alert("Wrong answer, try again!");
-      }
-    });
+      });
   };
 }
 
@@ -433,8 +426,9 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     alignSelf: "center",
+    textAlign: "center",
     borderColor: "black",
-    borderWidth: 0.5
+    borderWidth: 0
   },
   title: {
     width: "80%",
@@ -477,8 +471,18 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 9,
     padding: 10,
-    width: "30%",
-    marginTop: 60
+    width: "40%",
+    margin: 30
+  },
+  imageButton: {
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#43A79E",
+    borderWidth: 0,
+    borderRadius: 9,
+    padding: 10,
+    width: "50%",
+    margin: 10
   },
   buttonText: {
     color: "white",

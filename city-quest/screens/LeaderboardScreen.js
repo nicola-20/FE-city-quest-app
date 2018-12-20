@@ -3,7 +3,6 @@ import {
   Text,
   ActivityIndicator,
   View,
-  ScrollView,
   FlatList,
   StyleSheet
 } from "react-native";
@@ -28,7 +27,6 @@ class LeaderboardScreen extends React.Component {
         <View style={styles.heading}>
           <Text style={styles.title}>Leaderboard</Text>
         </View>
-
         <View style={styles.leaders}>
           <FlatList
             data={[...this.state.players]}
@@ -45,15 +43,6 @@ class LeaderboardScreen extends React.Component {
               </View>
             )}
           />
-          {/* {this.state.players.map((player, index) => {
-            return (
-              <View key={index} style={styles.player}>
-                <Text style={styles.number}>{index + 1}. </Text>
-                <Text style={styles.playerText}>{player.playerName}</Text>
-                <Text style={styles.time}>{player.totalTime} mins</Text>
-              </View>
-            );
-          })} */}
         </View>
       </View>
     );
@@ -151,8 +140,6 @@ const styles = StyleSheet.create({
     borderColor: "yellow",
     borderWidth: 0,
     textAlign: "right",
-    // position: 'relative',
-    // right: -100,
     color: "#515151"
   }
 });

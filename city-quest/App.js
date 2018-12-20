@@ -1,5 +1,5 @@
 import React from "react";
-import { Asset, AppLoading, SplashScreen, Font } from "expo";
+import { AppLoading, SplashScreen, Font } from "expo";
 import { createAppContainer } from "react-navigation";
 import Stack from "./navigation/Navigators";
 
@@ -63,8 +63,8 @@ export default class App extends React.Component {
         "sf-ultralight-italic": require("./assets/fonts/SF-Pro-Display-UltralightItalic.otf")
       }),
       Font.loadAsync({
-        "fa_solid_900": require("./assets/fonts/fa_solid_900.ttf"),
-        "FontAwesome5FreeSolid": require("./assets/fonts/FontAwesome5FreeSolid.ttf")
+        fa_solid_900: require("./assets/fonts/fa_solid_900.ttf"),
+        FontAwesome5FreeSolid: require("./assets/fonts/FontAwesome5FreeSolid.ttf")
       })
     ]);
   }

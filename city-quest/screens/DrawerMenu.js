@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import React, { Component } from "react";
 import { NavigationActions } from "react-navigation";
-import { ScrollView, Text, View, TouchableOpacity, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, StyleSheet } from "react-native";
 import { LinearGradient } from "expo";
 
 class SideMenu extends Component {
@@ -84,8 +84,8 @@ const styles = StyleSheet.create({
   container: {
     height: "100%",
     flex: 1,
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
+    justifyContent: "space-evenly",
+    alignItems: "center"
   },
   button: {
     height: "10%",
@@ -94,8 +94,8 @@ const styles = StyleSheet.create({
     borderColor: "white",
     borderRadius: 9,
     padding: 6,
-    justifyContent: 'center',
-    alignItems: 'center'
+    justifyContent: "center",
+    alignItems: "center"
   },
   buttonText: {
     color: "white",

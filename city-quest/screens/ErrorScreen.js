@@ -1,18 +1,6 @@
 import React from "react";
-import {
-  ScrollView,
-  View,
-  Text,
-  Button,
-  TouchableOpacity,
-  StyleSheet,
-  ActivityIndicator,
-  FlatList
-} from "react-native";
-import { LinearGradient } from "expo";
+import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
-import * as api from "../api.js";
-import convertTime from "../utils/index.js";
 
 class ErrorScreen extends React.Component {
   state = {

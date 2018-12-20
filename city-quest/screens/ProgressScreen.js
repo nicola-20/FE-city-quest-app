@@ -1,6 +1,5 @@
 import React from "react";
 import { Text, View } from "react-native";
-import ProgressCircle from "react-native-progress-circle";
 import PercentageCircle from "react-native-percentage-circle";
 import * as api from "../api";
 
@@ -11,12 +10,8 @@ class ProgressScreen extends React.Component {
     trail: this.props.navigation.state.params.trail
   };
   render() {
-    // const game = this.props.navigation.state.params.game;
     const game = this.state.game;
     const trail = this.state.trail;
-    // const trail = this.props.navigation.state.params.trail;
-    // const currentPlayer = this.props.navigation.state.params.playerName;
-    // const { game, currentPlayer, trail } = this.state
     const players = game.playersArray;
     const route = trail.route;
     const trailLength = route.length;
@@ -28,37 +23,8 @@ class ProgressScreen extends React.Component {
             let playerPercent = Math.floor(
               (player.progress / trailLength) * 100
             );
-            // playerPercent === 100 ? alert(`${player.playerName} won the game!!`) : ""
             return (
               <View key={index} style={styles.player}>
-                {/* <ProgressCircle
-                  percent={playerPercent}
-                  radius={60}
-                  borderWidth={15}
-                  color={
-                    player.playerName === this.state.currentPlayer
-                      ? "rgba(46, 191, 145, 1.0)"
-                      : "rgba(110, 120, 183, 1.0)"
-                  }
-                  shadowColor={
-                    player.playerName === this.state.currentPlayer
-                      ? "rgba(46, 191, 145, 0.2)"
-                      : "rgba(110, 120, 183, 0.2)"
-                  }
-                  bgColor="white"
-                >
-                  <Text style={styles.text}>
-                    {player.playerName === this.state.currentPlayer
-                      ? "You"
-                      : player.playerName}
-                  </Text>
-                  <Text style={styles.percentText}>
-                    {playerPercent === 100
-                      ? "Completed!"
-                      : `${player.progress}/${trailLength}`}
-                  </Text>
-                </ProgressCircle> */}
-
                 <PercentageCircle
                   radius={60}
                   percent={playerPercent}
@@ -82,7 +48,7 @@ class ProgressScreen extends React.Component {
                   </Text>
                   <Text style={styles.percentText}>
                     {playerPercent === 100
-                      ? "Completed!"
+                      ? "Done!"
                       : `${player.progress}/${trailLength}`}
                   </Text>
                 </PercentageCircle>
@@ -114,13 +80,6 @@ class ProgressScreen extends React.Component {
         });
       })
   }
-  // componentDidMount() {
-  //   const Pin = this.props.navigation.state.params.game.gamePin;
-  //   const intervalID = setInterval(this.updateProgress, 2000)
-  //   this.setState({
-  //     intervalID
-  //   })
-  // }
 
   componentWillUnmount = () => {
     clearInterval(this.state.intervalID);
@@ -152,7 +111,8 @@ const styles = {
     alignItems: "center",
     borderColor: "red",
     borderWidth: 0,
-    height: "100%"
+    height: "100%",
+    padding: 10
   },
   progress: {
     flex: 6,

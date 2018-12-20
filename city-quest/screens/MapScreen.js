@@ -1,7 +1,6 @@
 import React from "react";
-import { Text, SafeAreaView, Alert } from "react-native";
+import { Alert } from "react-native";
 import { Location, Permissions, MapView } from "expo";
-import * as api from "../api";
 
 const Marker = MapView.Marker;
 
@@ -9,15 +8,14 @@ const deltas = {
   latitudeDelta: 0.012,
   longitudeDelta: 0.013
 };
-const trailRegion = {
-  // put in initial city location
-  latitude: 53.48095,
-  longitude: -2.23743
-};
 
 export default class MapScreen extends React.Component {
   state = {
-    region: {},
+    region: {
+      latitude: this.props.navigation.state.params.trail.region.lat,
+      longitude: this.props.navigation.state.params.trail.region.long,
+      ...deltas
+    },
     locations: [],
     progress: 0
   };
@@ -43,7 +41,7 @@ export default class MapScreen extends React.Component {
           latitude: locations[progress].lat,
           longitude: locations[progress].long
         }}
-        image={require('../assets/images/marker.png')}
+        image={require("../assets/images/marker.png")}
       />
     );
   }
@@ -54,13 +52,12 @@ export default class MapScreen extends React.Component {
         Alert.alert(
           "Correct! New Challenge...",
           `Go to ${
-          this.state.locations[this.props.navigation.state.params.progress]
-            .name
-          } and view the challenge when you arrive`, //location name off state and progress
+            this.state.locations[this.props.navigation.state.params.progress]
+              .name
+          } and view the challenge when you arrive`,
           [
             {
               text: "OK",
-              onPress: () => console.log("ok pressed")
             }
           ],
           { cancelable: false }
@@ -73,12 +70,11 @@ export default class MapScreen extends React.Component {
       Alert.alert(
         "Here's your first challenge!",
         `Go to ${
-        this.state.locations[0].name
-        } and view the challenge when you arrive`, //location name off state and progress
+          this.state.locations[0].name
+        } and view the challenge when you arrive`,
         [
           {
             text: "OK",
-            onPress: () => console.log("ok pressed")
           }
         ],
         { cancelable: false }
@@ -89,7 +85,8 @@ export default class MapScreen extends React.Component {
   componentWillMount() {
     this.setState({
       region: {
-        ...trailRegion,
+        latitude: this.props.navigation.state.params.trail.region.lat,
+        longitude: this.props.navigation.state.params.trail.region.long,
         ...deltas
       },
       locations: this.props.navigation.state.params.trail.route,
@@ -103,26 +100,26 @@ export default class MapScreen extends React.Component {
   };
 
   getLocationAsync = async () => {
-    let { status } = await Permissions.askAsync(Permissions.LOCATION)
-      .catch(err => {
+    let { status } = await Permissions.askAsync(Permissions.LOCATION).catch(
+      err => {
         this.props.navigation.navigate("ErrorScreen", {
           msg: "Couldn't get location",
           err
         });
-      })
+      }
+    );
     if (status !== "granted") {
       this.setState({
         errorMessage: "Permission to access location was denied"
       });
     }
 
-    let location = await Location.getCurrentPositionAsync({})
-      .catch(err => {
-        this.props.navigation.navigate("ErrorScreen", {
-          msg: "Couldn't save image",
-          err
-        });
-      })
+    let location = await Location.getCurrentPositionAsync({}).catch(err => {
+      this.props.navigation.navigate("ErrorScreen", {
+        msg: "Couldn't save image",
+        err
+      });
+    });
     const region = {
       latitude: location.coords.latitude,
       longitude: location.coords.longitude,

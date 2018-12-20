@@ -1,22 +1,14 @@
 import React from "react";
-import { subscribeToTimer } from "../api";
 import {
   View,
   Text,
-  Button,
   StyleSheet,
-  Animated,
   ActivityIndicator,
   ScrollView,
   RefreshControl
 } from "react-native";
 import * as api from "../api.js";
-import {
-  Ionicons,
-  AntDesign,
-  MaterialCommunityIcons,
-  MaterialIcons
-} from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 class WaitingScreen extends React.Component {
   state = {
@@ -35,7 +27,6 @@ class WaitingScreen extends React.Component {
   };
 
   render() {
-    const { navigation } = this.props;
     const { playersArray } = this.state.game;
     const currentPlayers = [];
     for (let i = 0; i < this.state.game.noOfPlayers; i++) {
@@ -77,22 +68,20 @@ class WaitingScreen extends React.Component {
                 <MaterialCommunityIcons
                   name="account"
                   size={100}
-                  // color="rgba(131, 96, 195, 1.0)"
                   color="rgba(110, 120, 183, 1.0)"
                 />
                 <Text style={styles.playerText}>{player}</Text>
               </View>
             ) : (
-                <View style={styles.player} key={index}>
-                  <MaterialCommunityIcons
-                    name="account"
-                    size={100}
-                    // color="rgba(131, 96, 195, 1.0)"
-                    color="rgba(110, 120, 183, 0.2)"
-                  />
-                  <Text />
-                </View>
-              );
+              <View style={styles.player} key={index}>
+                <MaterialCommunityIcons
+                  name="account"
+                  size={100}
+                  color="rgba(110, 120, 183, 0.2)"
+                />
+                <Text />
+              </View>
+            );
           })}
         </View>
         <View style={styles.PIN}>
@@ -114,7 +103,7 @@ class WaitingScreen extends React.Component {
     );
   }
   componentWillUnmount() {
-    clearInterval(this.state.intervalID)
+    clearInterval(this.state.intervalID);
   }
   componentWillMount() {
     const { navigation } = this.props;
@@ -124,13 +113,6 @@ class WaitingScreen extends React.Component {
     api
       .getGame(GamePin)
       .then(game => {
-        // console.log(game)
-        // if (game.noOfPlayers === game.playersArray.length) {
-        //   console.log(game)
-        //   this.props.navigation.navigate("ErrorScreen", {
-        //     msg: "Sorry game full"
-        //   })
-        // }
         this.setState({
           game,
           isLoading: false,
@@ -166,7 +148,7 @@ class WaitingScreen extends React.Component {
       .getGame(Pin)
       .then(game => {
         if (game.playersArray.length >= game.noOfPlayers) {
-          clearInterval(this.state.intervalID)
+          clearInterval(this.state.intervalID);
           this.props.navigation.navigate("Drawer", {
             game: this.state.game,
             playerName: this.state.playerName,
@@ -277,7 +259,8 @@ const styles = StyleSheet.create({
     fontSize: 30,
     fontFamily: "sf-light",
     letterSpacing: 0.7,
-    color: "#515151"
+    color: "#515151",
+    textAlign: 'center'
   },
   PINtext: {
     fontSize: 60,

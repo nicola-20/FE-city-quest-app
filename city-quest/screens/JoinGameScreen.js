@@ -1,13 +1,11 @@
 import React, { Component } from "react";
-import ReactNative, {
+import {
   Animated,
   Keyboard,
   StyleSheet,
   TouchableOpacity,
   Text,
-  View,
   TextInput,
-  ScrollView,
   Platform
 } from "react-native";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
@@ -98,7 +96,7 @@ class JoinGameScreen extends Component {
   }
   handleJoin = () => {
     const { GamePin, PlayerName } = this.state;
-    console.log(GamePin)
+    console.log(GamePin);
     api
       .createPlayer(PlayerName, GamePin)
       .then(PlayerName => {
@@ -108,13 +106,12 @@ class JoinGameScreen extends Component {
         });
       })
       .catch(err => {
-        console.log(err)
+        console.log(err);
         this.props.navigation.navigate("ErrorScreen", {
           msg: "Cannot create player",
           err
-        })
-      }
-      );
+        });
+      });
   };
 }
 
@@ -124,17 +121,6 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 0
   },
-  // view: {
-  //   flex: 1,
-  //   minHeight: "90%",
-  //   // justifyContent: "center",
-  //   // alignContent: "space-between",
-  //   borderColor: "black",
-  //   // justifyContent: 'center',
-  //   alignItems: 'center',
-  //   justifyContent: 'space-evenly',
-  //   borderWidth: 0.6
-  // },
   text: {
     width: "80%",
     fontFamily: "sf-light",
@@ -159,14 +145,12 @@ const styles = StyleSheet.create({
     borderWidth: 0.7,
     borderRadius: 12,
     width: "80%",
-    // height: "10%",
     fontSize: 22,
     padding: 10,
     fontFamily: "sf-thin",
     letterSpacing: 0.5,
     color: "#515151",
     marginTop: 60
-    // marginBottom: 30,
   },
   button: {
     alignItems: "center",
@@ -174,10 +158,8 @@ const styles = StyleSheet.create({
     backgroundColor: "#8360c3",
     borderWidth: 0,
     borderRadius: 9,
-    // borderColor: "#515151",
     padding: 10,
     width: "30%",
-    // height: "10%",
     marginTop: 60
   },
   buttonText: {
@@ -188,117 +170,4 @@ const styles = StyleSheet.create({
   }
 });
 
-//   render() {
-//     // console.log(this.state);
-//     const { navigation } = this.props;
-//     return (
-//       <KeyboardAwareScrollView
-//         contentContainerStyle={{
-//           height: '100%'
-//           // flex: 1,
-//           // justifyContent: "space-evenly",
-//           // alignItems: "center",
-//           // paddingBottom: 20
-//         }}
-//         enableOnAndroid={true}
-//       >
-//         <View
-//           style={{
-//             flex: 1,
-//             justifyContent: "space-evenly",
-//             alignItems: "center",
-//             paddingBottom: 20
-//           }}
-//         >
-// <Text adjustsFontSizeToFit numberOfLines={2} style={styles.text}>
-//   To join a game, enter the invitation PIN and your name below:
-// </Text>
-//           <TextInput
-//             style={styles.input}
-//             placeholder="Game PIN"
-//             onChangeText={text => {
-//               this.setState({ GamePin: text });
-//             }}
-//           />
-//           <TextInput
-//             style={styles.input}
-//             placeholder="Your name here"
-//             onClick={() => {
-//               this.scroll.props.scrollToPosition(5, 5);
-//             }}
-//             returnKeyType="join"
-//             onSubmitEditing={this.handleJoin}
-//             onChangeText={text => {
-//               this.setState({ PlayerName: text });
-//             }}
-//           />
-//           <TouchableOpacity onPress={this.handleJoin} style={styles.button}>
-//             <Text style={styles.buttonText}>Join</Text>
-//           </TouchableOpacity>
-//         </View>
-//       </KeyboardAwareScrollView>
-//     );
-//   }
-
-//   handleJoin = () => {
-//     const { GamePin, PlayerName } = this.state;
-//     api.createPlayer(PlayerName, GamePin);
-//     this.props.navigation.navigate("Waiting", { GamePin: GamePin });
-//   };
-// }
-
-// const styles = StyleSheet.create({
-//   view: {
-//     flex: 1,
-//     justifyContent: "center",
-//     alignContent: "space-between"
-//   },
-//   text: {
-//     width: "80%",
-//     fontFamily: "sf-light",
-//     fontSize: 20,
-//     color: "#515151"
-//   },
-//   backButton: {
-//     paddingLeft: 15,
-//     paddingRight: 10
-//   },
-//   headerTitle: {
-//     color: "white",
-//     fontSize: 20,
-//     fontFamily: "sf-light",
-//     letterSpacing: 0.7,
-//     width: "100%",
-//     textAlign: "center"
-//   },
-//   input: {
-//     borderColor: "#515151",
-//     borderWidth: 0.7,
-//     borderRadius: 12,
-//     width: "80%",
-//     height: "10%",
-//     fontSize: 22,
-//     padding: 10,
-//     fontFamily: "sf-thin",
-//     letterSpacing: 0.5,
-//     color: "#515151"
-//   },
-//   button: {
-//     alignItems: "center",
-//     justifyContent: "center",
-//     backgroundColor: "#8360c3",
-//     borderWidth: 0,
-//     borderRadius: 9,
-//     // borderColor: "#515151",
-//     padding: 10,
-//     width: "30%",
-//     height: "10%"
-//   },
-//   buttonText: {
-//     color: "white",
-//     fontSize: 22,
-//     fontFamily: "sf-thin",
-//     letterSpacing: 1
-//   }
-// });
 export default JoinGameScreen;
